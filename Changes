@@ -61,3 +61,13 @@ Revision history for Perl extension AxKit::App::TABOO.
 	or UPDATE. 
 	- Added a save-method to AxKit::App::TABOO::Data::User::Contributor.
 	- Reviewed the changes of the previous upload. 
+
+0.021	  2004-02-18 11:10  
+	- Added a apache_request_changed to AxKit::App::TABOO::Data
+	- Fixed a bug in the code to check whether to insert or update.
+	- Tested the store user code, and fixed a few things.
+	- Changed the test to check if there is anything in the
+	variable to next unless defined().
+	- A few small changes in the POD.
+	- Actually tested AxKit::App::TABOO::XSP::User <store> - it 
+	seems to work! 

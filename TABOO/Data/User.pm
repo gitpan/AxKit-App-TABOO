@@ -9,7 +9,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.021_2';
+our $VERSION = '0.021';
 
 
 =head1 NAME
@@ -31,6 +31,7 @@ This Data class contains basic user information, such as name, e-mail address, a
 
 AxKit::App::TABOO::Data::User->selectquery("SELECT * FROM users WHERE username=?");
 AxKit::App::TABOO::Data::User->dbtable("users");
+AxKit::App::TABOO::Data::User->dbprimkey("username");
 AxKit::App::TABOO::Data::User->elementorder("username, name, email, uri, passwd");
 
 =head1 METHODS

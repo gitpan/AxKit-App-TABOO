@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.021_2';
+our $VERSION = '0.021';
 
 
 =head1 NAME
@@ -100,21 +100,26 @@ sub save {
   my $self = shift;
   my $dbh = DBI->connect($self->dbstring(),
 			 $self->dbuser(),
-			 $self->dbpasswd());
-#			 { PrintError => 1,
-#			   RaiseError => 0,
-#			   HandleError => Exception::Class::DBI->handler
-#			   });
+			 $self->dbpasswd(),
+			 { PrintError => 1,
+			   RaiseError => 0,
+			   HandleError => Exception::Class::DBI->handler,
+			   });
   my (@fields, @confields);
   my $i=0;
   my $j=0;
   foreach my $key (keys(%{$self})) {
       next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
-      next unless (${$self}{$key}); # No need to insert something that isn't there
+      next unless defined(${$self}{$key}); # No need to insert something that isn't there
       if (($key eq 'bio') || ($key eq 'authlevel')) {
 	# TODO: This is too ad-hoc, should have a better way to split the keys
 	push(@confields, $key);
 	$j++;
+      } elsif (($key eq 'username') && (! ${$self}{'ONFILE'})) {
+	push(@confields, $key);
+	$j++;
+	push(@fields, $key);
+	$i++;
       } else {
 	push(@fields, $key);
 	$i++;

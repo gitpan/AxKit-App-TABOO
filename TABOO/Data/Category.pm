@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.021_2';
+our $VERSION = '0.021';
 
 
 =head1 NAME

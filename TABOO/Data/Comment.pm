@@ -13,7 +13,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.021_2';
+our $VERSION = '0.021';
 
 
 

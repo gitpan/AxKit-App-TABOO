@@ -13,7 +13,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.021_2';
+our $VERSION = '0.021';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -32,7 +32,7 @@ use constant GOD       => 9;
 
 =head1 NAME
 
-AxKit::App::TABOO::XSP::User - User information managament tag library for TABOO
+AxKit::App::TABOO::XSP::User - User information management and authorization tag library for TABOO
 
 
 =head1 SYNOPSIS
@@ -88,17 +88,22 @@ sub store {
     my %args = $r->args;
     my $editinguser = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
+    AxKit::Debug(9, $editinguser . " logged in at level " . $authlevel);
     unless ($authlevel) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => AUTH_REQUIRED,
 					       -text => "Not authenticated and authorized with an authlevel");
     }
-    if ($args{'inspect'} eq $editinguser) {
+    my $user = AxKit::App::TABOO::Data::User::Contributor->new();
+    # Retrieve old data
+    $user->load($args{'username'});
+
+    if ($args{'username'} eq $editinguser) {
 	# It is the user editing his own data
 	if ($args{'authlevel'} > $authlevel) {
 	    throw Apache::AxKit::Exception::Retval(
 						   return_code => FORBIDDEN,
-						   -text => "Can you say privilige escalation, huh?");
+						   -text => "Can you say privilege escalation, huh?");
 	}
 	if (($args{'newpasswd1'}) && ($args{'newpasswd2'})) {
 	    # So, we want to update password
@@ -109,22 +114,27 @@ sub store {
 	    } else {
 		throw Apache::AxKit::Exception::Error(-text => "Passwords don't match");
 	    }
-	} else {
-	    # It is a higher privileged user editing another user's data. 
-	    if ($authlevel < AxKit::App::TABOO::XSP::User::ADMIN) {
-		throw Apache::AxKit::Exception::Retval(
-						       return_code => FORBIDDEN,
-						       -text => "Admin Priviliges are needed to edit other user's data. Your level: " . $authlevel);
-	    }
+	}
+    } else {
+	# It is a higher privileged user editing another user's data. 
+	my @changing = $user->apache_request_changed(\%args); # These are the fields sought to be changed
+	AxKit::Debug(10, "Changing fields: " . join(", ", @changing));
+	if ((scalar @changing == 1) && grep(/authlevel/, @changing)) {
+	    # Then, it is only the authlevel that is to be changed, which is ok with less privileges
 	    if ($args{'authlevel'} > ($authlevel - 2)) {
 		throw Apache::AxKit::Exception::Retval(
 						       return_code => FORBIDDEN,
 						       -text => "You may only set an authlevel two levels lower than your own. Your level: " . $authlevel);
 	    }
+	} else {
+	    # Any other fields require ADMIN privs
+	    if ($authlevel < AxKit::App::TABOO::XSP::User::ADMIN) {
+		throw Apache::AxKit::Exception::Retval(
+						       return_code => FORBIDDEN,
+						       -text => "Admin Privileges are needed to edit other user's data. Your level: " . $authlevel);
+	    }
 	}
     }
-#    AxKit::Debug(9, "Passwd: " . $args{'passwd'});
-    my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     $user->apache_request_data(\%args);
     $user->save();
 EOC
@@ -230,10 +240,10 @@ sub password_matches___false {
 
 =head2 C<<is-authorized authlevel="5" username="foo">>
 
-This is a boolean tag, which has child elements C<<true>> and C<<false>>. It takes an autherization level in an attribute or child element named C<authlevel>, and an attribute or child element named C<username>. If the authenticated user has it least this level I<or> the given C<username> matches the username of the authenticated user, the contents of the C<<true>> element will be included in the output document. Conversely, if the user has insufficient priviliges the contents of C<<false>> will be in the result document. If the user has not been authenticated at all, the tag will throw a exception with an C<AUTH_REQUIRED> code. 
+This is a boolean tag, which has child elements C<<true>> and C<<false>>. It takes an autherization level in an attribute or child element named C<authlevel>, and an attribute or child element named C<username>. If the authenticated user has it least this level I<or> the given C<username> matches the username of the authenticated user, the contents of the C<<true>> element will be included in the output document. Conversely, if the user has insufficient privileges the contents of C<<false>> will be in the result document. If the user has not been authenticated at all, the tag will throw a exception with an C<AUTH_REQUIRED> code. 
 
 
-B<NOTE:> This should I<not> be looked upon as a "security feature".  While it is possible to use it to make sure that an input control is not shown to someone who is not authorized to modify it (and this may indeed be its primary use), a malicious user could still insert data to that field by supplying arguments in a POST or GET request. Consequently, critical data must be checked for sanity before they are passed to the Data objects. The Data objects themselves are designed to believe anything they're fed, so it is most natural to do it in a taglib before handing the data to a Data object. See e.g. L<AxKit::App::TABOO::XSP::Story> internals for an example. 
+B<NOTE:> This should I<not> be looked upon as a "security feature".  While it is possible to use it to make sure that an input control is not shown to someone who is not authorized to modify it (and this may indeed be its primary use), a malicious user could still insert data to that field by supplying arguments in a POST or GET request. Consequently, critical data must be checked for sanity before they are passed to the Data objects. The Data objects themselves are designed to believe anything they're fed, so it is most natural to do it in a taglib before handing the data to a Data object. See e.g. the internals of the C<<store/>> tag for an example. 
 
 
 =cut

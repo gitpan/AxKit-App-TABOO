@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.021_2';
+our $VERSION = '0.021';
 
 
 use DBI;
@@ -149,7 +149,7 @@ This method takes as argument a reference to the args hash of a L<Apache::Reques
 
     my %args = $r->args;
 
-It will populate the data object by adding any data from a parameter having the same name as is used in the data storage. Keys with uppercase letters are ignored. 
+It will populate the data object by adding any data from a parameter having the same name as is used in the data storage. Fields that are not specified by the data object or that has uppercase letters are ignored. 
 
 =cut
 
@@ -163,6 +163,29 @@ sub apache_request_data {
     }
     return $self;
 }
+
+=item C<apache_request_changed(\%args)>
+
+Like the above method, this method takes as argument a reference to the args hash of a L<Apache::Request> object. Instead of populating the Data object, it will compare the C<\%args> with the contents of the object and return an array of fields that differs between the two. Fields that are not specified by the data object, that has uppercase letters or has no value, are ignored.
+
+
+=cut
+
+
+sub apache_request_changed {
+    my $self = shift;
+    my $args = shift;
+    my @keys;
+    foreach my $key (keys(%{$self})) {
+	next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
+	next unless defined(${$args}{$key}); # if it isn't there, we don't care.
+	if (${$self}{$key} ne ${$args}{$key}) {
+	  push(@keys, $key);
+	}
+    }
+    return @keys;
+}
+
 
 =item C<save([$olddbkey])>
 
@@ -187,7 +210,7 @@ sub save {
   my $i=0;
   foreach my $key (keys(%{$self})) {
       next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
-      next unless (${$self}{$key}); # No need to insert something that isn't there
+      next unless defined(${$self}{$key}); # No need to insert something that isn't there
       push(@fields, $key);
       $i++;
   }
@@ -237,12 +260,14 @@ Checks if a record with the present object's identifier is allready present in t
 
 =cut
 
+#'
+
 sub stored {
   my $self = shift;
   return 1 if ${$self}{'ONFILE'};
-  my $dbh = DBI->connect($self->dbstring(), 
-			 $self->dbuser(), 
-			 $self->dbpasswd(),  
+  my $dbh = DBI->connect($self->dbstring(),
+			 $self->dbuser(),
+			 $self->dbpasswd(),
 			 { PrintError => 0,
 			   RaiseError => 0,
 			   HandleError => Exception::Class::DBI->handler

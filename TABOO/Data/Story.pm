@@ -1,4 +1,3 @@
-
 package AxKit::App::TABOO::Data::Story;
 use strict;
 use warnings;
@@ -16,7 +15,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.021_2';
+our $VERSION = '0.021';
 
 
 =head1 NAME
