@@ -103,3 +103,40 @@ Revision history for Perl extension AxKit::App::TABOO.
 	- Added dependency on XML::LibXML 1.57
 	- A few notes on that my Data objects need more work when it
 	comes to plurals. 
+
+0.04	  2004-03-30 15:00
+	- I think this is worthy of being called a real ALPHA!
+	- Added lots of XSLT, and redesigned a lot in the pipelines, a
+	lot of it thanks to helpful remarks by Mike Nachbaur and Tod
+	Harter, including
+		* First part of the pipeline generates consistent
+		markup for several pages.  
+		* Splitting up the stylesheets so that each individual
+		file solves a specific task. 
+		* A small stylesheet that imports other stylesheets
+		that do the hard work.
+		* Finally, a stylesheet that inserts i18n strings from
+		a separate XML file. This is however only implemented
+		as proof of concept in this release, there are still
+		many strings that will be replaced.
+	- XSP page to really be able to submit a story
+	- XSP page to edit user information
+	- XSP page to submit a new user. 
+		* This needs AxKit::XSP::Sendmail and 
+		Crypt::GeneratePassword
+		* And I lifted random-password from Joerg Walter's Auth
+		taglib, I found that was better than using the
+		taglib. 
+	- Started work on editing an allready submitted story, but
+	this requires some new tags, and possibly redoing some more
+	architectural things, so it is a TODO to be addressed
+	shortly. 
+	- New tags:
+		* AxKit::App::TABOO::XSP::User:
+		     + new-user
+		     + exists
+		     + random-password (Author: Joerg Walter)
+		* AxKit::App::TABOO::XSP::Story:
+		     + I had forgotten to document this-story in the
+		     previous release. 
+

@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.021';
+our $VERSION = '0.04';
 
 =head1 NAME
 
@@ -73,13 +73,13 @@ It will take whatever data it finds in the L<Apache::Request> object held by AxK
 
 Finally, the Data object is instructed to save itself. 
 
-
+If successful, it will return a C<store> element in the output namespace with the number 1. 
 
 =cut
 
 # '
 
-sub store {
+sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}store) {
     return << 'EOC'
 	my %args = $r->args;
     $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
@@ -138,8 +138,16 @@ sub store {
 #  					   -text => $ex->error
 #  					   );
 #    };
+    1;
 EOC
 }
+
+
+=head2 C<<this-story/>>
+
+Will return an XML representation of the data submitted in the last request, enclosed in a C<story-submission> element. Particularly useful for previewing a submission. 
+
+=cut
 
 sub this_story : struct {
     return << 'EOC'
@@ -170,6 +178,47 @@ sub this_story : struct {
     $story->write_xml($doc, $root); # Return an XML representation
 EOC
 }
+
+
+
+sub merge : struct attribOrChild(storyname,sectionid) {
+    return << 'EOC'
+	my %args = $r->args;
+
+    my $story = AxKit::App::TABOO::Data::Story->new();
+    $story->load('*', $attr_sectionid, $attr_storyname);
+
+
+
+
+#      $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+    
+#      if (! $args{'submitterid'}) {
+#        # If the submitterid is not set, we set it to the current username
+#  	$args{'submitterid'} = $args{'username'}
+#      }
+    
+    
+#      my $timestamp = localtime;
+#      if (! $args{'timestamp'}) {
+#        $args{'timestamp'} = $timestamp->datetime;
+#      }
+#      if (! $args{'lasttimestamp'}) {
+#        $args{'lasttimestamp'} = $timestamp->datetime;
+#      }
+#      my $story = AxKit::App::TABOO::Data::Story->new();
+#      $story->apache_request_data(\%args);
+#      $story->adduserinfo();
+#      $story->addcatinfo();
+    
+    my $doc = XML::LibXML::Document->new();
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story-loaded');
+    $doc->setDocumentElement($root);
+    $story->write_xml($doc, $root); # Return an XML representation
+EOC
+}
+
+
 1;
 
 =head1 Quirks 

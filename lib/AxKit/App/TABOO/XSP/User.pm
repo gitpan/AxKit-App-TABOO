@@ -8,12 +8,13 @@ use AxKit;
 use AxKit::App::TABOO::Data::User;
 use AxKit::App::TABOO::Data::User::Contributor;
 use Apache::AxKit::Plugin::BasicSession;
+use Crypt::GeneratePassword;
 use Data::Dumper;
 
 use vars qw/$NS/;
 
 
-our $VERSION = '0.023';
+our $VERSION = '0.04';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -158,6 +159,37 @@ EOC
 }
 
 
+=head2 C<<new-user/>>
+
+This tag will store the contents of an Apache::Request object in the data store, but perform little checks on the data given. The only thing it checks is that hte username isn't in use and allready. Then, if the authlevel is different from 1, it is checked if the logged in user is privileged to set the authlevel.   
+
+=cut
+
+#'
+
+sub new_user
+{
+    return << 'EOC';
+    my %args = $r->args;
+    my $user = AxKit::App::TABOO::Data::User::Contributor->new();
+    if($user->load_name($args{'username'})) {
+	warn "here";
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => FORBIDDEN,
+					       -text => "User exists allready")
+	}
+    my $extremes = AxKit::App::TABOO::XSP::User::authlevel_extremes('');
+    if(($args{'authlevel'} > ${$extremes}{'maxlevel'}) || (! $args{'authlevel'})) {
+        $args{'authlevel'} = 1;   
+    }
+    $args{'passwd'} = crypt($args{'passwd'}, AxKit::App::TABOO::XSP::User::makeSalt());
+    $user->apache_request_data(\%args);
+    AxKit::Debug(9, "Saving new user " . $args{'username'});
+    $user->save();
+EOC
+}
+
+
 =head2 C<<get-passwd username="foo"/>>
 
 This tag will return the password of a user. The username may be given in an attribute or child element named C<username>.
@@ -206,9 +238,10 @@ sub this_user : struct attribOrChild(username)
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output', 'this-user');
     $doc->setDocumentElement($root);
     $user->write_xml($doc, $root); # Return an XML representation
-
 EOC
 }
+
+
 
 
 =head2 C<<password-matches>>
@@ -254,6 +287,42 @@ EOC
 sub password_matches___false {
   return '}'
 }
+
+
+
+=head2 C<<exists username="foo"/>>
+
+This tag will check if a user allready exists. Like C<<password-matches>> this tag is a boolean tag, which has child elements C<<true>> and C<<false>>. It takes a username, which may be given as an attribute or a child element named C<username>, and if the user is found in the data store, the contents of C<<true>> child element is included, otherwise, the contents of C<<false>> is included. 
+
+=cut
+
+sub exists : attribOrChild(username) {
+    return ''; # Gotta be something here
+}
+
+sub exists___true__open {
+return << 'EOC';
+    my $user = AxKit::App::TABOO::Data::User->new();
+    if ($user->load_name($attr_username)) {
+EOC
+}
+
+sub exists___true {
+  return '}'
+}
+
+
+sub exists___false__open {
+return << 'EOC';
+    my $user = AxKit::App::TABOO::Data::User->new();
+    unless ($user->load_name($attr_username)) {
+EOC
+}
+
+sub exists___false {
+  return '}'
+}
+
 
 =head2 C<<is-authorized authlevel="5" username="foo">>
 
@@ -320,8 +389,25 @@ EOC
 }
 
 
+=head2 C<<random-password/>>
+
+Shamelessly stolen from Jörg Walter's L<AxKit::XSP::Auth> taglib, this would generate a new random password, see his documentation for details.  
+
+=cut
+
+#'
+
+sub random_password : expr attribOrChild(lang,signs,numbers,minlen,maxlen)
+{
+	return 'Crypt::GeneratePassword::word(int($attr_minlen)||7,int($attr_maxlen)||7,$attr_lang,int($attr_signs),(defined $attr_numbers?int($attr_numbers):2))';
+}
+
+
 1;
 
+=head1 TODO
+
+Currently, C<<exists>> checks if a user exists by checking if the real name is defined. This is likely to change in the future. Do not rely on this behaviour, but do make sure every-one has a real name! 
 
 
 =head1 FORMALITIES

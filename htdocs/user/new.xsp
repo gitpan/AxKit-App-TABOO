@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="NULL" type="application/x-xsp"?>
+<?xml-stylesheet href="make-control.xsl" type="text/xsl"?>
+<?xml-stylesheet href="new2html.xsl" type="text/xsl"?>
+<?xml-stylesheet href="/insert-i18n.xsl" type="text/xsl"?>
+<xsp:page
+  xmlns:xsp="http://www.apache.org/1999/XSP/Core"
+  xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"
+  xmlns:param="http://www.axkit.org/2002/XSP/QueryParam"
+  xmlns:sendmail="http://axkit.org/NS/xsp/sendmail/v1"
+  xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
+  xmlns:html="http://www.w3.org/1999/xhtml">
+  <user>
+    <param:if-exists name="submitted">
+      
+      
+      <user:exists>
+	<user:username><param:get name="username"/></user:username>
+	<user:true><title><i18n:insert name="suggested-user-exists"/></title></user:true>
+	<user:false>
+	  <sendmail:send-mail>
+	    <sendmail:smtphost>pooh.kjernsmo.net</sendmail:smtphost>
+	    <sendmail:from>webmaster@dev.kjernsmo.net</sendmail:from>
+	    <sendmail:subject>TABOO Reg</sendmail:subject>
+	    <sendmail:to><param:get name="email"/></sendmail:to>
+	    <sendmail:body>
+	      You've been registered as <param:get name="username"/>
+	      with password <param:get name="passwd"/>.
+	    </sendmail:body>
+	  </sendmail:send-mail>
+	  <user:new-user/>
+	  <title><i18n:insert name="suggested-user-stored"/></title>
+	</user:false>
+      </user:exists>
+    </param:if-exists>
+
+    <param:unless-exists name="submitted">
+      <title>New User</title>
+      
+      <control element="input" type="text" name="username">
+	<title>Username</title>
+	<descr>Choose a single-word username</descr>
+      </control>
+      <control element="input" type="text" name="name">
+	<title>Name</title>
+      </control>
+      <control element="input" type="text" name="email">
+	<title>Email</title>
+      </control>
+
+      <control element="input" type="text" name="uri">
+	<title>URI</title>
+      </control>
+
+      <control element="input" type="hidden" name="passwd">
+	<value><user:random-password/></value>
+      </control>
+
+
+      
+      <control element="input" type="submit" name="submitted"> 
+	<value>Register</value>
+      </control>
+    </param:unless-exists>
+
+  </user>
+</xsp:page>
+
+
+

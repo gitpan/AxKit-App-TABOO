@@ -1,8 +1,18 @@
 Changes
-MANIFEST			This list of files
-META.yml			Module meta-data (added by MakeMaker)
-Makefile.PL
-README
+htdocs/news/story-html.xsl
+htdocs/news/submit.xsp
+htdocs/news/provider2html.xsl
+htdocs/news/submit2html.xsl
+htdocs/user/user.xsp
+htdocs/user/make-control.xsl
+htdocs/user/user2html.xsl
+htdocs/user/user-html.xsl
+htdocs/user/new.xsp
+htdocs/user/new2html.xsl
+htdocs/login.xsp
+htdocs/i18n.en.xml
+htdocs/insert-i18n.xsl
+htdocs/control-html.xsl
 lib/AxKit/App/TABOO.pm
 lib/AxKit/App/TABOO/Data.pm
 lib/AxKit/App/TABOO/Data/Category.pm
@@ -14,14 +24,9 @@ lib/AxKit/App/TABOO/Provider/News.pm
 lib/AxKit/App/TABOO/XSP/Category.pm
 lib/AxKit/App/TABOO/XSP/Story.pm
 lib/AxKit/App/TABOO/XSP/User.pm
-htdocs/news/submit.xsp
-htdocs/news/html.xsl
-htdocs/news/test.xsl
-htdocs/news/to-html.xsl
-htdocs/news/story-html.xsl
-htdocs/user/control.xsl
-htdocs/user/user.xsp
-htdocs/user/html.xsl
-htdocs/login.xsp
+Makefile.PL
+MANIFEST			This list of files
+META.yml			Module meta-data (added by MakeMaker)
+README
 sql/testdata.sql
 test.pl

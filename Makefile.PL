@@ -13,6 +13,8 @@ WriteMakefile(
 			     XML::LibXML => 1.57,
 			     AxKit => 1.62,
 			     AxKit::XSP::QueryParam => 0.02,
+                             AxKit::XSP::Sendmail => 0,
+			     Crypt::GeneratePassword => 0,
 			     Apache::AxKit::Exception => 0,
 			     Apache::AxKit::Plugin::BasicSession => 0,
 			   }, # E.g., Module::Name => 1.1

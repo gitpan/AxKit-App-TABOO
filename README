@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.03
+AxKit/App/TABOO version 0.04
 ============================
 
 INTRODUCTION
@@ -42,15 +42,18 @@ in the code, that's also rather important to make it maintainable.
 For the stuff that goes into the database, OTOH, XSP is used, and
 several taglibs are used. 
 
-Uhm, well, that's not really true yet. This is a early release, but
-sort of an alpha in that it does some useful things. It consists mainly
-of a News provider that constructs objects, instruct them to load
-their data based on the URI, get them to write their own XML, and pass
-this raw to the browser. There are also several XSP taglibs, and some
+This is a early release, an alpha in that it does some useful
+things. It consists mainly of a News provider that constructs objects,
+instruct them to load their data based on the URI, get them to write
+their own XML, and pass this to some XSLT stylesheets, which makes
+some presentable XHTML. There are also several XSP taglibs, and some
 some XSP pages and XSL Transformations are now included in the
-distribution. These are very much work-in-progress, and I don't feel I
-have quite gotten the hang of XSLT yet, but it is being worked on. Try
-them out if you understand what they're supposed to do. 
+distribution. There is also some user-management code, including
+authentication and authorization, to allow adding new users and editing the
+information of existing users. These are very much work-in-progress,
+and I don't feel I have quite gotten the hang of XSLT yet, but it is
+being worked on. Try them out if you understand what they're supposed
+to do.
 
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a
@@ -77,10 +80,20 @@ This module requires these other modules and libraries:
 - Time::Piece
 - Class::Data::Inheritable
 - Apache::AxKit::Plugin::BasicSession
+- Crypt::GeneratePassword for generating passwords to send to users.
+- AxKit::XSP::Sendmail to send e-mail to new users.
 - Data::Dumper lists out debugging information, but can be removed. 
 - and to use the XSP pages, you should have AxKit::XSP::QueryParam,
 AxKit::XSP::BasicAuth and AxKit::XSP::BasicSession, the first is
 currently required.
+
+SUPPORT
+
+There is a list taboo-dev@kjernsmo.net, you can subscribe to at 
+http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
+
+Beware that TABOO is in development, so it is not yet software
+that you just install and use. 
 
 COPYRIGHT AND LICENCE
 

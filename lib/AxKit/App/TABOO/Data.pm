@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.022';
+our $VERSION = '0.04';
 
 
 use DBI;
@@ -395,7 +395,7 @@ Consult the documentation for each individual Data class for the names of the st
 
 =head1 BUGS/TODO
 
-Except for still being near-alpha, and should have a few bugs, there is the issue with the handling of references to other objects in the C<save()> method. It's possible it will cope, but it definately needs work.
+Except for still being in alpha, and should have a few bugs, there is the issue with the handling of references to other objects in the C<save()> method. It's possible it will cope, but it definately needs work.
 
 Every load-type method should throw an exception or do something similar if it finds that the record it tries to retrieve doesn't exist. 
 

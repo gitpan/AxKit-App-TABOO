@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 NAME
 
@@ -335,7 +335,7 @@ sub _expand_root {
 
 =head1 BUGS/TODO
 
-Well, it is a pre-alpha, so obviously a lot needs doing. However, what needs doing next is to get the data I<into> the data storage... Then, the next thing to do with this module and modules it depends on is to implement some editor control, i.e. make sure that the editor can see a submitted article and that others can only see it after the editor has OKed it. 
+Well, it is an alpha, so there can be bugs...
 
 =head1 FORMALITIES
 

@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.032';
+our $VERSION = '0.04';
 
 
 # Preloaded methods go here.
@@ -99,9 +99,17 @@ easy-to-understand ways, you can load just the story, view the
 comments, separately, in a list or as a thread. 
 
 Currently, it supplies three Taglibs, L<User|AxKit::App::TABOO::XSP::User>,
-L<Story|AxKit::App::TABOO::XSP::Story> and L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide several tags that you may use interface with the Data objects. Currently, they are mainly used to write data to the storage. 
+L<Story|AxKit::App::TABOO::XSP::Story> and L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide several tags that you may use interface with the Data objects. 
 
-Some XSP and XSLT is written as a prototype to do that, and they are as of 0.03 included in the distribution, but I'm not confident in writing XSLT yet, and this is worked on every day, but please try them out.
+Some XSP and XSLT have been written that allows you to enter stories and the News Provider now has some XSLT to produce HTMLized output. 
+
+Furthermore, there is also some user-management code, including
+authentication and authorization, to allow adding new users and
+editing the information of existing users.
+
+I still have a lot to learn about XSLT, and these are worked on every day, but please try them out.
+
+As of 0.04, I have tried to include a final step in the stylesheet chain, which can take all strings of text from a separate XML file and insert them in the final product. This will hopefully make it easy to provide many translations with TABOO.  
 
 
 =head1 TODO
@@ -123,6 +131,11 @@ change, parameters may be different, and I may decide to do things
 differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
 feedback hackers provide. 
+
+=head1 SUPPORT
+
+There is now a taboo-dev mailing list that can be subscribed to at 
+http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
 =head1 BUGS
 

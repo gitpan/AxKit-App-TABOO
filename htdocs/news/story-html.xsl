@@ -4,6 +4,7 @@
   xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
+  xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:html="http://www.w3.org/1999/xhtml">  
   <xsl:output method="xml" version="1.0" encoding="utf-8"
     media-type="text/xml" indent="yes"/>
@@ -11,19 +12,19 @@
   <xsl:template match="story:story">
     <html:h2><xsl:value-of select="story:title"/></html:h2>
     <html:div id="byline">
-      <xsl:text>Submitted by </xsl:text>
+      <i18n:insert name="submit-by"/>
       <xsl:apply-templates select="user:submitter"/>
-      <xsl:text>Posted by </xsl:text>
-      <xsl:apply-templates select="user:user"/>
+      <i18n:insert name="posted-by"/>
+       <xsl:apply-templates select="user:user"/>
     </html:div>
     <html:div id="catinfo">
-      <xsl:text>To Category </xsl:text>
+      <i18n:insert name="to-cat"/>
       <xsl:apply-templates select="cat:primcat"/>
     </html:div>
     <html:div id="timeinfo">
-      <xsl:text>On </xsl:text>
+      <i18n:insert name="on"/>
       <xsl:apply-templates select="story:timestamp"/>
-      <xsl:text>Last changed </xsl:text>
+      <i18n:insert name="last-changed"/>
       <xsl:apply-templates select="story:lasttimestamp"/>
     </html:div>
     <html:div class="minicontent">
@@ -56,13 +57,6 @@
       <xsl:value-of select="."/>
     </html:span>
   </xsl:template>
-
-
-
- <xsl:template match="*|/">
-    <xsl:apply-templates/>
-  </xsl:template>
-
 
 </xsl:stylesheet>
 

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<translations
+  xmlns="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts" lang="en">
+
+  <text id="submit-by"> Submitted by </text>
+  <text id="posted-by"> Posted by </text>
+  <text id="to-cat"> To Category </text>
+  <text id="on"> On </text>
+  <text id="last-changed"> Last changed </text>
+
+
+  <text id="submit-story"> Submit Story </text>
+  <text id="article-descr"> The title of the article </text>
+
+  <text id="user-name"> Name </text>
+  <text id="user-email"> Email </text>
+  <text id="uri"> URI </text>
+
+  <text id="suggested-user-exists"> User name is allready in use! </text>
+  <text id="suggested-user-stored"> User information was successfully stored! </text>
+
+</translations>

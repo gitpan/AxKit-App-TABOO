@@ -7,16 +7,7 @@
   <xsl:output method="xml" version="1.0" encoding="utf-8"
     media-type="text/xml" indent="yes"/>  
 
-  <xsl:template match="user">
-    <user>
-      <!-- xsl:copy-of select="title"/>
-      <xsl:apply-templates select="//user:user"/ -->
-      <xsl:apply-templates select="control"/>
-      <xsl:apply-templates select="//html:*"/>
-      <xsl:copy-of select="//user:authlevel"/>
-    </user>
-  </xsl:template>
-  
+
   <xsl:template match="control">
     <xsl:choose>
       <xsl:when test="@name='authlevel'">
@@ -36,7 +27,7 @@
 	  <xsl:copy-of select="title|descr|@*"/>
 	  <value>
 	    <xsl:apply-templates select="value/userinc:*"/>
-	    <xsl:value-of select="value"/>
+	    <xsl:copy-of select="value/node()"/>
 	  </value>
 	</control>
       </xsl:otherwise>
@@ -55,19 +46,12 @@
     <xsl:value-of select="//user:uri"/>
   </xsl:template>
 
-  <xsl:template match="user:user">
-    <html:li>
-      <xsl:value-of select="user:username"/>
-    </html:li>
-    <html:li>
-      <xsl:value-of select="user:name"/>
-    </html:li>
-  </xsl:template>
 
-  <xsl:template match="html:*">
-    <xsl:copy-of select="."/>
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
   </xsl:template>
-
 
 </xsl:stylesheet>
 
