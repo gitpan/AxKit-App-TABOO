@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.07';
 
 
 =head1 NAME
@@ -101,9 +101,11 @@ TABOO (is intended to) recognize several types of categories, for different uses
 
 =item * angle - People write articles about the same subject but see it from different angles. For example, an anthropologist will view hackerdom from a different angle than a programmer. 
 
+=item * stsec - Stories that are managed by the Story data objects go in different sections, and we store them here.
+
 =back
 
-This may be extended. 
+This may be extended, and this may not even be the place to document it in the future.
 
 =item * uri
 

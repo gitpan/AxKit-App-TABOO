@@ -17,7 +17,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.011_1';
+our $VERSION = '0.017_1';
 
 AxKit::App::TABOO::Data::Plurals::Productsubtypes->dbtable("productsubtypes");
 AxKit::App::TABOO::Data::Plurals::Productsubtypes->dbfrom("productsubtypes");
@@ -63,6 +63,7 @@ sub load {
   my ($self, %args) = @_;
   my @prodsubs;
   my $data = $self->_load(%args); # Does the hard work
+  return undef unless ($data);
   foreach my $entry (@{$data}) {
     my $prodsub = AxKit::App::TABOO::Data::Productsubtype->new();
     $prodsub->populate($entry);

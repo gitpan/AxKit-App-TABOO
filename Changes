@@ -194,3 +194,21 @@ Revision history for Perl extension AxKit::App::TABOO.
 	store. 
 	- New get-story tag in the Story taglib.
 	- addcatinfo() now includes both name and username.
+
+0.07 	  2004-07-15 15:18 
+	- A new AxKit::App::TABOO::Provider::NewsList Provider, which
+	is used to make lists of the stories.
+	- Now depends on AxKit::XSP::BasicSession 0.18, as it fixed a
+	bug that bit me.
+	- Plurals will now die with an error message if you try to use
+	methods that are only implemented for singular objects.
+	- load methods have undergone some more changes:
+	       + Plurals have gained orderby and entries arguments. 
+	       + Plurals will load OK also if you ask for all records
+	       (i.e. limit argument to load() is undef).
+	       + The load methods will return undef if no record was 
+	       possible to retrieve with the arguments given. 
+	- Change the News Provider to use the method of Kip's book for exists.
+	- XSP::Story will again set the timestamp to now unless given
+	as a parameter.	
+	- New Grep method for Plurals.

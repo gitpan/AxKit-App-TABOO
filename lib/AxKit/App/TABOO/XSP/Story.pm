@@ -119,7 +119,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
     }
 
     my $timestamp = localtime;
-    unless ($oldstorykey) {
+    unless ($args{'timestamp') {
 	$args{'timestamp'} = $timestamp->datetime;
     }
     unless ($args{'lasttimestamp'}) {

@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.07';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -53,24 +53,44 @@ sub new {
 }
 
 
-=item C<load(what => fields, limit => {key => value, [...]})>
+=item C<load(what => fields, limit => {key => value, [...]}, orderby => fields, entries = number)>
 
-It takes a hashref where the keys are data storage names and the values are corresponding values to retrieve. These will be combined by logical AND. It will retrieve the data, and then call C<populate()> for each of the records retrieved to ensure that the plural data objects actually consists of an array of L<AxKit::App::TABOO::Data::Story>s. But it calls the internal C<_load()>-method to do the hard work (and that's in the parent class).
+This load method can be used to retrieve a number of entries from a
+data store.  It uses named parameters, the first C<what> is used to
+determine which fields to retrieve. It is a string consisting of a
+commaseparated list of fields, as specified in the data store. The
+C<limit> argument is to be used to determine which records to
+retrieve, these will be combined by logical AND. You may also supply a
+C<orderby> argument, which is an expression used to determine the
+order of entries returned. Usually, it would be a simple string with
+the field name to use, e.g. C<'timestamp'>, but you might want to
+append the keyword "C<DESC>" to it for descending order. Finally, you
+may supply a C<entries> argument, which is the maximum number of
+entries to retrieve.
+
+It will retrieve the data, and then call C<populate()> for each of the
+records retrieved to ensure that the plural data objects actually
+consists of an array of L<AxKit::App::TABOO::Data::Story>s. But it
+calls the internal C<_load()>-method to do the hard work (and that's
+in the parent class).
+
+If there is no data that corresponds to the given arguments, this method will return C<undef>.
 
 =cut
 
 
 sub load {
   my ($self, %args) = @_;
-  my @storys;
+  my @stories;
   my $data = $self->_load(%args); # Does the hard work
+  return undef unless (@{$data});
   foreach my $entry (@{$data}) {
     my $story = AxKit::App::TABOO::Data::Story->new();
     $story->populate($entry);
     $story->onfile;
-    push(@storys, $story);
+    push(@stories, $story);
   }
-  ${$self}{ENTRIES} = \@storys;
+  ${$self}{ENTRIES} = \@stories;
   return $self;
 }
 
@@ -78,7 +98,7 @@ sub load {
 
 =head1 BUGS/TODO
 
-This class has not yet seen a lot of testing.
+Not anything particular at the moment...
 
 
 =head1 FORMALITIES

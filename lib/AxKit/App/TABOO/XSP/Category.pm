@@ -61,7 +61,7 @@ package AxKit::App::TABOO::XSP::Category::Handlers;
 
 This tag will replace itself with some structured XML containing all
 categories of type C<foo>.  It relates to the TABOO Data object
-L<AxKit::App::TABOO::Data::Plurals::Category>, and calls on that to do
+L<AxKit::App::TABOO::Data::Plurals::Categories>, and calls on that to do
 the hard work. See the documentation of that class to see the
 available types.
 

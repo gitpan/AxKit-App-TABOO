@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.051';
+our $VERSION = '0.07';
 
 
 use DBI;
@@ -72,14 +72,18 @@ a reference to a hash, containing data store field values as keys and
 values are corresponding values to retrieve. These will be combined by
 logical AND.
 
+If there is no data that corresponds to the given arguments, this method will return C<undef>.
 
 =cut
 
 sub load {
   my ($self, %args) = @_;
   my $data = $self->_load(%args);
+  warn Dumper($data);
   if ($data) {
     ${$self}{'ONFILE'} = 1;
+  } else {
+    return undef;
   }
   foreach my $key (keys(%{$data})) {
     ${$self}{$key} = ${$data}{$key}; 
@@ -127,6 +131,7 @@ sub _load {
     if ($nothing) {
       # Then, none of the fields were actually sent with a value, so
       # load won't return anything sensible...
+      carp "No fields were sent with value, so no unique record can be found.";
       return undef;
     }
     my $sth = $dbh->prepare($query);
@@ -137,13 +142,20 @@ sub _load {
       $i++;
     }
     $sth->execute();
-
     return $sth->fetchrow_hashref;
 }
 
 =item C<write_xml($doc, $parent)>
 
-Takes arguments C<$doc>, which must be an L<XML::LibXML::Document> object, and C<$parent>, a reference to the parent node. The method will append the object it is handed it with the data contained in the data structure of the class in XML. This method is the jewel of this class, it should be sufficiently generic to rarely require subclassing. References to subclasses will be followed, and C<write_xml> will call the C<write_xml> of that object. Arrays will be represented with multiple instances of the same element. Fields that have undefined values will not be included.
+Takes arguments C<$doc>, which must be an L<XML::LibXML::Document>
+object, and C<$parent>, a reference to the parent node. The method
+will append the object it is handed it with the data contained in the
+data structure of the class in XML. This method is the jewel of this
+class, it should be sufficiently generic to rarely require
+subclassing. References to subclasses will be followed, and
+C<write_xml> will call the C<write_xml> of that object. Arrays will be
+represented with multiple instances of the same element. Fields that
+have undefined values will not be included.
 
 =cut
 

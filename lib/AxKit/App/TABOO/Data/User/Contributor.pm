@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.07';
 
 
 =head1 NAME
@@ -75,6 +75,8 @@ sub load {
   my $data = $self->_load(%args);
   if ($data) {
     ${$self}{'ONFILE'} = 1;
+  } else {
+    return undef;
   }
   foreach my $key (keys(%{$data})) {
     ${$self}{$key} = ${$data}{$key}; 

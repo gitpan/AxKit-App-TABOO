@@ -11,17 +11,30 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.051';
+our $VERSION = '0.07';
 
 =head1 NAME
 
 AxKit::App::TABOO::Provider::News - News Provider for TABOO
 
+=head1 SYNOPSIS
+
+In the Apache config:
+
+   <LocationMatch ^/news/(.*)/(.*)/>
+        PerlHandler AxKit
+        AxContentProvider AxKit::App::TABOO::Provider::News
+   </LocationMatch>
+
+
+
+
+
 =head1 DESCRIPTION 
 
 This is a Provider, it implements the AxKit Provider API, and therefore contains no method that anybody should use for anything. For that reason, this documentation deals with what you should expect to be returned for different URIs. 
 
-The News articles that are managed with this provider, are posts that may have been submitted by users of the site, reviewed by an editor and posted. It will consist of the editor-approved content, called the Story, and content provided as responses by site users, called Comments.
+The News articles that are managed with this provider are posts that may have been submitted by users of the site, reviewed by an editor and posted. It will consist of the editor-approved content, called the Story, and content provided as responses by site users, called Comments.
 
 In accordance with the TABOO philosophy, it interacts with Data objects, that are Perl objects responsible for retrieving data from a data storage, make up sensible data structures, return XML markup, etc. 
 
@@ -34,7 +47,6 @@ use vars qw/@ISA/;
 @ISA = ('Apache::AxKit::Provider');
 
 use Apache;
-use Apache::Log;
 use Apache::AxKit::Exception;
 use Apache::AxKit::Provider;
 
@@ -112,13 +124,20 @@ sub process {
 					       return_code => 404,
 					       -text => "URIs should not end with /");
     }
-    my $exists = $self->exists();
-    if (! $exists) {
+
+    $self->{exists} = 0;
+    if ($self->{storytimestamp}) { # This exists iff the story is OK
+      $self->{exists} = 1;
+    }
+    if($self->{getcomments}) {
+      $self->{exists} = ($self->{commenttimestamp}) ?1:0;
+    }
+    unless ($self->{exists}) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => 404,
 					       -text => "Not found by News Provider.");
     }
-    return $exists;
+    return $self->{exists};
 }
 
 
@@ -134,18 +153,7 @@ sub key {
 # should return 1 only if the resource actually exists.
 sub exists {
   my $self = shift;
-  my $exists = 0;
-  if ($self->{storytimestamp}) # This exists iff the story is OK
-  {
-      $exists = 1;
-  }
-  if($self->{getcomments})
-  {
-      $exists = ($self->{commenttimestamp}) ?1:0;
-  } else {
-      $exists = ($self->{uri} =~ m|^/news/.*?/.*?/$|i) ?1:0;
-  }
-  return $exists;
+  return $self->{exists};
 }
 
 
@@ -305,21 +313,6 @@ There are a few things worth noting:
 =cut
 
 
-# This is a method to return the transformations
-# ******* Quite unlikely I'll ever use this, rather use Conf Directives
-#  sub get_styles {
-#      my $self = shift;
-#      my @transforms;
-#      my $href= '/transforms/news/html.xsl';
-#      my $type= 'text/xsl';
-#      my $module= 'Apache::AxKit::Language::LibXSLT';
-#  #    my $module = 'Apache::AxKit::Language::Sablot';
-#      my %style = ( type => $type, href => $href, module => $module );
-#      push(@transforms, \%style);
-#      AxKit::Debug(10, Dumper(@transforms));
-#      return \@transforms;
-#  }
-
 # Internal method to get a tree of comments from root to the highest branch
 sub _expand_root {
   my $self = shift;
@@ -337,10 +330,15 @@ sub _expand_root {
 }
 
 
+=head1 TODO
 
-=head1 BUGS/TODO
+Since every resource comes with a C<lasttimestamp>, it should be relatively simple to implement C<mtime> better than it is now, but the question is if all code updates C<lasttimestamp> reliably enough...
+
+=head1 BUGS
 
 Well, it is an alpha, so there can be bugs...
+
+
 
 =head1 FORMALITIES
 

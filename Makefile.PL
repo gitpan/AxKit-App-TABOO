@@ -16,7 +16,7 @@ WriteMakefile(
                              AxKit::XSP::Sendmail => 0,
 			     Crypt::GeneratePassword => 0,
 			     Apache::AxKit::Exception => 0,
-			     Apache::AxKit::Plugin::BasicSession => 0,
+			     AxKit::XSP::BasicSession => 0.18,
 			   }, # E.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
      (ABSTRACT_FROM => 'lib/AxKit/App/TABOO.pm', # retrieve abstract from module

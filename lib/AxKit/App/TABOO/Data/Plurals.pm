@@ -15,7 +15,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.07';
 
 
 =head1 NAME
@@ -54,9 +54,51 @@ sub Push {
 
 
 
-=item C<_load(\%arg)>
+=item C<Grep($pattern, $field)>
 
-As the underscore implies this is B<for internal use only>! It can do the hard work for subclasses of this class. It takes a hashref where the keys are data storage names and the values are corresponding values to retrieve. These will be combined by logical AND. It will return an arrayref containing the data from the storage. 
+Somewhat similar to the usual C<grep> function, but takes as argument
+a pattern to search for, but I<not> enclosed in slashes, and which
+data field to look in. Will return an object of the same class with
+the records that matched, or C<undef> if there were no matches.
+
+=cut
+
+sub Grep {
+  my $self = shift;
+  my $pattern = shift;
+  my $field = shift;
+  my $work = ref($self)->new();
+  my $one;
+  foreach my $tmp (@{${$self}{ENTRIES}}) {
+    if (${$tmp}{$field} =~ m/$pattern/) {
+      $work->Push($tmp);
+      $one = 1;
+    }
+  }
+  if ($one) {
+    return $work;
+  } else {
+    return undef;
+  }
+}
+
+
+
+=item C<_load(%args)>
+
+As the underscore implies this is B<for internal use only>! It can do
+the hard work for subclasses of this class. It uses named parameters,
+the first C<what> is used to determine which fields to retrieve. It is
+a string consisting of a commaseparated list of fields, as specified
+in the data store. The C<limit> argument is to be used to determine
+which records to retrieve, these will be combined by logical AND. You
+may also supply a C<orderby> argument, which is an expression used to
+determine the order of entries returned. Usually, it would be a simple
+string with the field name to use, e.g. C<'timestamp'>, but you might
+want to append the keyword "C<DESC>" to it for descending
+order. Finally, you may supply a C<entries> argument, which is the
+maximum number of entries to retrieve.  It will return an arrayref
+containing the data from the storage.
 
 =cut
 
@@ -64,6 +106,8 @@ sub _load {
   my ($self, %args) = @_;
   my $what = $args{'what'};
   my %arg =  %{$args{'limit'}};
+  my $orderby = $args{'orderby'};
+  my $entries = $args{'entries'};
   my $dbh = DBI->connect($self->dbstring(), 
 			 $self->dbuser(), 
 			 $self->dbpasswd(),  
@@ -71,7 +115,10 @@ sub _load {
 			   RaiseError => 0,
 			   HandleError => Exception::Class::DBI->handler
 			 });
-  my $query = "SELECT " . $what . " FROM " . $self->dbfrom() . " WHERE ";
+  my $query = "SELECT " . $what . " FROM " . $self->dbfrom();
+  if (%arg) {
+    $query .= " WHERE ";
+  }
   my $i=1;
   my @keys = keys(%arg);
   foreach my $key (@keys) {
@@ -81,12 +128,28 @@ sub _load {
     }
     $i++;
   }
+  if ($orderby) {
+    $query .= ' ORDER BY ' . $orderby;
+  }
+  if ($entries) {
+    $query .= ' LIMIT ' . $entries;
+  }
+
   my $sth = $dbh->prepare($query);
   $i=1;
   foreach my $key (@keys) {
     $sth->bind_param($i, $arg{$key});
     $i++;
   }
+# Couldn't get parameter binding to work, but they should be passed OK...:
+#  if ($orderby) {
+#    $sth->bind_param($i, $orderby);
+#    $i++;
+#  }
+#  if ($entries) {
+#    $sth->bind_param($i, $entries);
+#  }
+
   $sth->execute();
   return $sth->fetchall_arrayref({});
 }
@@ -122,6 +185,24 @@ sub write_xml {
   }
   return $doc;
 }
+
+sub populate {
+  die "populate method not yet implemented for Plurals";
+}
+
+sub apache_request_changed {
+  die "apache_request_changed method not yet implemented for Plurals";
+}
+
+sub stored {
+  die "stored method not yet implemented for Plurals";
+}
+
+
+sub onfile {
+  die "onfile method not yet implemented for Plurals";
+}
+
 
 =back
 
