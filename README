@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.083
+AxKit/App/TABOO version 0.084
 =============================
 
 INTRODUCTION
@@ -50,17 +50,15 @@ designer, but to give an idea of how the blocks are intended. I'll get
 a more colorful example in soon.
 
 This is a early release, an alpha in that it does some useful
-things. It consists mainly of News and NewsList providers that
-constructs objects, instruct them to load their data based on the URI,
-get them to write their own XML, and pass this to some XSLT
-stylesheets, which makes some presentable XHTML. There are also
-several XSP taglibs, and some some XSP pages and XSL Transformations
-are now included in the distribution. There is also some
-user-management code, including authentication and authorization, to
-allow adding new users and editing the information of existing
-users. These are very much work-in-progress, and I don't feel I have
-quite gotten the hang of XSLT yet, but it is being worked on. Try them
-out if you understand what they're supposed to do.
+things. It is nearly a useable framework for posting news-stories. It
+consists mainly of News and NewsList providers that constructs
+objects, instruct them to load their data based on the URI, get them
+to write their own XML, and pass this to some XSLT stylesheets, which
+makes some presentable XHTML. There are also several XSP taglibs, and
+quite a lot of XSP pages and XSL Transformations are now included in
+the distribution. There is also some user-management code, including
+authentication and authorization, to allow adding new users and
+editing the information of existing users. 
 
 Plural objects is a conceptual step up which has recently been
 introduced to allow manipulation of more than one Data object. 
@@ -104,7 +102,7 @@ This module requires these other modules and libraries:
 - Time::Piece
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
-- AxKit::XSP::BasicSession, you must have 0.20 or later.
+- AxKit::XSP::BasicSession, you must have 0.21 or later.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
 - Apache::AxKit::Plugin::AddXSLParams::Request for virtual hosts, but

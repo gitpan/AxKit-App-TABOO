@@ -1,32 +1,28 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
-<!-- ?xml-stylesheet href="login.xsl" type="text/xsl"? -->
+<?xml-stylesheet href="/transforms/xhtml/login.xsl" type="text/xsl"?>
 
 <xsp:page language="Perl"
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
+  xmlns:cust="http://www.kjetil.kjernsmo.net/software/TABOO/NS/CustomGrammar"
+  xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:auth="http://www.nichework.com/2003/XSP/BasicAuth"
   xmlns:session="http://www.axkit.org/2002/XSP/BasicSession"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"
-  xmlns:param="http://axkit.org/NS/xsp/param/v1"
+  xmlns:param="http://www.axkit.org/2002/XSP/QueryParam"
   xmlns="http://www.w3.org/1999/xhtml">
-  <html>
-    <head>
-        <title>Auth Login Test</title>
-    </head>
-    <body>
-      <user:password-matches>
-	<user:username><param:credential_0/></user:username>
-	<user:clear><param:passwd/></user:clear>
-	<user:true>
-	  <xsp:logic><auth:login/>;
+  <cust:loginpage>
+    <user:password-matches>
+      <user:username><param:get name="credential_0"/></user:username>
+      <user:clear><param:get name="passwd"/></user:clear>
+      <user:true>
+	<xsp:logic><auth:login/>;
 	  <session:set-attribute name="authlevel">
-	    <session:value><user:get-authlevel><user:username><param:credential_0/></user:username></user:get-authlevel></session:value>
+	    <session:value><user:get-authlevel><user:username><param:get name="credential_0"/></user:username></user:get-authlevel></session:value>
 	  </session:set-attribute>;</xsp:logic>
-	  <strong>Password is valid</strong>
-
-	</user:true>
-	<user:false><em>Password is invalid</em></user:false>
-      </user:password-matches>
-    </body>
-</html>
+	<i18n:insert>password-valid</i18n:insert>
+      </user:true>
+      <user:false><i18n:insert>password-invalid</i18n:insert></user:false>
+    </user:password-matches>
+  </cust:loginpage>
 </xsp:page>

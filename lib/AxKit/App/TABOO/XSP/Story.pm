@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.076';
+our $VERSION = '0.084';
 
 =head1 NAME
 
@@ -22,7 +22,7 @@ AxKit::App::TABOO::XSP::Story - News story management tag library for TABOO
 
 =head1 SYNOPSIS
 
-Add the story: namespace to your XSP C<<xsp:page>> tag, e.g.:
+Add the story: namespace to your XSP C<E<lt>xsp:pageE<gt>> tag, e.g.:
 
     <xsp:page
          language="Perl"
@@ -66,7 +66,7 @@ package AxKit::App::TABOO::XSP::Story::Handlers;
 
 =head1 Tag Reference
 
-=head2 C<<store/>>
+=head2 C<E<lt>store/E<gt>>
 
 It will take whatever data it finds in the L<Apache::Request> object held by AxKit, and hand it to a new L<AxKit::App::TABOO::Data::Story> object, which will use whatever data it finds useful. It will not store anything unless the user is logged in and authenticated with an authorization level. If an authlevel is not found in the user's session object, it will throw an exceptions with an C<AUTH_REQUIRED> code. If asked to store certain priviliged fields, it will check the authorization level and throw an exception with a C<FORBIDDEN> code if not satisfied. If timestamps do not exist, they will be created based on the system clock. 
 
@@ -142,7 +142,7 @@ EOC
 }
 
 
-=head2 C<<this-story/>>
+=head2 C<E<lt>this-story/E<gt>>
 
 Will return an XML representation of the data submitted in the last request, enclosed in a C<story-submission> element. Particularly useful for previewing a submission. 
 
@@ -179,7 +179,7 @@ EOC
 }
 
 
-=head2 C<<get-story/>>
+=head2 C<E<lt>get-story/E<gt>>
 
 Will return an XML representation of the data for a previously saved
 story, enclosed in a C<story-loaded> element. It needs to get the
@@ -223,7 +223,7 @@ EOC
 
 =head1 Quirks 
 
-There are a few things that I'm not sure how to handle that I've included in this release in an inelegant way. For example, if you want to update an old record with a new storyname (which is not unusual, if for example you don't like the storyname used by the submitter), then you need to include this somehow. For the time being, you must supply the storyname as a query parameter C<auto-storyname>, and the supplied C<submit.xsp> does this. It is then understood by the C<<store>> tag, which does the right thing, but I feel that such a tag shouldn't really need to be aware of such things, from an aestetical POW, suggestion on how to do it differently are welcome. 
+There are a few things that I'm not sure how to handle that I've included in this release in an inelegant way. For example, if you want to update an old record with a new storyname (which is not unusual, if for example you don't like the storyname used by the submitter), then you need to include this somehow. For the time being, you must supply the storyname as a query parameter C<auto-storyname>, and the supplied C<submit.xsp> does this. It is then understood by the C<E<lt>storeE<gt>> tag, which does the right thing, but I feel that such a tag shouldn't really need to be aware of such things, from an aestetical POW, suggestion on how to do it differently are welcome. 
 
 
 =head1 FORMALITIES

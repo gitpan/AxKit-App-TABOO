@@ -20,6 +20,7 @@ htdocs/transforms/user/xhtml/new.xsl
 htdocs/transforms/user/xhtml/user.xsl
 htdocs/transforms/xhtml/header.xsl
 htdocs/transforms/xhtml/index.xsl
+htdocs/transforms/xhtml/login.xsl
 htdocs/transforms/xhtml/match-control.xsl
 htdocs/transforms/xhtml/match-menu.xsl
 htdocs/user/submit/new.xsp

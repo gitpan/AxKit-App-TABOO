@@ -13,6 +13,7 @@
     media-type="text/html" indent="yes"/>
   
   <xsl:param name="request.headers.host"/>
+  <xsl:param name="session.id"/>
 
   <xsl:template match="/">
     <html lang="en">

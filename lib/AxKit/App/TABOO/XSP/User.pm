@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.082';
+our $VERSION = '0.084';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -37,7 +37,7 @@ AxKit::App::TABOO::XSP::User - User information management and authorization tag
 
 =head1 SYNOPSIS
 
-Add the user: namespace to your XSP C<<xsp:page>> tag, e.g.:
+Add the user: namespace to your XSP C<E<lt>xsp:pageE<gt>> tag, e.g.:
 
     <xsp:page
          language="Perl"
@@ -90,7 +90,7 @@ package AxKit::App::TABOO::XSP::User::Handlers;
 
 =head1 Tag Reference
 
-=head2 C<<store/>>
+=head2 C<E<lt>store/E<gt>>
 
 It will take whatever data it finds in the L<Apache::Request> object held by AxKit, and hand it to a new L<AxKit::App::TABOO::Data::User> object, which will use whatever data it finds useful. It may also take  C<newpasswd1> and C<newpasswd2> fields, and if they are encountered, they will be checked if they are equal and then the password will be encrypted before it is sent to the Data object. The Data object is then instructed to save itself. 
 
@@ -158,7 +158,7 @@ EOC
 }
 
 
-=head2 C<<new-user/>>
+=head2 C<E<lt>new-user/E<gt>>
 
 This tag will store the contents of an Apache::Request object in the data store, but perform little checks on the data given. The only thing it checks is that hte username isn't in use and allready. Then, if the authlevel is different from 1, it is checked if the logged in user is privileged to set the authlevel.   
 
@@ -186,7 +186,7 @@ EOC
 }
 
 
-=head2 C<<get-passwd username="foo"/>>
+=head2 C<E<lt>get-passwd username="foo"/E<gt>>
 
 This tag will return the password of a user. The username may be given in an attribute or child element named C<username>.
 
@@ -202,7 +202,7 @@ EOC
 
 
 
-=head2 C<<get-authlevel username="foo"/>>
+=head2 C<E<lt>get-authlevel username="foo"/E<gt>>
 
 This tag will return the authorization level of a user, which is an integer that may be used to grant or deny access to certain elements or pages. The username may be given in an attribute or child element named C<username>.
 
@@ -219,7 +219,7 @@ EOC
 
 
 
-=head2 C<<get-user username="foo"/>>
+=head2 C<E<lt>get-user username="foo"/E<gt>>
 
 This tag will return and XML representation of the user information. The username may be given in an attribute or child element named C<username>.
 
@@ -240,9 +240,9 @@ EOC
 
 
 
-=head2 C<<password-matches>>
+=head2 C<E<lt>password-matchesE<gt>>
 
-This tag is a boolean tag, which has child elements C<<true>> and C<<false>>. First, it needs a username, which may be given as an attribute or a child element named C<username>, and the cleartext password in a child element C<<clear>>. If the password is valid, the contents of the C<<true>> element will be included in the output document. Conversely, if it is invalid, the contents of C<<false>> will be in the result document. For example:
+This tag is a boolean tag, which has child elements C<E<lt>trueE<gt>> and C<E<lt>falseE<gt>>. First, it needs a username, which may be given as an attribute or a child element named C<username>, and the cleartext password in a child element C<E<lt>clearE<gt>>. If the password is valid, the contents of the C<E<lt>trueE<gt>> element will be included in the output document. Conversely, if it is invalid, the contents of C<E<lt>falseE<gt>> will be in the result document. For example:
 
       <user:password-matches>
 	<user:username>foo</user:username>
@@ -286,9 +286,9 @@ sub password_matches___false {
 
 
 
-=head2 C<<exists username="foo"/>>
+=head2 C<E<lt>exists username="foo"/E<gt>>
 
-This tag will check if a user allready exists. Like C<<password-matches>> this tag is a boolean tag, which has child elements C<<true>> and C<<false>>. It takes a username, which may be given as an attribute or a child element named C<username>, and if the user is found in the data store, the contents of C<<true>> child element is included, otherwise, the contents of C<<false>> is included. 
+This tag will check if a user allready exists. Like C<E<lt>password-matchesE<gt>> this tag is a boolean tag, which has child elements C<E<lt>trueE<gt>> and C<E<lt>falseE<gt>>. It takes a username, which may be given as an attribute or a child element named C<username>, and if the user is found in the data store, the contents of C<E<lt>trueE<gt>> child element is included, otherwise, the contents of C<E<lt>falseE<gt>> is included. 
 
 =cut
 
@@ -320,16 +320,16 @@ sub exists___false {
 }
 
 
-=head2 C<<is-authorized authlevel="5" username="foo">>
+=head2 C<E<lt>is-authorized authlevel="5" username="foo"E<gt>>
 
-This is a boolean tag, which has child elements C<<true>> and
-C<<false>>. It takes an autherization level in an attribute or child
+This is a boolean tag, which has child elements C<E<lt>trueE<gt>> and
+C<E<lt>falseE<gt>>. It takes an autherization level in an attribute or child
 element named C<authlevel>, and an attribute or child element named
 C<username>. If the authenticated user has it least this level I<or>
 the given C<username> matches the username of the authenticated user,
-the contents of the C<<true>> element will be included in the output
+the contents of the C<E<lt>trueE<gt>> element will be included in the output
 document. Conversely, if the user has insufficient privileges the
-contents of C<<false>> will be in the result document. 
+contents of C<E<lt>falseE<gt>> will be in the result document. 
 
 B<NOTE:> This should I<not> be looked upon as a "security feature".
 While it is possible to use it to make sure that an input control is
@@ -340,7 +340,7 @@ request. Consequently, critical data must be checked for sanity before
 they are passed to the Data objects. The Data objects themselves are
 designed to believe anything they're fed, so it is most natural to do
 it in a taglib before handing the data to a Data object. See e.g. the
-internals of the C<<store/>> tag for an example.
+internals of the C<E<lt>store/E<gt>> tag for an example.
 
 
 =cut
@@ -382,7 +382,7 @@ sub is_authorized___false {
   return '}'
 }
 
-=head2 C<<valid-authlevels/>>
+=head2 C<E<lt>valid-authlevels/E<gt>>
 
 This returns a list of the authorization levels that the present user can legitimitely set. This is an ugly and temporary solution, I think it should be worked out elsewhere than the taglib, but I couldn't find a way to do it....
 
@@ -401,7 +401,7 @@ EOC
 }
 
 
-=head2 C<<random-password/>>
+=head2 C<E<lt>random-password/E<gt>>
 
 Shamelessly stolen from Jörg Walter's L<AxKit::XSP::Auth> taglib, this would generate a new random password, see his documentation for details.  
 
@@ -419,7 +419,7 @@ sub random_password : expr attribOrChild(lang,signs,numbers,minlen,maxlen)
 
 =head1 TODO
 
-Currently, C<<exists>> checks if a user exists by checking if the real name is defined. This is likely to change in the future. Do not rely on this behaviour, but do make sure every-one has a real name! 
+Currently, C<E<lt>existsE<gt>> checks if a user exists by checking if the real name is defined. This is likely to change in the future. Do not rely on this behaviour, but do make sure every-one has a real name! 
 
 
 =head1 FORMALITIES

@@ -97,6 +97,11 @@
 
   <text id="authlevel-descr"> The authorization level determines what
   kind of actions you are allowed to do. </text>
+  
+  <text id="password-valid"> The password is recognized as valid. </text>
+  <text id="password-invalid"> The password you gave has not been recognized as valid. </text>
+  <text id="return-to-top-page"> Return to main page of </text>
+
 
 
 </translations>

@@ -1,5 +1,16 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.084	2004-09-22 05:30
+	- The login-stuff has seen a facelift.
+	- The config example is now redone and has actually been
+	  verified to work well...
+	- bugfixing by adding explicit param session.id's where they
+	  previously been forgotten. 
+	- It now depends on BasicSession 0.21, the previous release
+          had a bug.
+	- Cleaned up the pointy brackets in the taglib documentation. 
+	- Quite some more testing.
+
 0.083	2004-09-17 01:30
 	- Fixing a few bugs, some small ones, and a big one: The
 	menu.xsp didn't the user's session, because it was called from

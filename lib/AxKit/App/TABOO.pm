@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.083';
+our $VERSION = '0.084';
 
 
 1;
@@ -108,8 +108,8 @@ L<Story|AxKit::App::TABOO::XSP::Story> and
 L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide
 several tags that you may use interface with the Data objects.
 
-Some XSP and XSLT have been written that allows you to enter and edit
-stories, etc.
+There is quite a lot of XSP and XSLT now that allows you to enter and edit
+stories and TABOO is nearly useable as a news-site management framework.
 
 Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
@@ -140,75 +140,75 @@ databases for different virtual hosts. A combination of C<DBI_DSN>,
 C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
 
+  # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  # The below directives are common for all virtual hosts, if you run such
+
+  # This stuff is needed for rewriting URIs.
+
   RewriteEngine on
 
   RewriteRule ^/user/([^/]+)$ /user/submit/user.xsp?username=$1
 
-  RewriteRule ^/user/submit/$ /user/submit/user.xsp
+  RewriteRule ^/user/submit/$ /user/submit/user.xsp 
   RewriteRule ^/user/submit/new$ /user/submit/new.xsp
 
-  Alias /news/submit /var/www/news/submit.xsp 
+  RewriteRule ^/$ /index.xsp
 
-  Alias /login /var/www/login.xsp
+  # This may be needed on some setups
+  DirectoryIndex index.xsp index.xml
 
+
+  # Stuff in the /css/ directory should not be seen by AxKit.
   <Location /css/>
     SetHandler default-handler 
   </Location>
 
 
+  # Here starts the the main AxKit-specific things
   PerlModule AxKit
   SetHandler AxKit
 
-  PerlModule Apache::AxKit::Plugin::BasicAuth
+  AxHandleDirs On
+
+  # Language modules to make XSP and XSLTransformations work
+  AxAddStyleMap application/x-xsp Apache::AxKit::Language::XSP
+  AxAddStyleMap text/xsl Apache::AxKit::Language::LibXSLT
 
   AxAddPlugin Apache::AxKit::Plugin::Passthru
 
   AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::Request
   PerlSetVar AxAddXSLParamGroups "HTTPHeaders"
 
-  AxAddStyleMap application/x-xsp Apache::AxKit::Language::XSP
-
-  AxAddStyleMap text/xsl Apache::AxKit::Language::LibXSLT
-
-
-
-  <Location />
-      AuthType Apache::AxKit::Plugin::BasicAuth
-      AuthName TABOO
-  </Location>
-
-
-  # Session Management
+  # Authentication
+  PerlModule Apache::AxKit::Plugin::BasicAuth
   AxAddPlugin Apache::AxKit::Plugin::BasicSession
-  PerlSetVar TABOODataStore DB_File
-  PerlSetVar TABOOArgs      "FileName => /tmp/session"
-
   AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::BasicSession
 
-  PerlSetVar TABOOLoginScript /login.xsp
-
-  AxAddXSPTaglib AxKit::XSP::BasicAuth
-  AxAddXSPTaglib AxKit::XSP::BasicSession
-
-  AxAddXSPTaglib AxKit::XSP::Param
-  AxAddXSPTaglib AxKit::XSP::QueryParam
-  AxAddXSPTaglib AxKit::XSP::Sendmail
-
+  # TABOO XSPs
   AxAddXSPTaglib AxKit::App::TABOO::XSP::User
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Story
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Category
 
+  # Other XSPs
+  AxAddXSPTaglib AxKit::XSP::BasicAuth
+  AxAddXSPTaglib AxKit::XSP::BasicSession
+  AxAddXSPTaglib AxKit::XSP::QueryParam
+  AxAddXSPTaglib AxKit::XSP::Sendmail
+
+
+  # Providers for News, depending somewhat on the paths.
+
   <Location /news/>
-  	PerlHandler AxKit
+        PerlHandler AxKit
         AxContentProvider AxKit::App::TABOO::Provider::NewsList
-    	PerlSetVar TABOOListDefaultRecords 20
-    	PerlSetVar TABOOListMaxRecords 200
+        PerlSetVar TABOOListDefaultRecords 20
+        PerlSetVar TABOOListMaxRecords 200
   </Location>
 
 
   <Location /news/submit>
-  	PerlHandler AxKit
-	AxContentProvider Apache::AxKit::Provider::File
+        PerlHandler AxKit
+        AxContentProvider Apache::AxKit::Provider::File
   </Location>
 
 
@@ -217,10 +217,54 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
         AxContentProvider AxKit::App::TABOO::Provider::News
   </LocationMatch>
 
+
+  # ////////////////////////////////
+
+
+  # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  # These are things that may be sensible to use during development
+
+  AxNoCache On
+  # This parameter can be useful if you suspect you're getting cached 
+  # copies, but it can only be set in the main Apache config.
+  #MaxRequestsPerChild 1
+
+  AxDebugLevel 10
+  AxDebugTidy On
+  AxTraceIntermediate /tmp/intermediate
+
+  # ////////////////////////////////
+
+
+
+  # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  # This section contains stuff that needs to be configured on a virtual host 
+  # basis. It may be an idea to place in it's own file.
+
+  # Database connection parameters
   PerlSetEnv DBI_DSN dbi:Pg:dbname=taboodemo
   PerlSetEnv PGUSER taboodemo
   PerlSetEnv PGPASSWORD hk987JKBgui
 
+  # Aliases, rather than files have a full filesystem path. 
+  # That's rather evil...
+  Alias /news/submit /var/www/news/submit.xsp 
+  Alias /login /var/www/login.xsp
+
+
+  # Authentication and authorization stuff
+  <Location />
+      AuthType Apache::AxKit::Plugin::BasicAuth
+      AuthName TABOODemo
+  </Location>
+
+  PerlSetVar TABOODemoURIToken SID
+  PerlSetVar TABOODemoDataStore DB_File
+  PerlSetVar TABOODemoArgs      "FileName => /tmp/taboodemo-session"
+  PerlSetVar TABOODemoLoginScript /login.xsp
+
+
+  # /////////////////////////////
 
 
 This should get you the authentication and authorization code you

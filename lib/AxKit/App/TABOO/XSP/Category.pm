@@ -16,7 +16,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.084';
 
 
 =head1 NAME
@@ -25,7 +25,7 @@ AxKit::App::TABOO::XSP::Category - Category management tag library for TABOO
 
 =head1 SYNOPSIS
 
-Add the category: namespace to your XSP C<<xsp:page>> tag, e.g.:
+Add the category: namespace to your XSP C<E<lt>xsp:pageE<gt>> tag, e.g.:
 
     <xsp:page
          language="Perl"
@@ -57,7 +57,7 @@ package AxKit::App::TABOO::XSP::Category::Handlers;
 
 =head1 Tag Reference
 
-=head2 C<<get-categories type="foo"/>>
+=head2 C<E<lt>get-categories type="foo"/E<gt>>
 
 This tag will replace itself with some structured XML containing all
 categories of type C<foo>.  It relates to the TABOO Data object
