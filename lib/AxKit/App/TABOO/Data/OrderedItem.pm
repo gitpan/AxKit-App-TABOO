@@ -1,4 +1,4 @@
-package AxKit::App::TABOO::Data::Productsubtype;
+package AxKit::App::TABOO::Data::OrderedItem;
 use strict;
 use warnings;
 use Carp;
@@ -12,17 +12,17 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.02';
-# Forked off Category
+our $VERSION = '0.01';
+# Forked off Productsubtype
 
 =head1 NAME
 
-AxKit::App::TABOO::Data::Productsubtype - Product Sub Types Data objects for TABOO
+AxKit::App::TABOO::Data::OrderedItem - Product Sub Types Data objects for TABOO
 
 =head1 SYNOPSIS
 
-  use AxKit::App::TABOO::Data::Productsubtype;
-  $size = AxKit::App::TABOO::Data::Productsubtype->new();
+  use AxKit::App::TABOO::Data::OrderedItem;
+  $size = AxKit::App::TABOO::Data::OrderedItem->new();
   $size->load('XXL');
 
 
@@ -32,8 +32,8 @@ AxKit::App::TABOO::Data::Productsubtype - Product Sub Types Data objects for TAB
 
 =cut
 
-AxKit::App::TABOO::Data::Productsubtype->elementorder("prodsubid, title, stockconfirmed, stockshipped, stockordered, ordered");
-AxKit::App::TABOO::Data::Productsubtype->dbfrom("productsubtypes");
+AxKit::App::TABOO::Data::OrderedItem->elementorder("prodsubid, title, stockconfirmed, stockshipped, stockordered");
+#AxKit::App::TABOO::Data::OrderedItem->selectquery("SELECT * FROM productsubtypes WHERE prodsubid=?");
 
 =head1 METHODS
 
@@ -52,15 +52,13 @@ sub new {
     my $that  = shift;
     my $class = ref($that) || $that;
     my $self = {
-		prodsubid => undef,
+		username => undef,
 		prodid => undef,
-		title => undef,
+		orderid => undef,
+		prodsubid => undef,
 		volume => undef,
-		stockconfirmed => undef,
-		stockshipped => undef,
-		stockordered => undef,
-		XMLELEMENT => 'subtype',	
-		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Productsubtypes/Output',
+		XMLELEMENT => 'ordereditem',
+		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Items/Output',
 		ONFILE => undef,
     };
     bless($self, $class);
@@ -77,13 +75,29 @@ The data is stored in named fields, and for certain uses, it is good to know the
 
 =over
 
+=item * username
+
+A simple word containing a unique name and identifier of the user who ordered the item.
+
+
+=item * prodid
+
+A simple word containing a unique name and identifier for the product ordered.
+
+
+=item * orderid
+
+An integer number identifying the order.
+
 =item * prodsubid
 
 A simple word containing a unique name and identifier for the productsubtypes.
 
 
+=item * volume
 
-This may be extended. 
+An integer representing the number of items for this order and productsubtype.
+
 
 =back
 
@@ -95,7 +109,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =over
 
-=item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Productsubtypes/Output>
+=item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/OrderedItems/Output>
 
 =back
 

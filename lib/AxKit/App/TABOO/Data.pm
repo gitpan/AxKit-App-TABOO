@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.043';
+our $VERSION = '0.05';
 
 
 use DBI;
@@ -48,7 +48,6 @@ The constructor of this class. Rarely used.
 
 sub new {
     my $that  = shift;
-    my $username = shift;
     my $class = ref($that) || $that;
     my $self = {
 		ONFILE => undef,
@@ -60,15 +59,49 @@ sub new {
     return $self;
 }
 
-=item C<load($key)>
 
-Will load and populate the data structure of an instance with the data from a the data source, given a key in the string C<$key>. 
+=item C<load(what => fields, limit => {key => value, [...]})>
+
+Will load and populate the data structure of an object with the data
+from a data store. It uses named parameters, the first C<what> is used
+to determine which fields to retrieve. It is a string consisting of a
+commaseparated list of fields, as specified in the data store. The
+C<limit> argument is to be used to determine which records to
+retrieve, and must be used to identify a record uniquely. It is itself
+a reference to a hash, containing data store field values as keys and
+values are corresponding values to retrieve. These will be combined by
+logical AND.
+
 
 =cut
 
 sub load {
-    my $self = shift;
-    my $dbkey = shift;
+  my ($self, %args) = @_;
+  my $data = $self->_load(%args);
+  if ($data) {
+    ${$self}{'ONFILE'} = 1;
+  }
+  foreach my $key (keys(%{$data})) {
+    ${$self}{$key} = ${$data}{$key}; 
+  }
+  return $self;
+}
+
+
+=item C<_load(what => fields, limit => {key => value, [...]})>
+
+As the underscore implies this is B<for internal use only>! It is
+intended to do the hard work for this class and its subclasses. It returns a hashref of the data from the datastore.
+
+
+See the documentation for the C<load> method for the details on the parameters.
+
+=cut
+
+sub _load {
+    my ($self, %args) = @_;
+    my $what = $args{'what'};
+    my %arg =  %{$args{'limit'}};
     my $dbh = DBI->connect($self->dbstring(), 
 			   $self->dbuser(), 
 			   $self->dbpasswd(),  
@@ -76,19 +109,28 @@ sub load {
 			     RaiseError => 0,
 			     HandleError => Exception::Class::DBI->handler
 			     });
-    # just get the data, the subclass should give of the selectquery.
-    my $sth = $dbh->prepare($self->selectquery());
-    $sth->execute($dbkey);
-    my $data = $sth->fetchrow_hashref;
-    if ($data) {
-      ${$self}{'ONFILE'} = 1;
+    # The subclass should give the dbfrom.
+    my $query = "SELECT " . $what . " FROM " . $self->dbfrom() . " WHERE ";
+    my $i=0;
+    my @keys = keys(%arg);
+    foreach my $key (@keys) {
+      $i++;
+      next unless ($arg{$key});
+      $query .= $key . "=?";
+      if ($i <= $#keys) {
+	$query .= " AND ";
+      }
     }
-    foreach my $key (keys(%{$data})) {
-      ${$self}{$key} = ${$data}{$key}; 
+    warn $query;
+    my $sth = $dbh->prepare($query);
+    $i=1;
+    foreach my $key (@keys) {
+      $sth->bind_param($i, $arg{$key});
+      $i++;
     }
-    $sth->finish;
-    $dbh->disconnect;
-    return $self;
+    $sth->execute();
+
+    return $sth->fetchrow_hashref;
 }
 
 =item C<write_xml($doc, $parent)>
@@ -389,7 +431,7 @@ The password to be passed to the DBI constructor. Currently defaults to an empty
 AxKit::App::TABOO::Data->mk_classdata('dbstring');
 AxKit::App::TABOO::Data->mk_classdata('dbuser');
 AxKit::App::TABOO::Data->mk_classdata('dbpasswd');
-AxKit::App::TABOO::Data->mk_classdata('selectquery');
+AxKit::App::TABOO::Data->mk_classdata('dbfrom');
 AxKit::App::TABOO::Data->mk_classdata('dbtable');
 AxKit::App::TABOO::Data->mk_classdata('dbprimkey');
 AxKit::App::TABOO::Data->mk_classdata('elementorder');

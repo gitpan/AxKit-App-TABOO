@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Carp;
 
+use Data::Dumper;
 use AxKit::App::TABOO::Data;
 use AxKit::App::TABOO::Data::Productprices;
 use AxKit::App::TABOO::Data::Plurals::Productsubtypes;
@@ -11,7 +12,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.01';
+our $VERSION = '0.011';
 
 
 =head1 NAME
@@ -37,8 +38,8 @@ It is worth noting that this class is supposed to contain most relevant informat
 =cut
 
 
-#AxKit::App::TABOO::Data::Product->dbtable("products");
-#AxKit::App::TABOO::Data::Product->dbprimkey("prodid");
+AxKit::App::TABOO::Data::Product->dbfrom("products");
+AxKit::App::TABOO::Data::Product->dbprimkey("prodid");
 AxKit::App::TABOO::Data::Product->elementorder("prodid, catname, title, descr, imgsmallurl, imglargeurl, imgcaption, comment, productsubtypes,	number,	PRICES, PRODUCTSUBTYPES");
 
 =head1 METHODS
@@ -75,40 +76,27 @@ sub new {
     return $self;
 }
 
-=item C<load($prodid)>
+=item C<load($what, $prodid)>
 
-This reimplemented load method takes as argument a product ID, a string used to identify a product. It will also call the load methods that are needed to ensure that the price information and the product subtypes are included.
+This reimplemented load method takes as arguments a string consisting of a comma-separated list of datafields to be retrieved, and a product ID, a string used to identify a product. It will also call the load methods that are needed to ensure that the price information and the product subtypes are included.
 
-=cut 
+=cut
 
 sub load {
-  my $self = shift;
-  my $what = shift;
-  my $prodid = shift;
-  my $dbh = DBI->connect($self->dbstring(), 
-			 $self->dbuser(), 
-			 $self->dbpasswd(),  
-			 { PrintError => 0,
-			   RaiseError => 0,
-			   HandleError => Exception::Class::DBI->handler
-			   });
-  my $sth = $dbh->prepare("SELECT " . $what . " FROM products WHERE prodid=?");
-  $sth->execute($prodid);
-  my $data = $sth->fetchrow_hashref;
+  my ($self, %args) = @_;
+  my $data = $self->_load(%args);
   if ($data) { ${$self}{'ONFILE'} = 1; }
   foreach my $key (keys(%{$data})) {
     ${$self}{$key} = ${$data}{$key};
   }
-  my $prices = AxKit::App::TABOO::Data::Productprices->new();
-  $prices->dbstring($self->dbstring());
-  $prices->dbuser($self->dbuser());
-  $prices->dbpasswd($self->dbpasswd());
-  ${$self}{'PRICES'} = \$prices->load($prodid);
-  my $subtypes = AxKit::App::TABOO::Data::Plurals::Productsubtypes->new();
-  $subtypes->dbstring($self->dbstring());
-  $subtypes->dbuser($self->dbuser());
-  $subtypes->dbpasswd($self->dbpasswd());
-  ${$self}{'PRODUCTSUBTYPES'} = \$subtypes->load({prodid => $prodid});
+  my $prodid = ${$args{'limit'}}{'prodid'};
+  if ($prodid) {
+    my $prices = AxKit::App::TABOO::Data::Productprices->new();
+    $prices->dbstring($self->dbstring());
+    $prices->dbuser($self->dbuser());
+    $prices->dbpasswd($self->dbpasswd());
+    ${$self}{'PRICES'} = \$prices->load($prodid);
+  }
   return $self;
 }
 

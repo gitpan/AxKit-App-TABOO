@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.023_1';
+our $VERSION = '0.024';
 # Forked off A::A::T::D::U::Contributor
 
 =head1 NAME
@@ -31,7 +31,7 @@ This Data class subclasses L<AxKit::App::TABOO::Data::User> to add more contact 
 
 =cut
 
-AxKit::App::TABOO::Data::User::Customer->selectquery("SELECT * FROM users INNER JOIN customers ON (users.username = customers.username) WHERE users.username=?");
+AxKit::App::TABOO::Data::User::Customer->dbfrom("users INNER JOIN customers ON (users.username = customers.username)");
 AxKit::App::TABOO::Data::User::Customer->dbtable("users,customers");
 AxKit::App::TABOO::Data::User::Customer->elementorder("username, name, email, uri, passwd, address, locality, code, contactstatus, comment");
 
@@ -56,36 +56,6 @@ sub new {
     bless($self, $class);
     return $self;
 }
-
-
-
-#  =item C<load_authlevel($username)>
-
-#  This is an ad hoc method to retrieve the authorization level of a user, and it takes a C<$username> key to identify whose level to retrieve. It will return a number that may be used to decide whether or not to grant access to an object or a data member. It will also populate the corresponding data fields of the object. You may therefore call C<write_xml> on the object afterwards and have markup for the username and level. 
-
-#  =cut
-
-#  sub load_authlevel {
-#      my $self = shift;
-#      my $username = shift;
-#      my $dbh = DBI->connect($self->dbstring(), 
-#  			   $self->dbuser(), 
-#  			   $self->dbpasswd(),  
-#  #			   { PrintError => 0,
-#  # 			     RaiseError => 0,
-#  #			     HandleError => Exception::Class::DBI->handler
-#  #			     }
-#  );
-#      my $sth = $dbh->prepare("SELECT authlevel FROM customers WHERE username=?");
-#      $sth->execute($username);
-#      my @data = $sth->fetchrow_array;
-#      if (@data) {
-#        ${$self}{'ONFILE'} = 1;
-#      }
-#      ${$self}{'authlevel'} = join('', @data);
-#      ${$self}{'username'} = $username;
-#      return ${$self}{'authlevel'};
-#  }
 
 
 

@@ -41,8 +41,9 @@ As the underscore implies this is B<for internal use only>! It can do the hard w
 =cut
 
 sub _load {
-  my $self = shift;
-  my $arg = shift;    
+  my ($self, %args) = @_;
+  my $what = $args{'what'};
+  my %arg =  %{$args{'limit'}};
   my $dbh = DBI->connect($self->dbstring(), 
 			 $self->dbuser(), 
 			 $self->dbpasswd(),  
@@ -50,9 +51,9 @@ sub _load {
 			   RaiseError => 0,
 			   HandleError => Exception::Class::DBI->handler
 			 });
-  my $query = "SELECT * FROM " . $self->dbtable() . " WHERE ";
+  my $query = "SELECT " . $what . " FROM " . $self->dbfrom() . " WHERE ";
   my $i=1;
-  my @keys = keys(%{$arg});
+  my @keys = keys(%arg);
   foreach my $key (@keys) {
     $query .= $key . "=?";
     if ($i <= $#keys) {
@@ -63,7 +64,7 @@ sub _load {
   my $sth = $dbh->prepare($query);
   $i=1;
   foreach my $key (@keys) {
-    $sth->bind_param($i, ${$arg}{$key});
+    $sth->bind_param($i, $arg{$key});
     $i++;
   }
   $sth->execute();

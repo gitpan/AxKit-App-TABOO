@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.05_1';
+our $VERSION = '0.05_3';
 
 
 # Preloaded methods go here.
@@ -132,7 +132,7 @@ differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
 feedback hackers provide. 
 
-The new webshop code is very badly documented... 
+The new webshop code is very badly documented, and since the deadline for it whooshed by, it is now halted a bit... But I think it is quite OK code...
 
 
 =head1 SUPPORT

@@ -33,7 +33,7 @@ It is often convenient to lump articles together in categories. People do that t
 =cut
 
 AxKit::App::TABOO::Data::Category->elementorder("catname, name, type, uri, description");
-AxKit::App::TABOO::Data::Category->selectquery("SELECT * FROM categories WHERE catname=?");
+AxKit::App::TABOO::Data::Category->dbfrom("categories");
 
 =head1 METHODS
 

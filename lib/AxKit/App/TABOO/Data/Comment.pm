@@ -13,7 +13,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.022';
+our $VERSION = '0.023';
 
 
 
@@ -250,6 +250,11 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Output>
 
 =back
+
+=head1 BUGS/TODO
+
+With the introduction of Plurals, the tree, root and generally the load code needs to be reworked a bit. It may still work as it used to, be expect some larger changes in both the code and API in shortly forthcoming releases.
+
 
 =head1 FORMALITIES
 

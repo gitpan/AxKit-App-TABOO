@@ -20,6 +20,7 @@ use Exception::Class::DBI;
 our $VERSION = '0.01';
 
 AxKit::App::TABOO::Data::Plurals::Productsubtypes->dbtable("productsubtypes");
+AxKit::App::TABOO::Data::Plurals::Productsubtypes->dbfrom("productsubtypes");
 
 =head1 NAME
 
@@ -51,7 +52,7 @@ sub new {
 }
 
 
-=item C<load()>
+=item C<load(what => fields, limit => {key => value, [...]})>
 
 It takes a hashref where the keys are data storage names and the values are corresponding values to retrieve. These will be combined by logical AND. It will retrieve the data, and then call C<populate()> for each of the records retrieved to ensure that the plural data objects actually consists of an array of L<AxKit::App::TABOO::Data::Productsubtype>s. But it calls the internal C<_load()>-method to do the hard work (and that's in the parent class).
 
@@ -59,10 +60,9 @@ It takes a hashref where the keys are data storage names and the values are corr
 
 
 sub load {
-  my $self = shift;
-  my $args = shift;
+  my ($self, %args) = @_;
   my @prodsubs;
-  my $data = $self->_load($args); # Does the hard work
+  my $data = $self->_load(%args); # Does the hard work
   foreach my $entry (@{$data}) {
     my $prodsub = AxKit::App::TABOO::Data::Productsubtype->new();
     $prodsub->populate($entry);

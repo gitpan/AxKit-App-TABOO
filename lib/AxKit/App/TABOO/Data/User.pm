@@ -29,7 +29,7 @@ This Data class contains basic user information, such as name, e-mail address, a
 
 =cut
 
-AxKit::App::TABOO::Data::User->selectquery("SELECT * FROM users WHERE username=?");
+AxKit::App::TABOO::Data::User->dbfrom("users");
 AxKit::App::TABOO::Data::User->dbtable("users");
 AxKit::App::TABOO::Data::User->dbprimkey("username");
 AxKit::App::TABOO::Data::User->elementorder("username, name, email, uri, passwd");
