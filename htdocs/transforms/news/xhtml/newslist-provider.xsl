@@ -45,7 +45,7 @@
 	  <xsl:text> | </xsl:text>
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
 	</title>
-	<link rel="stylesheet" type="text/css" href="/css/basic.css"/>
+	<xsl:call-template name="CommonHTMLHead"/>
 	<link rel="up" href=".."/>
 	<link rel="top" href="/"/>
       </head>

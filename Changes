@@ -1,5 +1,13 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.099   2004-12-27 14:40
+	- The start of Cascading Stylesheets by J. Shirley. They work
+	  mostly for the front page.
+	- A CommonHTMLHead template that makes it easier to add things
+	  to the output HTML head element, such as more CSS.
+	- Some dialogs end with links back to a sensible page.
+	- Translation of the Textile description.	
+
 0.098   2004-12-16 04:20
 	- Adds some more explanations particularly of Textile, but
 	  also some help for the editors.

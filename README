@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.098
+AxKit/App/TABOO version 0.099
 =============================
 
 This release has not been signed with my GPG key. This is due to that
@@ -48,10 +48,9 @@ in the code, that's also rather important to make it maintainable.
 For the stuff that goes into the database, OTOH, XSP is used, and
 several taglibs are used.
 
-There is now also some cascading stylesheets, just to do minimal
-formatting. It isn't intended to make it pretty, I'm not actually a
-designer, but to give an idea of how the blocks are intended. I'll get
-a more colorful example in soon.
+J. Shirley has now provided some more cascading stylesheets. He has
+focused on the front page, so it works mostly for that, but should
+give a general idea. This will see more work soon.
 
 This is a early release, an alpha in that it does some useful
 things. It is nearly a useable framework for posting news-stories. It

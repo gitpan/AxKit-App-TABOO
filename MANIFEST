@@ -1,9 +1,11 @@
 Changes
 htdocs/css/basic.css
+htdocs/css/default.css
 htdocs/guest-login.xsp
 htdocs/i18n.en.xml
 htdocs/i18n.nb.xml
 htdocs/index.xsp
+htdocs/internal/textile.en.xhtml
 htdocs/internal/textile.nb.xhtml
 htdocs/login.xsp
 htdocs/menu.xsp
@@ -57,6 +59,7 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 README
+SIGNATURE
 sql/grant.sql
 sql/news-create.sql
 sql/news-minimal.sql

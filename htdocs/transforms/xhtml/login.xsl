@@ -24,6 +24,7 @@
   <xsl:param name="session.id"/>
   <xsl:param name="session.keys.credential_0"/>
   <xsl:param name="request.headers.host"/>
+  <xsl:param name="request.headers.referer"/>
   <xsl:param name="neg.lang">en</xsl:param>
   
 
@@ -35,8 +36,8 @@
 	  <xsl:text> | </xsl:text>
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
 	</title>
-	<link rel="stylesheet" type="text/css" href="/css/basic.css"/>
-	<link rel="up" href="/"/>
+	<xsl:call-template name="CommonHTMLHead"/>
+	<link rev="previous" href="{$request.headers.referer}"/>
 	<link rel="top" href="/"/>
       </head>
       <body>
@@ -62,6 +63,12 @@
 	      <a rel="top" href="/"><xsl:value-of
 		  select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
 	      </a>
+	      <xsl:if test="$request.headers.referer">
+		<xsl:value-of select="i18n:include('or')"/> 
+		<a rev="previous" href="{$request.headers.referer}">
+		  <xsl:value-of select="i18n:include('the-previous-page')"/>
+		</a>
+	      </xsl:if>
 	    </p>
 	  </div>
 	</div>

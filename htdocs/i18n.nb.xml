@@ -93,6 +93,7 @@
   <text id="send"> Send </text>
   <text id="search"> Søk </text>
   <text id="preview"> Forhåndsvisning </text>
+  <text id="previous"> forrige </text>
   <text id="update"> Oppdater </text>
   <text id="change"> Endre </text>
   <text id="repeat"> Gjenta </text>
@@ -102,6 +103,7 @@
   <text id="me"> Meg </text>
   <text id="for"> for </text>
   <text id="to"> til </text>
+  <text id="or"> eller </text>
   <text id="with"> med </text>
   <text id="just"> bare </text>
 
@@ -130,7 +132,5 @@
   <text id="username-not-found"> Brukernavnet du ga passer ikke med
   noen brukere på dette systemet. </text>
   <text id="return-to-top-page"> Gå tilbake til hovedsiden av </text>
-
-
-
+  <text id="the-previous-page"> siden du kom fra </text>
 </translations>

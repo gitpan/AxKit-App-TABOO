@@ -5,7 +5,7 @@
   <text id="submit-by"> Submitted by </text>
   <text id="posted-by"> Posted by </text>
   <text id="by"> By </text>
-   <text id="to-cat"> To Category </text>
+  <text id="to-cat"> To Category </text>
   <text id="on-time"> On </text>
   <text id="last-changed"> Last changed </text>
 
@@ -90,6 +90,7 @@
   <text id="send"> Send </text>
   <text id="search"> Search </text>
   <text id="preview"> Preview </text>
+  <text id="previous"> previous </text>
   <text id="update"> Update </text>
   <text id="change"> Change </text>
   <text id="repeat"> Repeat </text>
@@ -99,6 +100,7 @@
   <text id="me"> Me </text>
   <text id="for"> for </text>
   <text id="to"> to </text>
+  <text id="or"> or </text>
   <text id="with"> with </text>
   <text id="just"> just </text>
 
@@ -126,7 +128,5 @@
   <text id="username-not-found"> The username you gave does not match
   that of any users of this system. </text>
   <text id="return-to-top-page"> Return to main page of </text>
-
-
-
+  <text id="the-previous-page"> the page you came from </text>
 </translations>

@@ -7,6 +7,10 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   exclude-result-prefixes="rdf wn i18n dc"> 
 
+  <xsl:template name="CommonHTMLHead">
+    <link rel="stylesheet" type="text/css" href="/css/basic.css"/>
+  </xsl:template>
+
   <xsl:template name="CreateHeader">
     <div id="top" class="main-header">
       <h1>
@@ -21,4 +25,5 @@
       </p>
     </div>
   </xsl:template>
+
 </xsl:stylesheet>

@@ -41,7 +41,7 @@
 	  <xsl:text> | </xsl:text>
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
 	</title>
-	<link rel="stylesheet" type="text/css" href="/css/basic.css"/>	
+	<xsl:call-template name="CommonHTMLHead"/>	
       </head>
       <body>      
 	<xsl:call-template name="CreateHeader"/>
@@ -106,8 +106,18 @@
 	      <p>
 		<xsl:value-of
 		  select="i18n:include('return-to-top-page')"/> 
-		<a rel="top" href="/"><xsl:value-of
-		    select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
+		<a rel="top" href="/">
+		  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
+		</a>
+		<xsl:value-of select="i18n:include('or')"/>
+		<xsl:value-of select="i18n:include('to')"/>
+		<a rel="up">
+		  <xsl:attribute name="href">
+		    <xsl:value-of select="substring-before($request.uri, '/respond')"/>
+		    <xsl:text>/thread</xsl:text>
+		  </xsl:attribute>
+		  <xsl:value-of select="i18n:include('previous')"/>
+		  <xsl:value-of select="i18n:include('comment')"/>
 		</a>
 	      </p>
 	    </xsl:if>

@@ -30,7 +30,7 @@
 	<title>
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
 	</title>
-	<link rel="stylesheet" type="text/css" href="/css/basic.css"/>
+	<xsl:call-template name="CommonHTMLHead"/>
 	
       </head>
       <body>
