@@ -10,7 +10,7 @@
   <xsl:param name="neg.lang">en</xsl:param>
 
 
-  <xsl:template match="//i18n:insert">
+  <xsl:template match="i18n:insert">
     <xsl:variable name="Text" select="."/>
     <xsl:value-of
       select="document(concat('/i18n.', $neg.lang, '.xml'))/texts:translations/texts:text[@id=$Text]"/>

@@ -18,7 +18,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 
 
 =head1 NAME
@@ -157,11 +157,11 @@ sub adduserinfo {
     my $user = AxKit::App::TABOO::Data::User->new($self->dbconnectargs());
     $user->xmlelement("user");
     $user->load(what => 'username,name', limit => {username => ${$self}{'username'}});
-    ${$self}{'USER'} = \$user;
+    ${$self}{'USER'} = $user;
     my $submitter = AxKit::App::TABOO::Data::User->new($self->dbconnectargs());
     $submitter->xmlelement("submitter");
     $submitter->load(what => 'username,name', limit => {username => ${$self}{'submitterid'}});
-    ${$self}{'SUBMITTER'} = \$submitter;
+    ${$self}{'SUBMITTER'} = $submitter;
     return $self;
 }
 
@@ -182,7 +182,7 @@ sub addcatinfo {
     $cat->xmlelement("primcat");
     $cat->load(what => '*', limit => {catname => ${$self}{'primcat'}});
 
-    ${$self}{'primcat'} = \$cat;
+    ${$self}{'primcat'} = $cat;
 
     # We allow several secondary categories, so we may get an array to run through. 
 #      my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new($self->dbconnectargs());
@@ -192,7 +192,7 @@ sub addcatinfo {
 #        $cat->load(what => '*', limit => {catname => $catname});
 #        $cats->Push($cat);
 #      }
-#      ${$self}{'seccat'} = \$cats;
+#      ${$self}{'seccat'} = $cats;
 #      my $frees = AxKit::App::TABOO::Data::Plurals::Categories->new($self->dbconnectargs());
 #      $frees->xmlelement("freesubject");
 #      foreach my $catname (@{${$self}{'freesubject'}}) {
@@ -200,7 +200,7 @@ sub addcatinfo {
 #        $cat->load(what => '*', limit => {catname => $catname});
 #        $frees->Push($cat);
 #      }
-#      ${$self}{'freesubject'} = \$frees;
+#      ${$self}{'freesubject'} = $frees;
 
     return $self;
 }

@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 
 AxKit::App::TABOO::Data::Plurals::Comments->dbtable("comments");
 AxKit::App::TABOO::Data::Plurals::Comments->dbfrom("comments");
@@ -124,8 +124,7 @@ sub load {
       my @build = grep(m|^/[a-z]+?$|, keys(%data));
       return undef if ($#build < 0);
       foreach (@build) {
-	# hm, it seems I haven't quite grokked all aspects with
-	# references yet or something...
+	# Apparently, I can't just modify $self straightforwardly. Quirky
 	my $comment = AxKit::App::TABOO::Data::Comment->new($self->dbconnectargs());
 	$comment->populate($data{$_});
 	$comment->onfile;
@@ -162,7 +161,7 @@ sub _threadhelper {
     $comment->reply($self->_threadhelper($_, %data));
     $comments->Push($comment);
   }
-  return \$comments;
+  return $comments;
 }
 
 

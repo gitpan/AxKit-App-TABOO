@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 
 
 1;
@@ -179,7 +179,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   AxAddPlugin Apache::AxKit::Plugin::Passthru
 
   AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::Request
-  PerlSetVar AxAddXSLParamGroups "HTTPHeaders"
+  PerlSetVar AxAddXSLParamGroups "Request-Common HTTPHeaders"
 
   # If you want a different language than English, you need to
   # translate i18n.en.xml and replace nb with your language

@@ -15,6 +15,9 @@
   <text id="article-descr"> The title of the article </text>
   <text id="article-title"> Title </text>
 
+  <text id="comments"> Comments </text>
+  <text id="comments-verb"> comments </text>
+
   <text id="minicontent"> First paragraph </text>
   <text id="minicontent-descr"> Enter the first paragraph or so
   here. This will appear on lists of stories, with links on to the rest. </text>
@@ -78,6 +81,8 @@
 
   <text id="me"> Me </text>
   <text id="for"> for </text>
+  <text id="to"> to </text>
+  <text id="with"> with </text>
 
   <text id="stories-title-menu"> News </text>
   <text id="users-title-menu"> User </text>

@@ -15,6 +15,9 @@
   <text id="article-descr"> Tittelen til artikkelen </text>
   <text id="article-title"> Tittel </text>
 
+  <text id="comments"> Kommentarer </text>
+  <text id="comments-verb"> kommenterer </text>
+
   <text id="minicontent"> Første avsnitt </text>
   <text id="minicontent-descr"> Skriv inn det første avsnittet til
   saken her. Denne vil opptre på lister over artikler, på forsiden
@@ -80,6 +83,8 @@
 
   <text id="me"> Meg </text>
   <text id="for"> for </text>
+  <text id="to"> til </text>
+  <text id="with"> med </text>
 
   <text id="stories-title-menu"> Nyheter </text>
   <text id="users-title-menu"> Bruker </text>

@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 
 =head1 NAME
 
@@ -234,6 +234,7 @@ sub get_strref {
       if($self->{showthread}) {
 	# We shall show a thread, not the story
 	AxKit::Debug(7, "[News] We shall show a thread, not the story");
+	$rootel->setAttribute('commentstatus', 'threadonly');
 	$self->{story}->write_xml($doc, $rootel);
 	if($self->{commentpath} eq '/') {
 	  $self->{commenttree}->load(limit => {sectionid => $self->{section},
@@ -250,6 +251,7 @@ sub get_strref {
 	# We shall show a single comment
 	AxKit::Debug(7, "[News] We shall show a single comment");
 	# The comment itself is in rootcomment allready.
+	$rootel->setAttribute('commentstatus', 'singlecomment');
 	$self->{story}->write_xml($doc, $rootel);
 	$self->{rootcomment}->adduserinfo();
 	$self->{rootcomment}->write_xml($doc, $rootel);
@@ -265,6 +267,7 @@ sub get_strref {
       } elsif($self->{showall}) {
 	# We shall show the full story and all the expanded comments
 	AxKit::Debug(7, "[News] We shall show the full story and all the expanded comments");
+	$rootel->setAttribute('commentstatus', 'everything');
 	$self->{story}->load(limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
@@ -277,6 +280,7 @@ sub get_strref {
       } else {
 	# We shall show the full story, but only headings of comments
 	AxKit::Debug(7, "[News] We shall show the full story, but only headings of comments");
+	$rootel->setAttribute('commentstatus', 'headings');
 	$self->{story}->load(limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
@@ -293,6 +297,7 @@ sub get_strref {
     } else {
       # We shall only display the story, no comments
       AxKit::Debug(7, "[News] We shall only display the story, no comments");
+      $rootel->setAttribute('commentstatus', 'nocomments');
       $self->{story}->load(limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
       $self->{story}->adduserinfo();
       $self->{story}->addcatinfo();

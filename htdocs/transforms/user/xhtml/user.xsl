@@ -32,7 +32,7 @@
 	<title>
 	  <xsl:apply-templates select="./cust:title/node()"/>
 	  <xsl:value-of select="i18n:include('for')"/>
-	  <xsl:value-of select="//user:name"/>
+	  <xsl:value-of select="./*/user:user/user:name"/>
 	  <xsl:text> | </xsl:text>
 	  <xsl:value-of
 	  select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
@@ -49,7 +49,7 @@
 	  <xsl:copy-of select="document($uri)"/>
 	  
 	  <div class="main">
-	    <xsl:apply-templates select="//user:user"/>
+	    <xsl:apply-templates select="./*/user:user"/>
 	    
 	    <form method="post" action="/user/submit/">
 	      <div class="fields">

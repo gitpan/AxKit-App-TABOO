@@ -10,20 +10,27 @@
   exclude-result-prefixes="cust user story cat i18n texts"> 
 
   <xsl:import href="/transforms/insert-i18n.xsl"/>
+  <xsl:import href="match-user.xsl"/>
 
 
   <xsl:template match="taboo[@type='story']/story:story|/cust:submit//story:story">
     <h2><xsl:value-of select="story:title"/></h2>
     <div id="byline">
-      <xsl:value-of select="i18n:include('submit-by')"/>
-      <xsl:apply-templates select="user:submitter"/>
-      <xsl:value-of select="i18n:include('posted-by')"/>
-       <xsl:apply-templates select="user:user"/>
+      <xsl:if test="user:submitter">
+	<xsl:value-of select="i18n:include('submit-by')"/>
+	<xsl:apply-templates select="user:submitter"/>
+      </xsl:if>
+      <xsl:if test="user:user">
+	<xsl:value-of select="i18n:include('posted-by')"/>
+	<xsl:apply-templates select="user:user"/>
+      </xsl:if>
     </div>
-    <div id="catinfo">
-      <xsl:value-of select="i18n:include('to-cat')"/>
-      <xsl:apply-templates select="cat:primcat"/>
-    </div>
+    <xsl:if test="cat:primcat">
+      <div id="catinfo">
+	<xsl:value-of select="i18n:include('to-cat')"/>
+	<xsl:apply-templates select="cat:primcat"/>
+      </div>
+    </xsl:if>
     <div id="timeinfo">
       <xsl:value-of select="i18n:include('on-time')"/>
       <xsl:apply-templates select="story:timestamp"/>
@@ -90,7 +97,7 @@
 	  <xsl:value-of select="story:linktext"/>
 	</a>
       </div>
-      <xsl:if test="//taboo[@can-edit]">
+      <xsl:if test="/taboo[@can-edit]">
 	<div class="editlink">
 	  <a>
 	    <xsl:attribute name="href">
@@ -132,7 +139,7 @@
       <td><xsl:apply-templates select="cat:primcat"/></td>
       <td><xsl:apply-templates select="story:timestamp"/></td>
       <td><xsl:apply-templates select="story:lasttimestamp"/></td>
-      <xsl:if test="//taboo[@can-edit]">
+      <xsl:if test="/taboo[@can-edit]">
 	<td>
 	  <a>
 	    <xsl:attribute name="href">
@@ -146,19 +153,6 @@
 	</td>
       </xsl:if>
     </tr>
-  </xsl:template>
-
-
-  <xsl:template match="user:user|user:submitter">
-    <span class="by">
-      <a>
-	<xsl:attribute name="href">
-	  <xsl:text>/user/</xsl:text><xsl:value-of
-	  select="user:username"/>
-	</xsl:attribute>
-	<xsl:value-of select="user:name"/>
-      </a>
-    </span>
   </xsl:template>
 
   <xsl:template match="cat:primcat">

@@ -64,11 +64,11 @@
 	    <xsl:choose>
 	      <xsl:when test="taboo[@type='list']">
 		<table>
-		<xsl:apply-templates select="//story:story"/>
+		<xsl:apply-templates select="/taboo/story:story"/>
 		</table>
 	      </xsl:when>
 	      <xsl:otherwise>
-		<xsl:apply-templates select="//story:story"/>
+		<xsl:apply-templates select="/taboo/story:story"/>
 	      </xsl:otherwise>
 	    </xsl:choose>
 	  </div>

@@ -15,7 +15,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 
 
 
@@ -120,7 +120,7 @@ sub adduserinfo {
   my $self = shift;
   my $user = AxKit::App::TABOO::Data::User->new($self->dbconnectargs());
   $user->load(what => 'username,name', limit => {username => ${$self}{'username'}});
-  ${$self}{'USER'} = \$user;
+  ${$self}{'USER'} = $user;
   return $self;
 }
 
@@ -140,9 +140,9 @@ sub reply {
   if (@_) { 
     my $comments = shift;
     return undef unless (defined($comments));
-#    croak "The reply object must be a Comment or Comments object" 
-#      unless ((ref($comments) eq 'AxKit::App::TABOO::Data::Comment') || 
-#	      (ref($comments) eq 'AxKit::App::TABOO::Data::Plurals::Comments'));
+    croak "The reply object must be a Comment or Comments object" 
+      unless ((ref($comments) eq 'AxKit::App::TABOO::Data::Comment') || 
+	      (ref($comments) eq 'AxKit::App::TABOO::Data::Plurals::Comments'));
     ${$self}{'REPLIES'} = $comments;
     return $self;
   } else {
@@ -242,7 +242,12 @@ posted. See also the C<timestamp()> method.
 
 =head1 XML representation
 
-The C<write_xml()> method, implemented in the parent class, can be used to create an XML representation of the data in the object. The above names will be used as element names. The C<xmlelement()> and C<xmlns()> methods can be used to set the name of the root element and the namespace respectively. Usually, it doesn't make sense to change the defaults, which are 
+The C<write_xml()> method, implemented in the parent class, can be
+used to create an XML representation of the data in the object. The
+above names will be used as element names. The C<xmlelement()> and
+C<xmlns()> methods can be used to set the name of the root element and
+the namespace respectively. Usually, it doesn't make sense to change
+the defaults, which are
 
 
 =over
@@ -257,7 +262,8 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =over
 
-=item * Add a category for the nature of the response, to support things like the Thread Description Language.
+=item * Add a category for the nature of the response, to support
+things like the Thread Description Language.
 
 =item * C<reply> should check the class of the object it is passed.
 

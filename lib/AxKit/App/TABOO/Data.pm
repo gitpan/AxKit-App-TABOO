@@ -11,7 +11,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 
 
 use DBI;
@@ -195,7 +195,12 @@ sub write_xml {
     foreach my $key (split(/,\s*/, $self->elementorder())) {
       if (defined(${$self}{$key})) {
 	my $content = ${$self}{$key};
-	if (ref($content) eq '') {
+	if (ref($content) =~ m/^AxKit::App::TABOO::Data/) {
+	  # The content is a reference to one of our subclasses, it
+	  # should write itself
+	  $content->write_xml($doc, $topel);
+	}
+	elsif (ref($content) eq '') {
 	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	  my $text = XML::LibXML::Text->new($content);
 	  if ($self->elementneedsparse() =~ m/\b$key\b/) {
@@ -204,15 +209,17 @@ sub write_xml {
 	    my $formatter = Formatter::HTML::Textile->new();
 	    $formatter->charset('utf-8');
 	    my $html = $formatter->format($content);
-	    my $parser = XML::LibXML->new();
-	    my $parsed = $parser->parse_balanced_chunk($html);
-	    my $fragment = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);	    
-	    $fragment->appendChild($parsed);
-	    $topel->appendChild($fragment);
-	    # Add an attribute to the other element containing the
-	    # unparsed stuff
-	    $element->setAttribute('raw', 'Textile');
-	  } 
+	    if ($html) {
+	      my $parser = XML::LibXML->new();
+	      my $parsed = $parser->parse_balanced_chunk($html);
+	      my $fragment = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
+	      $fragment->appendChild($parsed);
+	      $topel->appendChild($fragment);
+	      # Add an attribute to the other element containing the
+	      # unparsed stuff
+	      $element->setAttribute('raw', 'Textile');
+	    } 
+	  }
 	  $element->appendChild($text);
 	  $topel->appendChild($element);
 	} elsif (ref($content) eq "ARRAY") {
@@ -224,16 +231,12 @@ sub write_xml {
 	      $element->appendChild($text);
 	      $topel->appendChild($element);
 	    } else {
-	      my $el = ${$_};
-	      if (ref($el) =~ m/^AxKit::App::TABOO::Data/) {
+	      if (ref($_) =~ m/^AxKit::App::TABOO::Data/) {
 		# An element in the array contained a reference to one of our subclasses, it must be written too. 
-		$el->write_xml($doc, $topel);
+		$_->write_xml($doc, $topel);
 	      }
 	    }
 	  }
-	} elsif (ref(${$content}) =~ m/^AxKit::App::TABOO::Data/) {
-	  # a reference to one of our subclasses, it must be written too. 
-	  ${$content}->write_xml($doc, $topel);
         } else {
 	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	  my $text = XML::LibXML::Text->new($content);
@@ -278,7 +281,12 @@ sub populate {
 
 =item C<apache_request_changed(\%args)>
 
-Like the above method, this method takes as argument a reference to the args hash of a L<Apache::Request> object. Instead of populating the Data object, it will compare the C<\%args> with the contents of the object and return an array of fields that differs between the two. Fields that are not specified by the data object, that has uppercase letters or has no value, are ignored.
+Like the above method, this method takes as argument a reference to
+the args hash of a L<Apache::Request> object. Instead of populating
+the Data object, it will compare the C<\%args> with the contents of
+the object and return an array of fields that differs between the
+two. Fields that are not specified by the data object, that has
+uppercase letters or has no value, are ignored.
 
 
 =cut
@@ -301,9 +309,19 @@ sub apache_request_changed {
 
 =item C<save([$olddbkey])>
 
-This is a generic save method, that will write a new record to the data store, or update an old one. It may have to be subclassed for certain classes. It takes an optional argument C<$olddbkey>, which is the primary key of an existing record in the data store. You may supply this in the case if you want to update the record with a new key. In that case, you'd better be sure it actually exists, because the method will trust you do. 
+This is a generic save method, that will write a new record to the
+data store, or update an old one. It may have to be subclassed for
+certain classes. It takes an optional argument C<$olddbkey>, which is
+the primary key of an existing record in the data store. You may
+supply this in the case if you want to update the record with a new
+key. In that case, you'd better be sure it actually exists, because
+the method will trust you do.
 
-It is not yet a very rigorous implementation: It may well fail badly if it is given something with a reference to other Data objects, which is the case if you have a full story with all comments. Or it may cope. Only time will tell! Expect to see funny warnings in your logs if you try.
+It is not yet a very rigorous implementation: It may well fail badly
+if it is given something with a reference to other Data objects, which
+is the case if you have a full story with all comments. Or it may
+cope. Only time will tell! Expect to see funny warnings in your logs
+if you try.
 
 
 =cut
@@ -348,7 +366,7 @@ sub save {
 	  } else {
 	    # Actually, I should never get here, but anyway...:
 	      warn "Advanced forms of references aren't implemented meaningfully yet. Don't be surprised if I crash or corrupt something.";
-	      ${$content}->save(); # IOW: Panic!! Everybody save yourselves if you can! :-)
+	      $content->save(); # IOW: Panic!! Everybody save yourselves if you can! :-)
 	  }
 	  $i++;
       }
@@ -363,7 +381,8 @@ sub save {
 
 =item C<stored()>
 
-Checks if a record with the present object's identifier is allready present in the datastore. Returns 1 if this is so. 
+Checks if a record with the present object's identifier is allready
+present in the datastore. Returns 1 if this is so.
 
 =cut
 
@@ -495,14 +514,24 @@ AxKit::App::TABOO::Data->mk_classdata('elementneedsparse');
 
 =head1 STORED DATA
 
-The data is stored in named fields, currently in a database, but there is nothing stopping you from subclassing the Data classes and storing it somewhere else. TABOO should work well, but if you want to make it less painful for yourself, you should use the same names or provide some kind of mapping between your names and the names in these Data classes. Note that any similarity between these names and the internal names of this class is purely coincidential (eh, not really). 
+The data is stored in named fields, currently in a database, but there
+is nothing stopping you from subclassing the Data classes and storing
+it somewhere else. TABOO should work well, but if you want to make it
+less painful for yourself, you should use the same names or provide
+some kind of mapping between your names and the names in these Data
+classes. Note that any similarity between these names and the internal
+names of this class is purely coincidential (eh, not really).
 
-Consult the documentation for each individual Data class for the names of the stored data. 
+Consult the documentation for each individual Data class for the names
+of the stored data.
 
 
 =head1 BUGS/TODO
 
-Except for still being in alpha, and should have a few bugs, there is the issue with the handling of references to other objects in the C<save()> method. It's possible it will cope, but it definately needs work.
+Except for still being in alpha, and should have a few bugs, there is
+the issue with the handling of references to other objects in the
+C<save()> method. It's possible it will cope, but it definately needs
+work.
 
 
 =head1 FORMALITIES

@@ -26,9 +26,9 @@
 
   <xsl:param name="title"/>
 
-  <xsl:template match="//val:insert[@name='title']">
+  <xsl:template match="val:insert[@name='title']">
     <xsl:if test="$title = ''">
-      <xsl:value-of select="//story:story/story:title"/>  
+      <xsl:value-of select="story:story/story:title"/>  
     </xsl:if>
     <xsl:if test="not($title = '')">
       <xsl:value-of select="$title"/>  
@@ -37,9 +37,9 @@
 
   <xsl:param name="minicontent"/>
 
-  <xsl:template match="//val:insert[@name='minicontent']">
+  <xsl:template match="val:insert[@name='minicontent']">
     <xsl:if test="$minicontent = ''">
-      <xsl:value-of select="//story:story/story:minicontent[@raw]"/>  
+      <xsl:value-of select="story:story/story:minicontent[@raw]"/>  
     </xsl:if>
     <xsl:if test="not($minicontent = '')">
       <xsl:value-of select="$minicontent"/>  
@@ -48,9 +48,9 @@
 
   <xsl:param name="content"/>
 
-  <xsl:template match="//val:insert[@name='content']">
+  <xsl:template match="val:insert[@name='content']">
     <xsl:if test="$content = ''">
-      <xsl:value-of select="//story:story/story:content[@raw]"/>  
+      <xsl:value-of select="story:story/story:content[@raw]"/>  
     </xsl:if>
     <xsl:if test="not($content = '')">
       <xsl:value-of select="$content"/>  
@@ -59,9 +59,9 @@
 
   <xsl:param name="image"/>
 
-  <xsl:template match="//val:insert[@name='image']">
+  <xsl:template match="val:insert[@name='image']">
     <xsl:if test="$image = ''">
-      <xsl:value-of select="//story:story/story:image"/>  
+      <xsl:value-of select="story:story/story:image"/>  
     </xsl:if>
     <xsl:if test="not($image = '')">
       <xsl:value-of select="$image"/>  
@@ -70,9 +70,9 @@
 
   <xsl:param name="linktext"/>
 
-  <xsl:template match="//val:insert[@name='linktext']">
+  <xsl:template match="val:insert[@name='linktext']">
     <xsl:if test="$linktext = ''">
-      <xsl:value-of select="//story:story/story:linktext"/>  
+      <xsl:value-of select="story:story/story:linktext"/>  
     </xsl:if>
     <xsl:if test="not($linktext = '')">
       <xsl:value-of select="$linktext"/>  
@@ -81,9 +81,9 @@
 
   <xsl:param name="primcat"/>
 
-  <xsl:template match="//val:insert[@name='primcat']">
+  <xsl:template match="val:insert[@name='primcat']">
     <xsl:if test="$primcat = ''">
-      <xsl:value-of select="//story:story/story:primcat"/>  
+      <xsl:value-of select="story:story/story:primcat"/>  
     </xsl:if>
     <xsl:if test="not($primcat = '')">
       <xsl:value-of select="$primcat"/>  
@@ -93,9 +93,9 @@
 
   <xsl:param name="sectionid"/>
 
-  <xsl:template match="//val:insert[@name='sectionid']">
+  <xsl:template match="val:insert[@name='sectionid']">
     <xsl:if test="$sectionid = ''">
-      <xsl:value-of select="//story:story/story:sectionid"/>  
+      <xsl:value-of select="story:story/story:sectionid"/>  
     </xsl:if>
     <xsl:if test="not($sectionid = '')">
       <xsl:value-of select="$sectionid"/>  
@@ -104,9 +104,9 @@
 
   <xsl:param name="editorok"/>
 
-  <xsl:template match="//val:insert[@name='editorok']">
+  <xsl:template match="val:insert[@name='editorok']">
     <xsl:if test="$editorok = ''">
-      <xsl:value-of select="//story:story/story:editorok"/>  
+      <xsl:value-of select="story:story/story:editorok"/>  
     </xsl:if>
     <xsl:if test="not($editorok = '')">
       <xsl:value-of select="$editorok"/>  
@@ -115,9 +115,9 @@
 
   <xsl:param name="submitterid"/>
 
-  <xsl:template match="//val:insert[@name='submitterid']">
+  <xsl:template match="val:insert[@name='submitterid']">
     <xsl:if test="$submitterid = ''">
-      <xsl:value-of select="//story:story/user:submitter/user:username"/>  
+      <xsl:value-of select="story:story/user:submitter/user:username"/>  
     </xsl:if>
     <xsl:if test="not($submitterid = '')">
       <xsl:value-of select="$submitterid"/>  
@@ -127,9 +127,9 @@
 
   <xsl:param name="storyname"/>
 
-  <xsl:template match="//val:insert[@name='storyname']">
+  <xsl:template match="val:insert[@name='storyname']">
     <xsl:if test="$storyname = ''">
-      <xsl:value-of select="//story:story/story:storyname"/>  
+      <xsl:value-of select="story:story/story:storyname"/>  
     </xsl:if>
     <xsl:if test="not($storyname = '')">
       <xsl:value-of select="$storyname"/>  

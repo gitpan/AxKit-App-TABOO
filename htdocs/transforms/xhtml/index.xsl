@@ -37,8 +37,8 @@
 	<xsl:call-template name="CreateHeader"/>
 	<div id="container">
 	  <h2>
-	    <xsl:if test="//taboo/cat:category/cat:type='stsec'">
-	      <xsl:value-of select="//taboo/cat:category/cat:name"/>
+	    <xsl:if test="/taboo/cat:category/cat:type='stsec'">
+	      <xsl:value-of select="/taboo/cat:category/cat:name"/>
 	    </xsl:if>
 	  </h2>
 	  <xsl:variable name="uri" select="concat('http://',
@@ -46,13 +46,13 @@
 	  <xsl:copy-of select="document($uri)"/>
 	  <div class="main">
 	    <xsl:choose>
-	      <xsl:when test="//taboo[@type='list']">
+	      <xsl:when test="/taboo[@type='list']">
 		<table>
-		  <xsl:apply-templates select="//story:story"/>
+		  <xsl:apply-templates select="/taboo/story:story"/>
 		</table>
 	      </xsl:when>
 	      <xsl:otherwise>
-		<xsl:apply-templates select="//story:story"/>
+		<xsl:apply-templates select="/taboo/story:story"/>
 	      </xsl:otherwise>
 	    </xsl:choose>
 	  </div>

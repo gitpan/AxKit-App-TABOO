@@ -142,3 +142,8 @@ div.main div.control p
   font-style: italic;
   margin: 0.4em 1em;
 }
+
+div.reply div.reply
+{  
+  margin-left: 2em;
+}

@@ -11,7 +11,9 @@ htdocs/site/main.rdf
 htdocs/transforms/index-aggregate.xsl
 htdocs/transforms/insert-i18n.xsl
 htdocs/transforms/news/insert-values-edit.xsl
+htdocs/transforms/news/xhtml/match-comment.xsl
 htdocs/transforms/news/xhtml/match-story.xsl
+htdocs/transforms/news/xhtml/match-user.xsl
 htdocs/transforms/news/xhtml/news-provider.xsl
 htdocs/transforms/news/xhtml/newslist-provider.xsl
 htdocs/transforms/news/xhtml/submit.xsl
