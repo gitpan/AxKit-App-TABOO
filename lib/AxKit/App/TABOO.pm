@@ -1,10 +1,10 @@
 package AxKit::App::TABOO;
 
-use 5.6.0;
+use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.085';
+our $VERSION = '0.086';
 
 
 1;
@@ -117,7 +117,7 @@ editing the information of existing users.
 
 It can also format user-entered text with L<Formatter::HTML::Textile>.
 
-It also have some code for i18n, consisting of stylesheets that can
+It also has some code for i18n, consisting of stylesheets that can
 take all strings of text from a separate XML file and insert them in
 the final product. This will make it easy to provide many translations
 with TABOO, but it needs elaboration, which is next on the TODO list.

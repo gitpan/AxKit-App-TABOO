@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.085
+AxKit/App/TABOO version 0.086
 =============================
 
 INTRODUCTION
@@ -98,11 +98,15 @@ see inline docs for details.
 
 DEPENDENCIES
 
+You will need at least Perl 5.7.3 to use TABOO. This is due to
+Unicode-issues that is not well supported in earlier releases.
+
 This module requires these other modules and libraries:
 - AxKit, of course!
 - DBI
 - DBD::Pg. You need at least 1.32. Earlier versions has problems with 
   SQL3 Arrays, but it may be possible to get away with it.  
+- Encode
 - Time::Piece
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
@@ -113,6 +117,9 @@ This module requires these other modules and libraries:
 - Apache::AxKit::Plugin::AddXSLParams::Request for virtual hosts, but
   it is easy to remove this dependency if one wishes.
 - Data::Dumper lists out debugging information, but can be removed. 
+- AxKit will bring along XML::LibXML, and while you could use any
+  LibXSLT module supported by AxKit, I recommend XML::LibXSLT, and to
+  ease installation, I made it a prerequisite.
 
 You will also need some XML libraries, for example libxml2 and
 libxslt. You will probably have gotten these along with AxKit. TABOO
