@@ -14,15 +14,16 @@
  
   <xsl:import href="/transforms/news/xhtml/match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:output encoding="utf-8" method="html"
     media-type="text/html" indent="yes"/>
 
   <xsl:param name="session.id"/>
   <xsl:param name="request.headers.host"/>
-
+  <xsl:param name="neg.lang">en</xsl:param>
 
   <xsl:template match="/">
-    <html lang="en">
+    <html lang="{$neg.lang}">
       <head>
 	<title>
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
@@ -32,27 +33,33 @@
       </head>
       <body>
 	<xsl:call-template name="CreateHeader"/>
-	<h2>
-	  <xsl:if test="//taboo/category:category/category:type='stsec'">
-	    <xsl:value-of select="//taboo/category:category/category:name"/>
-	  </xsl:if>
-	</h2>
-	<xsl:variable name="uri" select="concat('http://',
-	$request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
-	<xsl:copy-of select="document($uri)"/>
-	<div class="main">
-	  <xsl:choose>
-	    <xsl:when test="//taboo[@type='list']">
-	      <table>
+	<div id="container">
+	  <h2>
+	    <xsl:if test="//taboo/category:category/category:type='stsec'">
+	      <xsl:value-of select="//taboo/category:category/category:name"/>
+	    </xsl:if>
+	  </h2>
+	  <xsl:variable name="uri" select="concat('http://',
+	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	  <xsl:copy-of select="document($uri)"/>
+	  <div class="main">
+	    <xsl:choose>
+	      <xsl:when test="//taboo[@type='list']">
+		<table>
+		  <xsl:apply-templates select="//story:story"/>
+		</table>
+	      </xsl:when>
+	      <xsl:otherwise>
 		<xsl:apply-templates select="//story:story"/>
-	      </table>
-	    </xsl:when>
-	    <xsl:otherwise>
-	      <xsl:apply-templates select="//story:story"/>
-	    </xsl:otherwise>
-	  </xsl:choose>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </div>
 	</div>
+	<xsl:call-template name="CreateFooter"/>
       </body>
     </html>
   </xsl:template>
 </xsl:stylesheet>
+
+
+

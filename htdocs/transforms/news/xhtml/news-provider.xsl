@@ -9,14 +9,16 @@
   xmlns="http://www.w3.org/1999/xhtml">
   <xsl:import href="match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:output encoding="utf-8" method="html"
     media-type="text/html" indent="yes"/>
   
   <xsl:param name="request.headers.host"/>
   <xsl:param name="session.id"/>
+  <xsl:param name="neg.lang">en</xsl:param>
 
   <xsl:template match="/">
-    <html lang="en">
+    <html lang="{$neg.lang}">
       <head>
 	<title>
 	  <xsl:value-of select="//story:story/story:title"/>
@@ -29,12 +31,15 @@
       </head>
       <body>
 	<xsl:call-template name="CreateHeader"/>
-	<xsl:variable name="uri" select="concat('http://',
-	  $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
-	<xsl:copy-of select="document($uri)"/>
-	<div class="main">
-	  <xsl:apply-templates select="//story:story"/>
+	<div id="container">
+	  <xsl:variable name="uri" select="concat('http://',
+	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	  <xsl:copy-of select="document($uri)"/>
+	  <div class="main">
+	    <xsl:apply-templates select="//story:story"/>
+	  </div>
 	</div>
+	<xsl:call-template name="CreateFooter"/>
       </body>
     </html>
   </xsl:template>

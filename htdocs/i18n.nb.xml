@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<translations
+  xmlns="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts" xml:lang="en">
+
+  <text id="submit-by"> Innsendt av </text>
+  <text id="posted-by"> Postet av </text>
+  <text id="to-cat"> Til kategori </text>
+  <text id="on-time"> Den </text>
+  <text id="last-changed"> Sist endret </text>
+
+
+  <text id="submit-story"> Send inn nyhetssak </text>
+  <text id="story-stored"> Nyhetssak lagret </text>
+  <text id="submit-story-menu"> Send inn sak </text>
+  <text id="article-descr"> Tittelen til artikkelen </text>
+  <text id="article-title"> Tittel </text>
+
+  <text id="minicontent"> Første avsnitt </text>
+  <text id="minicontent-descr"> Skriv inn det første avsnittet til
+  saken her. Denne vil opptre på lister over artikler, på forsiden
+  osv, med linker til resten. </text>
+
+  <text id="content"> Innholdet </text>
+  <text id="content-descr"> Skriv inn resten av innholdet her. </text>
+
+  <text id="descriptive-image"> Et beskrivende bilde </text>
+  <text id="descriptive-image-descr"> Adressen til et beskrivende bilde. </text>
+
+  <text id="linktext"> Linketekst </text>
+  <text id="linktext-descr"> En god, beskrivende tekst som skal brukes
+  til linken for resten av saken "Les mer" er et vanlig, men svært
+  dårlig valg. </text>
+
+  <text id="primcat"> Primær kategori </text>
+  <text id="primcat-descr"> Angi primær kategorisering for artikkelen.
+  Bruker et kontrollert vokabular. </text>
+
+  <text id="article-sectionid"> Seksjon </text>
+  <text id="article-sectionid-descr"> Velg hvilken seksjon artikkelen
+  skal postes til. </text>
+
+
+  <text id="editorok"> Redaktørens godkjennelse </text>
+  <text id="editorok-descr"> Kryss av for å angi at artikkelen er
+  godkjent for publisering. </text>
+
+  <text id="storyname"> Saksnavn </text>
+  <text id="storyname-descr"> Et kort ett-ords navn for saken </text>
+
+  <text id="submitterid"> Innsenders ID </text>
+  <text id="submitterid-descr"> Brukernavnet til den som sendte inn
+  artikkelen. </text>
+
+
+
+  <text id="user-name"> Fullt navn </text>
+  <text id="username"> Brukernavn </text>
+  <text id="user-email"> Epost </text>
+  <text id="user-bio"> Biografi </text>
+  <text id="uri"> URI </text>
+  <text id="homepage"> Hjemmeside </text>
+  <text id="login"> Login </text>
+  <text id="password"> Passord </text>
+  <text id="authlevel"> authorisasjonsnivå </text>
+  <text id="new-password"> Nytt passord </text>
+  <text id="register"> Registrer </text>
+
+  <text id="suggested-user-exists"> Brukernavnet er allerede i bruk! </text>
+  <text id="suggested-user-stored"> Brukerinformasjonen ble lagret! </text>
+
+  <text id="listing-everything"> Lister opp alle saker </text>
+  <text id="edit"> Rediger </text>
+  <text id="send"> Send </text>
+  <text id="search"> Søk </text>
+  <text id="preview"> Forvisning </text>
+  <text id="update"> Oppdater </text>
+  <text id="change"> Endre </text>
+  <text id="repeat"> Gjenta </text>
+  <text id="not-found"> ikke funnet </text>
+
+  <text id="me"> Meg </text>
+  <text id="for"> for </text>
+
+  <text id="stories-title-menu"> Nyheter </text>
+  <text id="users-title-menu"> Bruker </text>
+  <text id="subqueue-story-menu"> Se innsendte </text>
+  <text id="submit-new-user"> Ny bruker </text>
+  <text id="user-info"> Brukerinformasjon </text>
+
+  <text id="new-username-descr"> Velg et ett-ords brukernavn </text>
+  <text id="new-fullname-descr"> Gi ditt fulle navn </text>
+  <text id="new-email-descr"> En gyldig e-post adresse </text>
+  <text id="new-uri-descr"> Adressen til en webside som beskriver deg </text>
+
+  <text id="to-change-passwd-descr"> For å forandre passord, gi det
+  nye passorder to ganger. </text>
+
+  <text id="authlevel-descr"> Autorisasjonsnivået bestemmer hva du får
+  lov til å gjøre på sidene. </text>
+  
+  <text id="password-valid"> Passordet ble funnet å være gyldig. </text>
+  <text id="password-invalid"> Passordet du gav ble ikke funnet å være
+  gyldig. </text>
+  <text id="username-not-found"> Brukernavnet du ga passer ikke med
+  noen brukere på dette systemet. </text>
+  <text id="return-to-top-page"> Gå tilbake til hovedsiden av </text>
+
+
+
+</translations>

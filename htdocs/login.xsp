@@ -12,17 +12,25 @@
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam"
   xmlns="http://www.w3.org/1999/xhtml">
   <cust:loginpage>
-    <user:password-matches>
+    <user:exists>
       <user:username><param:get name="credential_0"/></user:username>
-      <user:clear><param:get name="passwd"/></user:clear>
       <user:true>
-	<xsp:logic><auth:login/>;
-	  <session:set-attribute name="authlevel">
-	    <session:value><user:get-authlevel><user:username><param:get name="credential_0"/></user:username></user:get-authlevel></session:value>
-	  </session:set-attribute>;</xsp:logic>
-	<i18n:insert>password-valid</i18n:insert>
+	<user:password-matches>
+	  <user:username><param:get name="credential_0"/></user:username>
+	  <user:clear><param:get name="passwd"/></user:clear>
+	  <user:true>
+	    <xsp:logic><auth:login/>;
+	      <session:set-attribute name="authlevel">
+		<session:value><user:get-authlevel><user:username><param:get name="credential_0"/></user:username></user:get-authlevel></session:value>
+	      </session:set-attribute>;</xsp:logic>
+	    <i18n:insert>password-valid</i18n:insert>
+	  </user:true>
+	  <user:false><i18n:insert>password-invalid</i18n:insert></user:false>
+	</user:password-matches>
       </user:true>
-      <user:false><i18n:insert>password-invalid</i18n:insert></user:false>
-    </user:password-matches>
+      <user:false>
+	<i18n:insert>username-not-found</i18n:insert>
+      </user:false>
+    </user:exists>
   </cust:loginpage>
 </xsp:page>

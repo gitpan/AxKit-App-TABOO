@@ -1,5 +1,18 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.086_1	2004-10-09 20:27
+	- Some more code to allow easily setting the language for the
+	  interface. 
+	    * This uses Apache::AxKit::Plugin::XSLTParam which is not yet
+	      released. Thus, this is development release.
+	    * A nb (Norwegian Bokmål) translation. 
+	- The login gives an error message if the user doesn't exist.
+	- Adding some more div elements to ease CSS work. 
+	- Added a footer
+	    * with a Google search for the host.
+	- Commented out the image stuff, it doesn't do anything yet.
+	
+
 0.086	2004-10-07 03:53
 	- Adding some missing dependencies.
 	- ...with the consequence that TABOO now depends on at least

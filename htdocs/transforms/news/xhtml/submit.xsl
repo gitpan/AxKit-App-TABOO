@@ -15,16 +15,18 @@
   <xsl:import href="match-story.xsl"/>
   <xsl:import href="../../../transforms/xhtml/match-control.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:output version="1.0" encoding="utf-8" method="html"
     media-type="text/html" indent="yes"/>  
 
   <xsl:param name="request.headers.host"/>
   <xsl:param name="session.id"/>
+  <xsl:param name="neg.lang">en</xsl:param>
 
  
   <xsl:template match="cust:submit">
-    <html lang="en">
+    <html lang="{$neg.lang}">
       <head>
 	<title>
 	  <xsl:apply-templates select="./cust:title/node()"/>
@@ -35,26 +37,36 @@
       </head>
       <body>      
 	<xsl:call-template name="CreateHeader"/>
-	<h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>
-	
-	<xsl:variable name="uri" select="concat('http://',
-	  $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
-	<xsl:copy-of select="document($uri)"/>
-
-	<div class="main">
-
-	  <xsl:apply-templates select="./story:story-submission/story:story"/>
+	<div id="container">
+	  <h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>
 	  
-	  <xsl:if test="//story:store=1">
-	    <xsl:value-of select="i18n:include('story-stored')"/>
-	  </xsl:if>
+	  <xsl:variable name="uri" select="concat('http://',
+	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	  <xsl:copy-of select="document($uri)"/>
 	  
-	  <form method="GET" action="submit">
-	    <fieldset>
-	      <xsl:apply-templates select="./ct:control"/>
-	    </fieldset>
-	  </form>
+	  <div class="main">
+	    
+	    <xsl:apply-templates select="./story:story-submission/story:story"/>
+	    
+	    <xsl:if test="//story:store=1">
+	      <xsl:value-of select="i18n:include('story-stored')"/>
+	      <p>
+		<xsl:value-of
+		  select="i18n:include('return-to-top-page')"/> 
+		<a rel="top" href="/"><xsl:value-of
+		    select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
+		</a>
+	      </p>
+	    </xsl:if>
+	    
+	    <form method="GET" action="submit">
+	      <fieldset>
+		<xsl:apply-templates select="./ct:control"/>
+	      </fieldset>
+	    </form>
+	  </div>
 	</div>
+	<xsl:call-template name="CreateFooter"/>
       </body>      
     </html>
   </xsl:template>

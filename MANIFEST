@@ -2,6 +2,7 @@ Changes
 htdocs/css/basic.css
 htdocs/guest-login.xsp
 htdocs/i18n.en.xml
+htdocs/i18n.nb.xml
 htdocs/index.xsp
 htdocs/login.xsp
 htdocs/menu.xsp
@@ -18,6 +19,7 @@ htdocs/transforms/user/make-control.xsl
 htdocs/transforms/user/xhtml/match-user.xsl
 htdocs/transforms/user/xhtml/new.xsl
 htdocs/transforms/user/xhtml/user.xsl
+htdocs/transforms/xhtml/footer.xsl
 htdocs/transforms/xhtml/header.xsl
 htdocs/transforms/xhtml/index.xsl
 htdocs/transforms/xhtml/login.xsl

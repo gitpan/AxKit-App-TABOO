@@ -8,19 +8,19 @@
   extension-element-prefixes="func i18n"
   exclude-result-prefixes="func i18n texts">
 
+  <xsl:param name="neg.lang">en</xsl:param>
 
 
-  
   <xsl:template match="//i18n:insert">
     <xsl:variable name="Text" select="."/>
     <xsl:value-of
-    select="document('/i18n.en.xml')/texts:translations/texts:text[@id=$Text]"/>
+      select="document(concat('/i18n.', $neg.lang, '.xml'))/texts:translations/texts:text[@id=$Text]"/>
   </xsl:template>
 
   <func:function name="i18n:include">  
     <xsl:param name="Text"/>
     <func:result 
-      select="document('/i18n.en.xml')/texts:translations/texts:text[@id=$Text]"/>
+      select="document(concat('/i18n.', $neg.lang, '.xml'))/texts:translations/texts:text[@id=$Text]"/>
   </func:function>
 
 </xsl:stylesheet>

@@ -27,7 +27,7 @@
       <xsl:apply-templates select="cat:primcat"/>
     </div>
     <div id="timeinfo">
-      <xsl:value-of select="i18n:include('on')"/>
+      <xsl:value-of select="i18n:include('on-time')"/>
       <xsl:apply-templates select="story:timestamp"/>
       <xsl:value-of select="i18n:include('last-changed')"/>
       <xsl:apply-templates select="story:lasttimestamp"/>
@@ -74,7 +74,7 @@
 	<xsl:apply-templates select="cat:primcat"/>
       </div>
       <div class="timeinfo">
-	<xsl:value-of select="i18n:include('on')"/>
+	<xsl:value-of select="i18n:include('on-time')"/>
 	<xsl:apply-templates select="story:timestamp"/>
 	<xsl:value-of select="i18n:include('last-changed')"/>
 	<xsl:apply-templates select="story:lasttimestamp"/>

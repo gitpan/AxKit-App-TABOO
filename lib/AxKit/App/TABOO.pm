@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.086';
+our $VERSION = '0.086_1';
 
 
 1;
@@ -180,6 +180,14 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
   AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::Request
   PerlSetVar AxAddXSLParamGroups "HTTPHeaders"
+
+  # If you want a different language than English, you need to
+  # translate i18n.en.xml and replace nb with your language
+  # code. These two directives are optional, you don't need any if you
+  # want English.
+  AxAddPlugin Apache::AxKit::Plugin::XSLTParam
+  PerlAddVar XSLTParam neg.lang '"nb"'
+
 
   # Authentication
   PerlModule Apache::AxKit::Plugin::BasicAuth

@@ -12,6 +12,7 @@
   xmlns="http://www.w3.org/1999/xhtml">
  
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:output encoding="utf-8" method="html"
     media-type="text/html" indent="yes"/>
@@ -19,10 +20,11 @@
   <xsl:param name="session.id"/>
   <xsl:param name="session.keys.credential_0" value="unknown"/>
   <xsl:param name="request.headers.host"/>
+  <xsl:param name="neg.lang">en</xsl:param>
 
 
   <xsl:template match="/cust:loginpage">
-    <html lang="en">
+    <html lang="{$neg.lang}">
       <head>
 	<title>
 	  <xsl:value-of select="i18n:include('login')"/> 
@@ -35,24 +37,27 @@
       </head>
       <body>
 	<xsl:call-template name="CreateHeader"/>
-	<h2 class="pagetitle">
-	  <xsl:value-of select="i18n:include('login')"/>
-	  <xsl:value-of select="$session.keys.credential_0"/> 
-	</h2>
-	<!-- xsl:variable name="uri" select="concat('http://',
+	<div id="container">
+	  <h2 class="pagetitle">
+	    <xsl:value-of select="i18n:include('login')"/>
+	    <xsl:value-of select="$session.keys.credential_0"/> 
+	  </h2>
+	  <!-- xsl:variable name="uri" select="concat('http://',
 	  $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
-	<xsl:copy-of select="document($uri)"/ -->
-	<div class="main">
-	  
-	  <p>
-	    <xsl:apply-templates/>
-	    <xsl:value-of
-	      select="i18n:include('return-to-top-page')"/> 
-            <a rel="top" href="/"><xsl:value-of
-		select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
-	    </a>
-	  </p>
+	  <xsl:copy-of select="document($uri)"/ -->
+	  <div class="main">
+	    
+	    <p>
+	      <xsl:apply-templates/>
+	      <xsl:value-of
+		select="i18n:include('return-to-top-page')"/> 
+	      <a rel="top" href="/"><xsl:value-of
+		  select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
+	      </a>
+	    </p>
+	  </div>
 	</div>
+	<xsl:call-template name="CreateFooter"/>
       </body>
     </html>
   </xsl:template>

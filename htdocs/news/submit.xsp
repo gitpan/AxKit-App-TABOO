@@ -44,7 +44,7 @@
 	<ct:descr><i18n:insert>content-descr</i18n:insert></ct:descr>
 	<ct:value><val:insert name="content"/></ct:value>
       </ct:control>
-      <user:is-authorized authlevel="3">
+      <!-- user:is-authorized authlevel="3">
 	<user:true>
 	  <ct:control element="input" type="text" name="image">
 	    <ct:title><i18n:insert>descriptive-image</i18n:insert></ct:title>
@@ -52,7 +52,7 @@
 	    <ct:value><val:insert name="image"/></ct:value>
 	  </ct:control>
 	</user:true>
-      </user:is-authorized>
+      </user:is-authorized -->
       <ct:control name="linktext" type="text" element="input">
 	<ct:title><i18n:insert>linktext</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>linktext-descr</i18n:insert></ct:descr>

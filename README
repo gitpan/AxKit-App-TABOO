@@ -1,5 +1,9 @@
-AxKit/App/TABOO version 0.086
-=============================
+AxKit/App/TABOO version 0.086_1
+===============================
+
+Note: This developer release uses the yet unreleased
+Apache::AxKit::Plugin::XSLTParam by Joerg Walter. 0.09 will be
+released when this module makes it to CPAN. 
 
 INTRODUCTION
 
