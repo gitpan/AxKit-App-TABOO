@@ -14,10 +14,10 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 ab1624b99ccc49527aade98853fb86988f93d449 Changes
+SHA1 5dfa28e5b3082a649b0333bc12f4ce05ab2be0d0 Changes
 SHA1 8d65c69c22588cbed5d4f3e8e80ab9b0e89939ec MANIFEST
 SHA1 11017501c8d9a2a9fc9d6cdb1fe4ef7d10a44748 MANIFEST.SKIP
-SHA1 e3684355ff1b5ec4f4a0524b92c68c05f083bb4e META.yml
+SHA1 1fb3c90be9d50f22442b633a0cda28d7b7f3f8e0 META.yml
 SHA1 0f3bd11de07f13544b52f9a6d6e57d658a187321 Makefile.PL
 SHA1 29dff8f22083575a86d7b3dc3d25ba4fe7b315d8 README
 SHA1 786152d3dfc41181099e8aa4d90b2bfec8d09367 htdocs/articles/provider.xsp
@@ -72,9 +72,9 @@ SHA1 2961cbaaa8788365077ad7fefb2519c95824b5d7 htdocs/transforms/xhtml/match-cont
 SHA1 335f60255fe16d4413701859f2019c4540786897 htdocs/transforms/xhtml/match-menu.xsl
 SHA1 2b812c125b5e6f6aedc051b2d9f1a086cdc06f12 htdocs/user/submit/new.xsp
 SHA1 70bbad5f80644a571d3cf1c6809c7837f1e78929 htdocs/user/submit/user.xsp
-SHA1 7eeb4575e04db9c315fed0df2eeb784f99c200e4 lib/AxKit/App/TABOO.pm
+SHA1 082da005da8e8925877075d5e79774002769c1fd lib/AxKit/App/TABOO.pm
 SHA1 a80fae4ecb030dc5a8811cd2189905540a149520 lib/AxKit/App/TABOO/Data.pm
-SHA1 1b66302742ba1d30a64b8738002276f107b62296 lib/AxKit/App/TABOO/Data/Article.pm
+SHA1 31fc9a768ec856bc903017a7b6a90ea9f8e15e30 lib/AxKit/App/TABOO/Data/Article.pm
 SHA1 af81f1fb4c9e9101403d0fc7413b66e60d516665 lib/AxKit/App/TABOO/Data/Category.pm
 SHA1 72b2ffd0a300d5621f40bf6b0e4194b882c9c623 lib/AxKit/App/TABOO/Data/Comment.pm
 SHA1 c0e5e52576c0cb2c0b8c56ed8e28a24822236bbe lib/AxKit/App/TABOO/Data/MediaType.pm
@@ -108,7 +108,7 @@ SHA1 835b4545bdf1054b755c56cb24f92819156d51d0 test.pl
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.5 (GNU/Linux)
 
-iD8DBQFCPNeqlE/Gp2pqC7wRAmObAJ9SkSAalr4sWcUDXfnWiR+9bALUuQCgnmSJ
-y+9ix4eHUvnNxdW+G+lw380=
-=kxKR
+iD8DBQFCP4sJlE/Gp2pqC7wRAjwlAKCGNFcA9kZjhCAGI5AMmP5R5kRu9gCfcekS
+l9F8MFIPVCImgjnGt040/1U=
+=qHAY
 -----END PGP SIGNATURE-----

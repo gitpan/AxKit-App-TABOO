@@ -21,7 +21,7 @@ use MIME::Types;
 use DBI;
 
 
-our $VERSION = '0.18_12';
+our $VERSION = '0.18_13';
 
 
 =head1 NAME
@@ -155,6 +155,73 @@ sub populate {
   }
   return $self;
 }
+
+sub save {
+  my $self = shift;
+  my $dbh = DBI->connect($self->dbconnectargs());
+  my @fields;
+  my $i=0;
+  my $catsusers=0;
+  foreach my $key (keys(%{$self})) {
+    next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
+    next unless defined(${$self}{$key}); # No need to insert something that isn't there
+    if (grep(/^$key$/, qw(primcat seccat freesubject angles authorids))) {
+      # Needs to be dealt with specially
+      $catsusers=1;
+      next;
+    }
+    $key =~ s/^(format|lang)$/$1_id/;
+    push(@fields, $key);
+    $i++;
+  }
+  if (($i == 0) && ($catsusers == 0)) {
+    carp "No data fields with anything to save";
+  } else {
+    my $sth;
+    my ($articleid) = $dbh->selectrow_array("SELECT id FROM articles WHERE filename=?", {}, ${$self}{'filename'});
+    if ($articleid) {
+      die "Updating articles not yet implemented. Filename ${$self}{'filename'} exists";
+    } else {
+      ($articleid) = $dbh->selectrow_array("SELECT NEXTVAL('articles_id_seq')");
+      $sth = $dbh->prepare("INSERT INTO articles (id, " . join(',', @fields) . ") VALUES (" . '?,' x $i . '?)');
+      $sth->bind_param(1, $articleid);
+      $i = 2;
+      foreach my $key (@fields) {
+	my $content = ${$self}{$key};
+	if ($key eq 'format_id') {
+	  my ($fid) = $dbh->selectrow_array("SELECT id FROM mediatypes WHERE mimetype=?", {}, ${$self}{'format'});
+	  $sth->bind_param($i, $fid);
+	} elsif ($key eq 'lang_id') {
+	  my ($lid) = $dbh->selectrow_array("SELECT id FROM languages WHERE code=?", {}, ${$self}{'lang'});
+	  $sth->bind_param($i, $lid);
+	} elsif (ref($content) eq '') {
+	  $sth->bind_param($i, $content);
+	} elsif (ref($content) eq "ARRAY") {
+	  # The content is an array, save it as such, ad hoc SQL3 for now.
+	  $sth->bind_param($i, "{" . join(',', @{$content}) . "}");
+	} else {
+	  # Actually, I should never get here, but anyway...:
+	  warn "Advanced forms of references aren't implemented meaningfully yet. Don't be surprised if I crash or corrupt something.";
+	  $content->save(); # IOW: Panic!! Everybody save yourselves if you can! :-)
+	}
+	$i++;
+      }
+      $sth->execute;
+
+      foreach my $catfield (qw(primcat seccat freesubject angles)) {
+	if (ref(${$self}{$catfield}) eq 'ARRAY') {
+	  $dbh->do("INSERT INTO articlecats (article_id, field, cat_id) SELECT ?,?,id FROM categories WHERE catname IN (?" . ',?' x (scalar(@{${$self}{$catfield}})-1) . ')', {}, ($articleid, $catfield, @{${$self}{$catfield}}));
+	} elsif (defined(${$self}{$catfield})) {
+	  $dbh->do("INSERT INTO articlecats (article_id, field, cat_id) SELECT ?,?,id FROM categories WHERE catname=?", {}, ($articleid, $catfield, ${$self}{$catfield}));
+
+	}
+      }
+      $dbh->do("INSERT INTO articleusers (article_id, role_id, enabled, users_id) SELECT ?,1,true,id FROM users WHERE username IN (?" . ',?' x (scalar(@{${$self}{'authorids'}})-1) . ')', {}, ($articleid, @{${$self}{'authorids'}}));
+    }
+  }
+  return $self;
+}
+
 
 =item C<adduserinfo()>
 
