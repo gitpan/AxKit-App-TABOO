@@ -12,6 +12,7 @@
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="match-user.xsl"/>
 
+  <xsl:param name="cats.prefix"/>
 
   <xsl:template match="taboo[@type='story']/story:story|/cust:submit//story:story">
     <h2>
@@ -146,7 +147,9 @@
 	</a>
       </td>
       <td><xsl:apply-templates select="user:submitter"/></td>
-      <td><xsl:apply-templates select="cat:primcat"/></td>
+      <xsl:if test="not(/taboo[@type = 'catlists'])">
+	<td><xsl:apply-templates select="cat:primcat"/></td>
+      </xsl:if>
       <td><xsl:apply-templates select="story:timestamp"/></td>
       <td><xsl:apply-templates select="story:lasttimestamp"/></td>
       <xsl:if test="/taboo[@can-edit]">
@@ -160,7 +163,13 @@
   </xsl:template>
 
   <xsl:template match="cat:primcat">
-    <xsl:value-of select="cat:name"/>
+    <a>	
+      <xsl:attribute name="href">
+	<xsl:value-of select="$cats.prefix"/>
+	<xsl:value-of select="./cat:catname"/>
+      </xsl:attribute>
+      <xsl:value-of select="cat:name"/>
+    </a>
   </xsl:template>
 
   <xsl:template match="story:timestamp|story:lasttimestamp">

@@ -72,6 +72,7 @@
   <text id="storyname-descr-editorhelp"> Når en vanlig bruker poster får saken et tilfeldig fem-siffers tall. Redaktøren bør bytte ut dette med et nogenlunde beskrivende ord. </text>
 
   <text id="submitterid"> Innsenders ID </text>
+  <text id="submitter"> Innsender </text>
   <text id="submitterid-descr"> Brukernavnet til den som sendte inn
   artikkelen. </text>
 

@@ -21,7 +21,7 @@
 	  <user:true>
 	    <!-- In here, everything is OK, and we log the user in,
 	    after first invalidating any other sessions. -->
-	    <xsp:logic><session:invalidate/>;<auth:login/>;
+	    <xsp:logic><auth:logout>;<session:invalidate/>;<auth:login/>;
 	      <session:set-attribute name="authlevel">
 		<session:value><user:get-authlevel><user:username><param:get name="credential_0"/></user:username></user:get-authlevel></session:value>
 	      </session:set-attribute>;</xsp:logic>

@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.18_09';
+our $VERSION = '0.18_10';
 
 
 1;
@@ -157,11 +157,13 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
   RewriteRule ^/user/([^/]+)$ /user/submit/user.xsp?username=$1
 
-  RewriteRule ^/user/submit/$ /user/submit/user.xsp 
+  RewriteRule ^/user/submit/$ /user/submit/user.xsp
   RewriteRule ^/user/submit/new$ /user/submit/new.xsp
 
   RewriteRule ^/news/([^/]+)/([^/]+)/comment(/?.*)/respond$ /news/comment.xsp?sectionid=$1&storyname=$2&parentcpath=$3
   RewriteRule ^/news/([^/]+)/([^/]+)/edit$ /news/submit.xsp?sectionid=$1&storyname=$2&edit=true
+
+  RewriteRule ^/articles/([^/]+)/([^/]+)$ /articles/provider.xsp?primcat=$1&filename=$2
 
   RewriteRule ^/$ /index.xsp
 
@@ -171,7 +173,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
   # Some stuff should not be seen by AxKit.
   <Location ~ "/css/|favicon.ico">
-    SetHandler default-handler 
+    SetHandler default-handler
   </Location>
 
 
@@ -214,6 +216,13 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   AxAddXSPTaglib AxKit::XSP::BasicSession
   AxAddXSPTaglib AxKit::XSP::QueryParam
   AxAddXSPTaglib AxKit::XSP::Sendmail
+
+  PerlAddVar AxParamExpr cats.prefix '"/cats/"'
+
+  <Location /cats/>
+  	PerlHandler AxKit
+        AxContentProvider AxKit::App::TABOO::Provider::Classification
+  </Location>
 
 
   # Providers for News, depending somewhat on the paths.

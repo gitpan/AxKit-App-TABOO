@@ -76,8 +76,26 @@
 	  <div class="main">
 	    <xsl:choose>
 	      <xsl:when test="taboo[@type='list']">
-		<table>
-		<xsl:apply-templates select="/taboo/story:story"/>
+		<table>	
+		  <thead>
+		    <tr>
+		      <th scope="col">
+			<xsl:value-of select="i18n:include('article-title')"/>
+		      </th>
+		      <th scope="col">
+			<xsl:value-of select="i18n:include('submitter')"/>
+		      </th>
+		      <th scope="col">
+			<xsl:value-of select="i18n:include('primcat')"/>
+		      </th>
+		      <th scope="col">
+			<xsl:value-of select="i18n:include('on-time')"/>
+		      </th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <xsl:apply-templates select="/taboo/story:story"/>
+		  </tbody>
 		</table>
 	      </xsl:when>
 	      <xsl:otherwise>

@@ -4,6 +4,7 @@
 
 <xsp:page
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns:menu="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Menu"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"

@@ -70,6 +70,7 @@
   <text id="storyname-descr-editorhelp"> When an unprivileged user posts an article, the article will get a random five-digit number. The editor should replace this with a reasonably descriptive word.</text>
 
   <text id="submitterid"> Submitter ID </text>
+  <text id="submitter"> Submitter </text>
   <text id="submitterid-descr"> The username of the person who
   submitted the story. </text>
 

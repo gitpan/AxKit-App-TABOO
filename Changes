@@ -1,5 +1,8 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.18_10 2005-03-13 02:50
+	- YA dev release. Bugfixing, but also additions of category stuff.
+
 0.18_09 2005-03-08 01:20
 	- Another developer release. Bugfixing over the previous one.
 

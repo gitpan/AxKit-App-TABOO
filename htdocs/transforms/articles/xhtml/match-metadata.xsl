@@ -11,6 +11,7 @@
   <xsl:import href="/transforms/articles/xhtml/match-author.xsl"/>
   
   <xsl:param name="request.uri"/>
+  <xsl:param name="cats.prefix"/>
 
   <xsl:template match="art:article">
     <dt>
@@ -31,21 +32,20 @@
     <dd>
       <div class="catinfo">
 	<xsl:value-of select="i18n:include('cats-title-menu')"/>
-	<xsl:text>:</xsl:text>  
+	<xsl:text>: </xsl:text>  
 	<xsl:for-each select="./cat:*">
 	  <a>	
 	    <xsl:attribute name="href">
-	      <xsl:variable name="catname">
-		<xsl:text>/</xsl:text>
-		<xsl:value-of select="./cat:catname"/>
-	      </xsl:variable>
-	      <xsl:choose> <!-- TODO, doesn't really work -->
-		<xsl:when test="contains($request.uri, $catname)">
-		  <xsl:text>/cats/</xsl:text> <!-- TODO: has to change when using a different name -->
-		  <xsl:value-of select="./cat:catname"/>
+	      <xsl:variable name="catname" select="./cat:catname"/>
+	      <xsl:choose> 
+		<xsl:when test="contains(substring-after($request.uri, $cats.prefix), $catname)">
+		  <xsl:value-of select="$cats.prefix"/>
+		  <xsl:value-of select="$catname"/>
 		</xsl:when>
 		<xsl:otherwise>
-		  <xsl:value-of select="./cat:catname"/>
+		  <xsl:value-of select="$request.uri"/>
+		  <xsl:text>/</xsl:text>  
+		  <xsl:value-of select="$catname"/>
 		</xsl:otherwise>
 	      </xsl:choose>
 	    </xsl:attribute>

@@ -88,7 +88,22 @@
 	    <xsl:if test="/taboo/story:story">
 	      <table>
 		<caption><xsl:value-of select="i18n:include('stories-title-menu')"/></caption>
-		<xsl:apply-templates select="/taboo/story:story"/>
+		<thead>
+		  <tr>
+		    <th scope="col">
+		      <xsl:value-of select="i18n:include('article-title')"/>
+		    </th>
+		    <th scope="col">
+		      <xsl:value-of select="i18n:include('submitter')"/>
+		    </th>
+		    <th scope="col">
+		      <xsl:value-of select="i18n:include('on-time')"/>
+		    </th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <xsl:apply-templates select="/taboo/story:story"/>
+		</tbody>
 	      </table>
 	    </xsl:if>
 
