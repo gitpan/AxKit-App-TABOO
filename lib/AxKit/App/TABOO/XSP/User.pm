@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -222,19 +222,19 @@ EOC
 
 
 
-=head2 C<<this-user username="foo"/>>
+=head2 C<<get-user username="foo"/>>
 
 This tag will return and XML representation of the user information. The username may be given in an attribute or child element named C<username>.
 
 =cut
 
-sub this_user : struct attribOrChild(username)
+sub get_user : struct attribOrChild(username)
 {
     return << 'EOC';
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     $user->load(what => '*', limit => {'username' => $attr_username}); 
     my $doc = XML::LibXML::Document->new();
-    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output', 'this-user');
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output', 'get-user');
     $doc->setDocumentElement($root);
     $user->write_xml($doc, $root); # Return an XML representation
 EOC

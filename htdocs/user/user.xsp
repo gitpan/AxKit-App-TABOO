@@ -15,9 +15,9 @@
       <user:store/>
     </param:if-exists>
     
-    <user:this-user>
+    <user:get-user>
       <user:username><param:get name="username"/></user:username>
-    </user:this-user>
+    </user:get-user>
     
 
     

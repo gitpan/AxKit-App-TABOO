@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
+<?xml-stylesheet href="insert-values-edit.xsl" type="text/xsl"?>
 <?xml-stylesheet href="submit2html.xsl" type="text/xsl"?>
 <?xml-stylesheet href="/insert-i18n.xsl" type="text/xsl"?>
 <xsp:page
@@ -8,6 +9,7 @@
   xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
+  xmlns:val="http://www.kjetil.kjernsmo.net/software/TABOO/NS/FormValues"
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam">
   <submit>
     <title><i18n:insert name="submit-story"/></title>
@@ -18,42 +20,42 @@
       <story:this-story/>
     </param:if-exists>    
     <param:if-exists name="edit">
-      <story:merge>
+      <story:get-story>
 	<story:sectionid><param:get name="sectionid"/></story:sectionid>
 	<story:storyname><param:get name="storyname"/></story:storyname>
-      </story:merge>
+      </story:get-story>
     </param:if-exists>    
     <param:unless-exists name="submitted">
       <control name="title" type="text" element="input">
 	<title>Title</title>
 	<descr><i18n:insert name="article-descr"/></descr>
-	<value><param:get name="title"/></value>
+	<value><val:insert name="title"/></value>
       </control>
       <control name="minicontent" element="textarea">
 	<title>Minicontent</title>
-	<value><param:get name="minicontent"/></value>
+	<value><val:insert name="minicontent"/></value>
       </control>
       <control name="content" element="textarea">
 	<title>Content</title>
-	<value><param:get name="content"/></value>
+	<value><val:insert name="content"/></value>
       </control>
       <user:is-authorized authlevel="3">
 	<user:true>
 	  <control element="input" type="text" name="image">
 	    <title>Image</title>
 	    <descr>URL of an image</descr>
-	    <value><param:get name="image"/></value>
+	    <value><val:insert name="image"/></value>
 	  </control>
 	</user:true>
       </user:is-authorized>
       <control name="linktext" type="text" element="input">
 	<title>Linktext</title>
-	<value><param:get name="linktext"/></value>
+	<value><val:insert name="linktext"/></value>
       </control>
       <control name="primcat">
 	<title>Primcat</title>
 	<cat:get-categories type="categ"/>
-	<value><param:get name="primcat"/></value>
+	<value><val:insert name="primcat"/></value>
       </control>
       
       <!-- Arrays are not yet supported well by the underlying
@@ -76,21 +78,32 @@
 	<user:true>
 	  <control element="input" type="text" name="sectionid">
 	    <title>Sectionid</title>
-	    <value><param:get name="sectionid"/></value>
+	    <value><val:insert name="sectionid"/></value>
 	  </control>
 	  <control element="input" type="checkbox" name="editorok">
 	    <title>Editor's approval</title>
-	    <value><param:get name="editorok"/></value>
+	    <value><val:insert name="editorok"/></value>
 	  </control>
 	  <control element="input" type="text" name="storyname">
 	    <title>Storyname</title>
-	    <value><param:get name="storyname"/></value>
+	    <value><val:insert name="storyname"/></value>
+	  </control>
+	  <control element="input" type="text" name="submitterid">
+	    <title>Submitter ID</title>
+	    <value><val:insert name="submitterid"/></value>
 	  </control>
 	  <param:if-exists name="auto-storyname">
 	    <control element="input" type="hidden" name="auto-storyname"> 
 	      <value><param:get name="auto-storyname"/></value>
 	    </control>
 	  </param:if-exists>
+	  <param:unless-exists name="auto-storyname">
+	    <param:if-exists name="edit">
+	      <control element="input" type="hidden" name="auto-storyname"> 
+		<value><param:get name="storyname"/></value>
+	      </control>
+	    </param:if-exists>
+	  </param:unless-exists>
 	</user:true>
 	<user:false>
 	  <control element="input" type="hidden" name="sectionid"> 

@@ -176,3 +176,21 @@ Revision history for Perl extension AxKit::App::TABOO.
 	- New Push method for plurals.
 	- Minor changes in most files, but too small and too numerous
 	to list them all....
+
+0.06 	  2004-07-10 23:18
+	- TABOO can now be used to edit posts that are allready in the
+	datastore! Just supply an 'edit' query parameter to
+	submit.xsp, as well as valid values of 'storyname' and
+	'sectionid'.
+		+ a part of this was a insert-values-edit.xsl
+		transformations. It'll choose values from query
+		parameters or data store. It is a bit unelegant,
+		though. 
+	- submitterid is dealt with a bit more intelligently, and an
+	editor may change it upon reviewing data.
+	- Renamed this-user to get-user in the User Taglib. The
+	this-prefix should be used for a tag working on parameter
+	data, so I'll use get- for tags that get stuff from the data
+	store. 
+	- New get-story tag in the Story taglib.
+	- addcatinfo() now includes both name and username.

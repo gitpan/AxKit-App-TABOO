@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.051';
 
 
 use DBI;

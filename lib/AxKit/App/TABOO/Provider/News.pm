@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.051';
 
 =head1 NAME
 
@@ -162,6 +162,8 @@ sub get_fh {
   throw Apache::AxKit::Exception::IO(
 	      -text => "No fh for News Provider");
 }
+
+
 
 # Here, the correct stuff is retrieved from the data store.
 # We are fed URLs on the form 

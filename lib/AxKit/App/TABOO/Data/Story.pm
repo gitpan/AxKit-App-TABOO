@@ -16,7 +16,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 
 =head1 NAME
@@ -137,11 +137,11 @@ sub adduserinfo {
     $user->dbuser($self->dbuser());
     $user->dbpasswd($self->dbpasswd());
     $user->xmlelement("user");
-    $user->load(what => 'name', limit => {username => ${$self}{'username'}});
+    $user->load(what => 'username,name', limit => {username => ${$self}{'username'}});
     ${$self}{'USER'} = \$user;
     my $submitter = AxKit::App::TABOO::Data::User->new();
     $submitter->xmlelement("submitter");
-    $submitter->load(what => 'name', limit => {username => ${$self}{'submitterid'}});
+    $submitter->load(what => 'username,name', limit => {username => ${$self}{'submitterid'}});
     ${$self}{'SUBMITTER'} = \$submitter;
     return $self;
 }
@@ -227,9 +227,12 @@ sub lasttimestamp {
 
 =item C<editorok([($section, $storyname)])>
 
-This is similar to the timestamp method, but instead returns the editorok, which is a boolean variable that says can be used to see if an editor has approved a story.
+This is similar to the timestamp method, but instead returns the
+editorok, which is a boolean variable that says can be used to see if
+an editor has approved a story.
 
-It may require arguments like the timestamp method does, and it will return 1 if the story has been approved, 0 if not. 
+It may require arguments like the timestamp method does, and it will
+return 1 if the story has been approved, 0 if not.
 
 =back
 

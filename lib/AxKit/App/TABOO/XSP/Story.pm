@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 NAME
 
@@ -76,7 +76,6 @@ If successful, it will return a C<store> element in the output namespace with th
 
 =cut
 
-# '
 
 sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}store) {
     return << 'EOC'
@@ -111,21 +110,22 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
 	$args{'submitterid'} = $args{'username'}
     }
 
-
-    my $timestamp = localtime;
-    if (! $args{'timestamp'}) {
-	$args{'timestamp'} = $timestamp->datetime;
-    }
-    if (! $args{'lasttimestamp'}) {
-	$args{'lasttimestamp'} = $timestamp->datetime;
-    }
+    my $story = AxKit::App::TABOO::Data::Story->new();
 
     my $oldstorykey = undef;
     if ($args{'auto-storyname'}) {
 	$oldstorykey = $args{'auto-storyname'};
 	delete $args{'auto-storyname'};
     }
-    my $story = AxKit::App::TABOO::Data::Story->new();
+
+    my $timestamp = localtime;
+    unless ($oldstorykey) {
+	$args{'timestamp'} = $timestamp->datetime;
+    }
+    unless ($args{'lasttimestamp'}) {
+	$args{'lasttimestamp'} = $timestamp->datetime;
+    }
+
     $story->populate(\%args);
 #    try {
 	$story->save($oldstorykey);
@@ -153,17 +153,17 @@ sub this_story : struct {
 	my %args = $r->args;
     $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
     
-    if (! $args{'submitterid'}) {
+    unless ($args{'submitterid'}) {
       # If the submitterid is not set, we set it to the current username
 	$args{'submitterid'} = $args{'username'}
     }
     
     
     my $timestamp = localtime;
-    if (! $args{'timestamp'}) {
+    unless ($args{'timestamp'}) {
       $args{'timestamp'} = $timestamp->datetime;
     }
-    if (! $args{'lasttimestamp'}) {
+    unless ($args{'lasttimestamp'}) {
       $args{'lasttimestamp'} = $timestamp->datetime;
     }
     my $story = AxKit::App::TABOO::Data::Story->new();
@@ -179,37 +179,39 @@ EOC
 }
 
 
+=head2 C<<get-story/>>
 
-sub merge : struct attribOrChild(storyname,sectionid) {
+Will return an XML representation of the data for a previously saved
+story, enclosed in a C<story-loaded> element. It needs to get the
+story identified by C<storyname> and C<sectionid> attributes or child
+elements.
+
+=cut
+
+
+sub get_story : struct attribOrChild(storyname,sectionid) {
     return << 'EOC'
-	my %args = $r->args;
+    my %args = $r->args;
+
+    unless ($args{'username'}) {
+      $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+    }
 
     my $story = AxKit::App::TABOO::Data::Story->new();
-    $story->load(what => '*', limit => (sectionid => $attr_sectionid, storyname=> $attr_storyname});
+    $story->load(what => '*', limit => {sectionid => $attr_sectionid, storyname=> $attr_storyname});
+    $story->adduserinfo();
+
+
+    unless ($story->editorok) {
+      if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) {
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => 401,
+					       -text => "Authentication and higher priviliges required to load story");
+      }
+    } 
 
 
 
-
-#      $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
-    
-#      if (! $args{'submitterid'}) {
-#        # If the submitterid is not set, we set it to the current username
-#  	$args{'submitterid'} = $args{'username'}
-#      }
-    
-    
-#      my $timestamp = localtime;
-#      if (! $args{'timestamp'}) {
-#        $args{'timestamp'} = $timestamp->datetime;
-#      }
-#      if (! $args{'lasttimestamp'}) {
-#        $args{'lasttimestamp'} = $timestamp->datetime;
-#      }
-#      my $story = AxKit::App::TABOO::Data::Story->new();
-#      $story->populate(\%args);
-#      $story->adduserinfo();
-#      $story->addcatinfo();
-    
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story-loaded');
     $doc->setDocumentElement($root);
@@ -222,10 +224,7 @@ EOC
 
 =head1 Quirks 
 
-There are a few things that I'm not sure how to handle that I've included in this release in an inelegant way. For example, if you want to update an old record with a new storyname (which is not unusual, if for example you don't like the storyname used by the submitter), then you need to include this somehow. For the time being, the C<<story>> tag takes take the old storyname as a parameter C<auto-storyname>. Such a tag shouldn't really need to be aware of such things, from an aestetical POW, suggestion on how to do it differently are welcome. 
-
-Also quirky is that if the submitterid is not set, it is set to the current username.
-
+There are a few things that I'm not sure how to handle that I've included in this release in an inelegant way. For example, if you want to update an old record with a new storyname (which is not unusual, if for example you don't like the storyname used by the submitter), then you need to include this somehow. For the time being, you must supply the storyname as a query parameter C<auto-storyname>, and the supplied C<submit.xsp> does this. It is then understood by the C<<store>> tag, which does the right thing, but I feel that such a tag shouldn't really need to be aware of such things, from an aestetical POW, suggestion on how to do it differently are welcome. 
 
 
 =head1 FORMALITIES

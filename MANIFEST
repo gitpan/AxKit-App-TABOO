@@ -5,6 +5,7 @@ htdocs/insert-i18n.xsl
 htdocs/login.xsp
 htdocs/news/provider2html.xsl
 htdocs/news/story-html.xsl
+htdocs/news/insert-values-edit.xsl
 htdocs/news/submit.xsp
 htdocs/news/submit2html.xsl
 htdocs/user/make-control.xsl
