@@ -13,7 +13,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.021_1';
+our $VERSION = '0.021_2';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -124,7 +124,7 @@ sub store {
 	}
     }
 #    AxKit::Debug(9, "Passwd: " . $args{'passwd'});
-    my $user = AxKit::App::TABOO::Data::User->new();
+    my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     $user->apache_request_data(\%args);
     $user->save();
 EOC

@@ -11,6 +11,8 @@ use Carp;
 # what you should expect from this module. 
 
 
+our $VERSION = '0.02';
+
 =head1 NAME
 
 AxKit::App::TABOO::Provider::News - News Provider for TABOO

@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.021';
+our $VERSION = '0.021_2';
 
 =head1 NAME
 

@@ -1,4 +1,3 @@
-
 package AxKit::App::TABOO::Data;
 use strict;
 use warnings;
@@ -7,6 +6,9 @@ use Carp;
 use Data::Dumper;
 use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
+
+
+our $VERSION = '0.021_2';
 
 
 use DBI;
@@ -47,6 +49,7 @@ sub new {
     my $username = shift;
     my $class = ref($that) || $that;
     my $self = {
+		ONFILE => undef,
 		XMLELEMENT => 'taboo',
 		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Output'
 	       };
@@ -75,6 +78,9 @@ sub load {
     my $sth = $dbh->prepare($self->selectquery());
     $sth->execute($dbkey);
     my $data = $sth->fetchrow_hashref;
+    if ($data) {
+      ${$self}{'ONFILE'} = 1;
+    }
     foreach my $key (keys(%{$data})) {
       ${$self}{$key} = ${$data}{$key}; 
     }
@@ -170,9 +176,9 @@ It is not yet a very rigorous implementation: It may well fail badly if it is gi
 sub save {
   my $self = shift;
   my $olddbkey = shift;
-  my $dbh = DBI->connect($self->dbstring(), 
-			 $self->dbuser(), 
-			 $self->dbpasswd());  
+  my $dbh = DBI->connect($self->dbstring(),
+			 $self->dbuser(),
+			 $self->dbpasswd());
 #			 { PrintError => 1,
 #			   RaiseError => 0,
 #			   HandleError => Exception::Class::DBI->handler

@@ -16,6 +16,9 @@ use Time::Piece;
 use DBI;
 
 
+our $VERSION = '0.021_2';
+
+
 =head1 NAME
 
 AxKit::App::TABOO::Data::Story - Story Data object for TABOO

@@ -11,6 +11,9 @@ use vars qw/@ISA/;
 use DBI;
 
 
+our $VERSION = '0.021_2';
+
+
 =head1 NAME
 
 AxKit::App::TABOO::Data::User::Contributor - Contributor Data objects for TABOO
@@ -76,10 +79,85 @@ sub load_authlevel {
     my $sth = $dbh->prepare("SELECT authlevel FROM contributors WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;
+    if (@data) {
+      ${$self}{'ONFILE'} = 1;
+    }
     ${$self}{'authlevel'} = join('', @data);
     ${$self}{'username'} = $username;
     return ${$self}{'authlevel'};
 }
+
+
+
+=item C<save()>
+
+The C<save()> method has been reimplemented in this class. It is less generic than the method of the grandparent class, but it saves data to two different tables, and should do its job well. It takes no parameters.
+
+
+=cut
+
+sub save {
+  my $self = shift;
+  my $dbh = DBI->connect($self->dbstring(),
+			 $self->dbuser(),
+			 $self->dbpasswd());
+#			 { PrintError => 1,
+#			   RaiseError => 0,
+#			   HandleError => Exception::Class::DBI->handler
+#			   });
+  my (@fields, @confields);
+  my $i=0;
+  my $j=0;
+  foreach my $key (keys(%{$self})) {
+      next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
+      next unless (${$self}{$key}); # No need to insert something that isn't there
+      if (($key eq 'bio') || ($key eq 'authlevel')) {
+	# TODO: This is too ad-hoc, should have a better way to split the keys
+	push(@confields, $key);
+	$j++;
+      } else {
+	push(@fields, $key);
+	$i++;
+      }
+    }
+    if (($i == 0) && ($j == 0)) {
+      carp "No data fields with anything to save";
+    } else {
+      my ($sth1, $sth2);
+      if (${$self}{'ONFILE'}) {
+	$sth1 = $dbh->prepare("UPDATE users SET " . join('=?,', @fields) . "=? WHERE username=?");
+	$sth2 = $dbh->prepare("UPDATE contributors SET " . join('=?,', @confields) . "=? WHERE username=?");
+      } else {
+	$sth1 = $dbh->prepare("INSERT INTO users (" . join(',', @fields) . ") VALUES (" . '?,' x ($i-1) . '?)');
+  	$sth2 = $dbh->prepare("INSERT INTO contributors (" . join(',', @confields) . ") VALUES (" . '?,' x ($j-1) . '?)');
+      }
+      my $k=1;
+      foreach my $key (@fields) {
+	$sth1->bind_param($k, ${$self}{$key});
+	$k++;
+      }
+      if (${$self}{'ONFILE'}) {
+	  $sth1->bind_param($k, ${$self}{'username'});
+      }
+      $k=1;
+      foreach my $key (@confields) {
+	$sth2->bind_param($k, ${$self}{$key});
+	$k++;
+      }
+      if (${$self}{'ONFILE'}) {
+	  $sth2->bind_param($k, ${$self}{'username'});
+      }
+      if ($i > 0) {
+	$sth1->execute();
+      }
+      if ($j > 0) {
+	$sth2->execute();
+      }
+  }
+  return $self;
+}
+
+
 
 =back
 
@@ -103,6 +181,10 @@ The contributors biographical information.
 =back
 
 This is likely to be extended in future versions. 
+
+=head1 BUGS/TODO
+
+You cannot use the save method in this class to save an object in the case where there is a record for the parent class, but lacks one for this class. 
 
 
 =head1 FORMALITIES

@@ -13,6 +13,9 @@ use vars qw/@ISA/;
 use DBI;
 
 
+our $VERSION = '0.021_2';
+
+
 
 =head1 NAME
 
@@ -105,6 +108,9 @@ sub load {
     my $sth = $dbh->prepare("SELECT $what FROM comments WHERE commentpath=? AND sectionid=? AND storyname=?");
     $sth->execute($commentpath, $section, $storyname);
     my $data = $sth->fetchrow_hashref;
+    if ($data) {
+      ${$self}{'ONFILE'} = 1;
+    }
     # Here, data will contain the basic data from the database
     # We are interested in the replies as well. Therefore, we retrieve the 
     # commentpaths by selecting the commentpaths that start with the 

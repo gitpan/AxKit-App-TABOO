@@ -11,6 +11,10 @@ use vars qw/@ISA/;
 use DBI;
 use Exception::Class::DBI;
 
+
+our $VERSION = '0.021_2';
+
+
 =head1 NAME
 
 AxKit::App::TABOO::Data::Category - Category Data objects for TABOO
@@ -82,6 +86,9 @@ sub load_name {
     my $sth = $dbh->prepare("SELECT name FROM categories WHERE catname=?");
     $sth->execute($catname);
     my @data = $sth->fetchrow_array;
+    if (@data) {
+      ${$self}{'ONFILE'} = 1;
+    }
     ${$self}{'name'} = join('', @data);
     ${$self}{'catname'} = $catname;
     return ${$self}{'name'};

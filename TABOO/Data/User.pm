@@ -9,6 +9,8 @@ use vars qw/@ISA/;
 
 use DBI;
 
+our $VERSION = '0.021_2';
+
 
 =head1 NAME
 
@@ -82,6 +84,9 @@ sub load_name {
     my $sth = $dbh->prepare("SELECT name FROM users WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;
+    if (@data) {
+      ${$self}{'ONFILE'} = 1;
+    }
     ${$self}{'name'} = join('', @data);
     ${$self}{'username'} = $username;
     return ${$self}{'name'};
@@ -106,6 +111,9 @@ sub load_passwd {
     my $sth = $dbh->prepare("SELECT passwd FROM users WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;
+    if (@data) {
+      ${$self}{'ONFILE'} = 1;
+    }
     ${$self}{'passwd'} = join('', @data);
     ${$self}{'username'} = $username;
     return ${$self}{'passwd'};

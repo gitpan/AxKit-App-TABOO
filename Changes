@@ -52,4 +52,12 @@ Revision history for Perl extension AxKit::App::TABOO.
 	checking access for a particular user (e.g. the owner). 
 	- Starting to add version numbers to all files. 
 		
-
+0.021_2	  2004-02-16 23:10  
+	- Added version numbers to all files
+	- Added an ONFILE data member which is used internally to
+	check whether we can expect to find the object in the
+	storage. This is set by all methods that load something,
+	making it possible for save-methods to know whether to INSERT
+	or UPDATE. 
+	- Added a save-method to AxKit::App::TABOO::Data::User::Contributor.
+	- Reviewed the changes of the previous upload. 
