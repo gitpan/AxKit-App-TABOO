@@ -9,7 +9,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.023';
+our $VERSION = '0.05';
 
 
 =head1 NAME
@@ -20,7 +20,7 @@ AxKit::App::TABOO::Data::User - User Data objects for TABOO
 
   use AxKit::App::TABOO::Data::User;
   $user = AxKit::App::TABOO::Data::User->new();
-  $user->load('kjetil');
+  $user->load(what => '*', limit => {username => 'kjetil'});
   my $fullname = $user->load_name('kjetil');
 
 =head1 DESCRIPTION

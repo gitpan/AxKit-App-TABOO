@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.05';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -45,8 +45,8 @@ sub new {
     my $class = ref($that) || $that;
     my $self = {
 	ENTRIES => [], # Internally, some methods finds it useful that the entries are stored in a array of this name.
-	XMLELEMENT => 'stories',
-	XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output',
+	XMLELEMENT => undef,
+	XMLNS => undef,
     };
     bless($self, $class);
     return $self;
@@ -62,21 +62,23 @@ It takes a hashref where the keys are data storage names and the values are corr
 
 sub load {
   my ($self, %args) = @_;
-  my @cats;
+  my @storys;
   my $data = $self->_load(%args); # Does the hard work
   foreach my $entry (@{$data}) {
-    my $cat = AxKit::App::TABOO::Data::Story->new();
-    $cat->populate($entry);
-    $cat->onfile;
-    push(@cats, $cat);
+    my $story = AxKit::App::TABOO::Data::Story->new();
+    $story->populate($entry);
+    $story->onfile;
+    push(@storys, $story);
   }
-  ${$self}{ENTRIES} = \@cats;
+  ${$self}{ENTRIES} = \@storys;
   return $self;
 }
 
 =back
 
 =head1 BUGS/TODO
+
+This class has not yet seen a lot of testing.
 
 
 =head1 FORMALITIES

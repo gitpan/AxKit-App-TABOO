@@ -12,7 +12,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.011';
+our $VERSION = '0.012_1';
 
 
 =head1 NAME
@@ -149,7 +149,9 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =head1 TODO
 
-This is an early release, just to show off what I've been thinking about and ease testing on different platforms. In particular, an elaborate plural version of this class is needed.
+This is an early release, just to show off what I've been thinking about and ease testing on different platforms. In particular, an elaborate plural version of this class is needed. When that's done, the load method will probably look different from what it does today.
+
+I have actually allready found it to be a bad idea for the load method to try to load everything in one go. That too will therefore change.
 
 
 =head1 FORMALITIES

@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.01';
+our $VERSION = '0.011_1';
 
 
 =head1 NAME
@@ -21,15 +21,14 @@ AxKit::App::TABOO::Data::Order - Order Data objects for TABOO-based Webshop
 =head1 SYNOPSIS
 
   use AxKit::App::TABOO::Data::Order;
-  $product = AxKit::App::TABOO::Data::Order->new();
-  $product->load('*', 't-shirt');
+  $order = AxKit::App::TABOO::Data::Order->new();
+  $order->load(what => '*', limit => {orderid => 345366});
+
 
 
 =head1 DESCRIPTION
 
-This Data class contains information about a product to be found in the webshop of the site, such as name, a description, URLs to images, prices etc.
-
-It is worth noting that this class is supposed to contain most relevant information about a product, but that some of this information is contained in related classes, particularly L<AxKit::App::TABOO::Data::OrderedItems> and L<AxKit::App::TABOO::Data::OrderedItem>. For that reason, the load method will retrieve all the data, and return an object containing objects that are instances of these classes or their plural counterparts. Consult the documentation for these classes for details, and see below for the details on the fields in this class.
+This Data class contains information about an order placed through a webshop of the site, such as what was ordered, who ordered it, total price, when it was shipped, etc.
 
 
 
@@ -78,9 +77,10 @@ sub new {
     return $self;
 }
 
-=item C<load($what, $orderid)>
+=item C<load(what => '*', limit => {orderid => 345366})>
 
-This reimplemented load method takes as arguments a string consisting of a comma-separated list of datafields to be retrieved, an order ID, a string used to identify an order. It will also call the load method to include the ordered items. 
+This reimplemented load method is similar to the standard load methods, but also attempts to build a more elaborate data structure.
+
 
 
 =cut
@@ -93,19 +93,19 @@ sub load {
     ${$self}{$key} = ${$data}{$key};
   }
   my $orderid = ${$args{'limit'}}{'orderid'};
-  if (($orderid) && (${$args{'limit'}} ~= m/volume|\*/)) {
-    # This means, we should populate the rest of the object with all data.
-    my $items = AxKit::App::TABOO::Data::Plurals::OrderedItems->new();
-    $items->dbstring($self->dbstring());
-    $items->dbuser($self->dbuser());
-    $items->dbpasswd($self->dbpasswd());
-    my $ordereditems = $items->load(what => '*', limit => {orderid => $orderid});
-    my %products = $ordereditems->orderedproductids();
-    my @products;
-    foreach my $prodid (keys(%products)) {
-      my $prod =  AxKit::App::TABOO::Data::Plurals::Product->new();
+#    if (($orderid) && (${$args{'limit'}} ~= m/volume|\*/)) {
+#      # This means, we should populate the rest of the object with all data.
+#      my $items = AxKit::App::TABOO::Data::Plurals::OrderedItems->new();
+#      $items->dbstring($self->dbstring());
+#      $items->dbuser($self->dbuser());
+#      $items->dbpasswd($self->dbpasswd());
+#      my $ordereditems = $items->load(what => '*', limit => {orderid => $orderid});
+#      my %products = $ordereditems->orderedproductids();
+#      my @products;
+#      foreach my $prodid (keys(%products)) {
+#        my $prod =  AxKit::App::TABOO::Data::Plurals::Product->new();
       
-  }
+#    }
   return $self;
 }
 
@@ -149,7 +149,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =over
 
-=item * C<product>
+=item * C<order>
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Order/Output>
 
@@ -158,7 +158,13 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =head1 TODO
 
-This is an early release, just to show off what I've been thinking about and ease testing on different platforms. In particular, an elaborate plural version of this class is needed.
+This is an early release, just to show off what I've been thinking about. 
+
+It hardly works at all, I'm afraid, but I hope the things that are
+here are interesting to someone looking to use TABOO for a webshop, as
+they are a good first step.
+
+There's a big issue in that a typical order will consist of all the data from the data stores of the webshop. That's rather big, and requires some careful thinking. I have found that it is probably a bad idea to try to do it in the load method, so that is where it is halted for the time being.
 
 
 =head1 FORMALITIES

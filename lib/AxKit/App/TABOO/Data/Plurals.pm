@@ -15,7 +15,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.05_1';
+our $VERSION = '0.05';
 
 
 =head1 NAME
@@ -26,13 +26,33 @@ AxKit::App::TABOO::Data::Plurals - Base class to handle multiple Data objects in
 
 Sometimes, it is desireable to retrieve and handle multiple instances of a data object, and most economic to do it in a single operation. That is what the Plural data objects are for. The load methods should generally retrieve all records as efficiently as they can, and then return an array of their singular counterparts.
 
-This is a conceptual advancement in TABOO, and the main reason for this release.
+This is a conceptual advancement in TABOO, and the main new thing in the 0.05 release.
 
 =head1 METHODS
 
-It (re)implements some methods, but nothing you really need to be aware of. If you want to raise your awareness anyway, this is for you:
+It implements a single new method, with a name that should ring bells
+for everyone. It also reimplements some methods, but nothing you
+really need to be aware of. If you want to raise your awareness
+anyway, the documentation of them is for you:
 
 =over
+
+
+
+=item C<Push($singular)>
+
+This does pretty much what C<push> does in a normal context, it adds a singular version C<$singular> of a object to the plural object that the method is used on. 
+
+=cut
+
+sub Push {
+  my $self = shift;
+  my $singular = shift;
+  push(@{${$self}{ENTRIES}}, $singular);
+  return $self;
+}
+
+
 
 =item C<_load(\%arg)>
 
@@ -76,7 +96,12 @@ sub _load {
 
 To avoid bloating the parent class too much, this takes care of some
 specifics for plurals, but leaves most of the job to the parent
-class. Has a completely identical interface as the parent class, and can be called like it without further ado. 
+class. Has a completely identical interface as the parent class, and
+can be called like it without further ado.
+
+If an object of this class has had its element and/or namespace set
+with C<xmlelement()>/C<xmlns()> respectively, the individual entries
+will have the same element and/or namespace.
 
 =cut
 
@@ -85,6 +110,14 @@ sub write_xml {
   my $doc = shift;
   my $parent = shift;
   foreach my $entry (@{${$self}{ENTRIES}}) {
+    # If the object has had its element and/or NS set to something, we pass it on.
+    if (${$self}{XMLELEMENT}) {
+      $entry->xmlelement($self->xmlelement());
+    }
+    if (${$self}{XMLNS}) {
+      $entry->xmlns($self->xmlns());
+    }
+
     $entry->write_xml($doc, $parent);
   }
   return $doc;

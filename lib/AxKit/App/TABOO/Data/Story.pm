@@ -10,12 +10,13 @@ use vars qw/@ISA/;
 @ISA = qw(AxKit::App::TABOO::Data);
 use AxKit::App::TABOO::Data::User;
 use AxKit::App::TABOO::Data::Category;
+use  AxKit::App::TABOO::Data::Plurals::Categories;
 use Time::Piece;
 
 use DBI;
 
 
-our $VERSION = '0.041';
+our $VERSION = '0.05';
 
 
 =head1 NAME
@@ -26,7 +27,7 @@ AxKit::App::TABOO::Data::Story - Story Data object for TABOO
 
   use AxKit::App::TABOO::Data::Story;
   $story = AxKit::App::TABOO::Data::Story->new();
-  $story->load('*', $sectionid, $storyname);
+  $story->load(what => '*', limit => {sectionid => $sectionid, storyname => $storyname});
   $story->adduserinfo();
   $story->addcatinfo();
   $timestamp = $story->timestamp();
@@ -50,6 +51,7 @@ The constructor. Nothing special.
 =cut
 
 AxKit::App::TABOO::Data::Story->dbtable("stories");
+AxKit::App::TABOO::Data::Story->dbfrom("stories");
 AxKit::App::TABOO::Data::Story->dbprimkey("storyname");
 AxKit::App::TABOO::Data::Story->elementorder("storyname, sectionid, image, primcat, seccat, freesubject, editorok, title, minicontent, content, USER, SUBMITTER, linktext, timestamp, lasttimestamp");
 
@@ -64,7 +66,7 @@ sub new {
 	primcat => undef,
 	seccat => [],
 	freesubject => [],
-	editorok => 0,
+	editorok => undef,
 	title => undef,
 	minicontent => undef,
 	content => undef,
@@ -87,38 +89,28 @@ sub new {
 #our ($storyname, $sectionid, $image, $primcat, $seccat, $freesubject, $editorok, $title, $minicontent, $content, $username, $USER, $submitterid, $SUBMITTER, $linktext, $timestamp, $lasttimestamp, $ONFILE);
 
 
-=item C<load($what, $section, $storyname)>
+=item C<load(what => fields, limit => {sectionid => value, storyname => value, [...]})>
 
-This class reimplements the load method, to accomodate for the possibility that one may not want to load all the data, one may for example only want to load the title and when it was posted. The load method now takes three arguments:
+This class reimplements the load method, to support the fact that some data may be stored as arrays in the datastore. It shares the API of the parent class. It is useful to note, however, that there are two fields that you most likely would want to specify for the common use of retrieving a specific story:
 
 =over
 
-=item * The first is a comma-separated list of fields from the data storage, see L<"STORED DATA"> for details and available values. For all fields, use C<'*'>.
 
+=item * The C<section> which the story has been posted to. Typically, this string will be taken directly from the URI. The use of sections makes it possible to divide the site in different ways. It is not intended that sections will coincide with L<categories|AxKit::App::TABOO::Data::Category>, rather one can have sections with "small news", i.e. blatant rip-offs of other news sites with a few comments added, or longer articles with more unique content.
 
-=item * The second parameter is a word identifying a section which the story has been posted to. Typically, this string will be taken directly from the URI. The use of sections makes it possible to devide the site in different ways. It is not intended that sections will coincide with L<categories|AxKit::App::TABOO::Data::Category>, rather one can have sections with "small news", i.e. blatant rip-offs of other news sites with a few comments added, or longer articles with more unique content.
-
-=item * The third parameter is a unique identifier for the story. This too will typically be derived from the URI directly.
+=item * C<storyname> is a unique identifier for the story. This too will typically be derived from the URI directly.
 
 =back
+
+It is of course possible to identify a single story by a completely different set of parameters, and you can do that too, but it is not a very common thing to do. 
 
 
 =cut
 
 sub load
 {
-  my $self = shift;
-  my ($what, $section, $storyname) = @_;
-  my $dbh = DBI->connect($self->dbstring(), 
-			 $self->dbuser(), 
-			 $self->dbpasswd(),  
-			 { PrintError => 0,
-			   RaiseError => 0,
-			   HandleError => Exception::Class::DBI->handler
-			   });
-  my $sth = $dbh->prepare("SELECT " . $what . " FROM stories WHERE sectionid=? AND storyname=?");
-  $sth->execute($section, $storyname);
-  my $data = $sth->fetchrow_hashref;
+  my ($self, %args) = @_;
+  my $data = $self->_load(%args);
   if ($data) { ${$self}{'ONFILE'} = 1; }
   foreach my $key (keys(%{$data})) {
     if (defined(${$data}{$key}) && (${$data}{$key} =~ m/^\{(\S+)\}$/)) { # Support SQL3 arrays ad hoc
@@ -144,11 +136,13 @@ sub adduserinfo {
     $user->dbstring($self->dbstring());
     $user->dbuser($self->dbuser());
     $user->dbpasswd($self->dbpasswd());
-    # This calls a _addinfo method in the parent class, which should only be used by subclasses for this purpose. It adds the reference itself.
-    $self->_addinfo($user,'username','USER');
-    $user = AxKit::App::TABOO::Data::User->new();
-    $user->xmlelement("submitter");
-    $self->_addinfo($user,'submitterid','SUBMITTER');
+    $user->xmlelement("user");
+    $user->load(what => 'name', limit => {username => ${$self}{'username'}});
+    ${$self}{'USER'} = \$user;
+    my $submitter = AxKit::App::TABOO::Data::User->new();
+    $submitter->xmlelement("submitter");
+    $submitter->load(what => 'name', limit => {username => ${$self}{'submitterid'}});
+    ${$self}{'SUBMITTER'} = \$submitter;
     return $self;
 }
 
@@ -160,30 +154,34 @@ Similarly to adding user info, this method will also add category information, f
 
 sub addcatinfo {
     my $self = shift;
-    my $category = AxKit::App::TABOO::Data::Category->new();
-    $category->dbstring($self->dbstring());
-    $category->dbuser($self->dbuser());
-    $category->dbpasswd($self->dbpasswd());
+    my $cat = AxKit::App::TABOO::Data::Category->new();
+    $cat->dbstring($self->dbstring());
+    $cat->dbuser($self->dbuser());
+    $cat->dbpasswd($self->dbpasswd());
     # There is only one primary category allowed.
-    $self->_addinfo($category,'primcat','primcat');
+    $cat->xmlelement("primcat");
+    $cat->load(what => '*', limit => {catname => ${$self}{'primcat'}});
+
+    ${$self}{'primcat'} = \$cat;
 
     # We allow several secondary categories, so we may get an array to run through. 
-    my $i = 0;
+    my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
+    $cats->xmlelement("seccat");
     foreach my $catname (@{${$self}{'seccat'}}) {
       my $cat = AxKit::App::TABOO::Data::Category->new();
-      $cat->xmlelement("seccat");
-      $cat->load($catname);
-      ${$self}{'seccat'}[$i] = \$cat;
-      $i++;
+      $cat->load(what => '*', limit => {catname => $catname});
+      $cats->Push($cat);
     }
-    $i = 0;
+    ${$self}{'seccat'} = \$cats;
+    my $frees = AxKit::App::TABOO::Data::Plurals::Categories->new();
+    $frees->xmlelement("freesubject");
     foreach my $catname (@{${$self}{'freesubject'}}) {
       my $cat = AxKit::App::TABOO::Data::Category->new();
-      $cat->xmlelement("freesubject");
-      $cat->load($catname);
-      ${$self}{'freesubject'}[$i] = \$cat;
-      $i++;
+      $cat->load(what => '*', limit => {catname => $catname});
+      $frees->Push($cat);
     }
+    ${$self}{'freesubject'} = \$frees;
+
     return $self;
 }
 
@@ -199,8 +197,9 @@ sub timestamp {
   my $self = shift;
   if (! ${$self}{'timestamp'}) {
     my ($section, $storyname) = @_;
-    $self->load('timestamp', $section, $storyname);
+    $self->load(what => 'timestamp', limit => {sectionid => $section, storyname => $storyname});
   }
+  unless (${$self}{'timestamp'}) { return undef; }
   (my $tmp = ${$self}{'timestamp'}) =~ s/\+\d{2}$//;
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
@@ -218,8 +217,9 @@ sub lasttimestamp {
   my $self = shift;
   if (! ${$self}{'lasttimestamp'}) {
     my ($section, $storyname) = @_;
-    $self->load('lasttimestamp', $section, $storyname);
+    $self->load(what => 'lasttimestamp', limit => {sectionid => $section, storyname => $storyname});
   }
+  unless (${$self}{'timestamp'}) { return undef; }
   (my $tmp = ${$self}{'lasttimestamp'}) =~ s/\+\d{2}$//;
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
@@ -237,9 +237,9 @@ It may require arguments like the timestamp method does, and it will return 1 if
 
 sub editorok {
   my $self = shift;
-  if (! ${$self}{'editorok'}) {
+  unless (defined(${$self}{'editorok'})) {
     my ($section, $storyname) = @_;
-    $self->load('editorok', $section, $storyname);
+    $self->load(what => 'editorok', limit => {sectionid => $section, storyname => $storyname});
   }
   return ${$self}{'editorok'};
 }
@@ -303,7 +303,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =head1 BUGS/TODO
 
-Besides that it is in alpha, there is a quirk in the load method. I use SQL3 arrays in the underlying database, but the database driver doesn't support this. So, there is a very hackish ad hoc implementation to parse the arrays in that method. It works partly for reading, but just with  L<DBD::Pg> greater than 1.32.
+Besides that it is in alpha, there is a quirk in the load method. I use SQL3 arrays in the underlying database, but the database driver doesn't support this. So, there is a very hackish ad hoc implementation to parse the arrays in that method. It is in fact the only reason why this class reimplements the load method. It works partly for reading, but just with  L<DBD::Pg> greater than 1.32.
 
 =head1 FORMALITIES
 

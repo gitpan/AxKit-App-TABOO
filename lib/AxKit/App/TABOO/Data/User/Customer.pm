@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.024';
+our $VERSION = '0.05_1';
 # Forked off A::A::T::D::U::Contributor
 
 =head1 NAME
@@ -22,7 +22,8 @@ AxKit::App::TABOO::Data::User::Customer - Customer Data objects for TABOO
 
   use AxKit::App::TABOO::Data::User::Customer;
   $user = AxKit::App::TABOO::Data::User::Customer->new();
-  $user->load('kjetil');
+  $user->load(what => '*', limit => {'username' => 'kjetil'});
+
 
 =head1 DESCRIPTION
 
@@ -55,6 +56,28 @@ sub new {
     $self->{bio} = undef;
     bless($self, $class);
     return $self;
+}
+
+# We reimplement the load method with no changes to the API. Actually,
+# the reason is to preserve the API, we need to do it because we're
+# getting data from two tables, and they both have a username field.
+
+sub load {
+  my ($self, %args) = @_;
+  my $tmp = $args{'limit'}{'username'};
+  if ($tmp) {
+    delete $args{'limit'}{'username'};
+    $args{'limit'}{'users.username'} = $tmp;
+  }
+
+  my $data = $self->_load(%args);
+  if ($data) {
+    ${$self}{'ONFILE'} = 1;
+  }
+  foreach my $key (keys(%{$data})) {
+    ${$self}{$key} = ${$data}{$key}; 
+  }
+  return $self;
 }
 
 

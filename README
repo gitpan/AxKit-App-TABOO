@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.05_3
-==============================
+AxKit/App/TABOO version 0.05
+============================
 
 INTRODUCTION
 
@@ -11,9 +11,9 @@ I don't know what the T stands for yet, suggestions are welcome!
 It is a fundamental design choice with TABOO that all data is to be
 abstracted to objects. I noticed while looking at other people's code,
 that though it was a lot of interesting code, it would be rather hard
-to integrate all the interesting parts into a coherent
-whole. Furthermore, everybody has their own way of storing data, and
-scattered files or different databases didn't seem right to me. 
+to integrate all the interesting parts into a coherent whole.
+Furthermore, everybody has their own way of storing data, and
+scattered files or different databases didn't seem right to me.
 
 With TABOO, everything that interacts with AxKit just interacts with
 the Data objects. That means, if you don't want to store things in the
@@ -26,22 +26,23 @@ The intention is to write Data objects for every kind of thing you
 might want to do. From the start, there will be Slashdot-type stories
 of varying length, with comments. These are ever-changing in the sense
 that people can come in an add comments at any time. The other thing
-we start out with is more static and longer articles. 
+we start out with is more static and longer articles.
 
 It is the intention, however, that TABOO should be a framework where
-one can add a Wiki, a webshop (which is a work now in progress),
-etc. The AxKit::App::TABOO::User class will then be reused and
-probably subclassed with e.g. a Customer class (now being done), but
-the datasource will be the same.
+one can add a Wiki, a webshop (which is a work now in progress, and
+present in the distro but alas in an unusable form), etc. The
+AxKit::App::TABOO::User class will then be reused and probably
+subclassed with e.g. a Customer class (now being done), but the
+datasource will be the same.
 
 TABOO makes extensive use of Providers. That is mostly because I like
 the abstraction and direct control of URIs that Providers provide. It
 makes it easy to create a framework where URIs are sensible and should
 be easy to maintain for foreseeable future. Also, there is no markup
-in the code, that's also rather important to make it maintainable. 
+in the code, that's also rather important to make it maintainable.
 
 For the stuff that goes into the database, OTOH, XSP is used, and
-several taglibs are used. 
+several taglibs are used.
 
 This is a early release, an alpha in that it does some useful
 things. It consists mainly of a News provider that constructs objects,
@@ -50,21 +51,22 @@ their own XML, and pass this to some XSLT stylesheets, which makes
 some presentable XHTML. There are also several XSP taglibs, and some
 some XSP pages and XSL Transformations are now included in the
 distribution. There is also some user-management code, including
-authentication and authorization, to allow adding new users and editing the
-information of existing users. These are very much work-in-progress,
-and I don't feel I have quite gotten the hang of XSLT yet, but it is
-being worked on. Try them out if you understand what they're supposed
-to do.
+authentication and authorization, to allow adding new users and
+editing the information of existing users. These are very much
+work-in-progress, and I don't feel I have quite gotten the hang of
+XSLT yet, but it is being worked on. Try them out if you understand
+what they're supposed to do.
 
 The webshop has a lot of Data objects, but had a fixed deadline that
 whooshed by so it has now been put on hold. But it is actually not
 very far from ready to manage a simple webshop.
 
-I have introduced "Plural" data objects now, and that's the main reason
-for releasing "development releases". This is a major conceptual step,
-and the whole "Comments" code need a review to conform with the new
-ideas. Thus, there are some code in the present release that used to
-work that is somewhat flaky. And it is only second on the TODO list...
+I have introduced "Plural" data objects now, and that's the main
+reason for releasing "development releases". This is a major
+conceptual step, and the whole "Comments" code need a review to
+conform with the new ideas. Thus, there are some code in the present
+release that used to work that is somewhat flaky. And it is only
+second on the TODO list...
 
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a

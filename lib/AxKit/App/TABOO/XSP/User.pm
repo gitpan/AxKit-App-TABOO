@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.041';
+our $VERSION = '0.05';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -109,7 +109,7 @@ sub store {
     }
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     # Retrieve old data
-    $user->load($args{'username'});
+    $user->load(what => '*', limit => {'username' => $args{'username'}});
 
     if ($args{'username'} eq $editinguser) {
 	# It is the user editing his own data
@@ -232,7 +232,7 @@ sub this_user : struct attribOrChild(username)
 {
     return << 'EOC';
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
-    $user->load($attr_username); 
+    $user->load(what => '*', limit => {'username' => $attr_username}); 
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output', 'this-user');
     $doc->setDocumentElement($root);

@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.031';
+our $VERSION = '0.05';
 
 
 =head1 NAME
@@ -23,7 +23,7 @@ AxKit::App::TABOO::Data::Category - Category Data objects for TABOO
 
   use AxKit::App::TABOO::Data::Category;
   $cat = AxKit::App::TABOO::Data::Category->new();
-  $cat->load('kitten');
+  $cat->load(what => '*', limit => {catname => 'kitten'});
 
 
 =head1 DESCRIPTION
@@ -127,7 +127,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =back
 
-However, the root element may change depending on what kind of category we have. The default is C<primcat>.
+However, the root element may change depending on what kind of category we have. The default is C<category>.
 
 =cut
 
@@ -140,7 +140,7 @@ sub new {
 		type => undef,
 		uri => undef,
 		description => undef,
-		XMLELEMENT => 'primcat',	
+		XMLELEMENT => 'category',	
 		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output',
 		ONFILE => undef,
     };

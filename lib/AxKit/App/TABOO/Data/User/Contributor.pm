@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.021';
+our $VERSION = '0.05';
 
 
 =head1 NAME
@@ -22,7 +22,7 @@ AxKit::App::TABOO::Data::User::Contributor - Contributor Data objects for TABOO
 
   use AxKit::App::TABOO::Data::User::Contributor;
   $user = AxKit::App::TABOO::Data::User::Contributor->new();
-  $user->load('kjetil');
+  $user->load(what => '*', limit => {'username' => 'kjetil'});
   my $fullname = $user->load_authlevel('kjetil');
 
 =head1 DESCRIPTION
@@ -32,7 +32,7 @@ This Data class subclasses L<AxKit::App::TABOO::Data::User> to add an authentica
 
 =cut
 
-AxKit::App::TABOO::Data::User::Contributor->selectquery("SELECT * FROM users INNER JOIN contributors ON (users.username = contributors.username) WHERE users.username=?");
+AxKit::App::TABOO::Data::User::Contributor->dbfrom("users INNER JOIN contributors ON (users.username = contributors.username)");
 AxKit::App::TABOO::Data::User::Contributor->dbtable("users,contributors");
 AxKit::App::TABOO::Data::User::Contributor->elementorder("username, name, email, uri, passwd, bio, authlevel");
 
@@ -56,6 +56,30 @@ sub new {
     $self->{bio} = undef;
     bless($self, $class);
     return $self;
+}
+
+
+
+# We reimplement the load method with no changes to the API. Actually,
+# the reason is to preserve the API, we need to do it because we're
+# getting data from two tables, and they both have a username field.
+
+sub load {
+  my ($self, %args) = @_;
+  my $tmp = $args{'limit'}{'username'};
+  if ($tmp) {
+    delete $args{'limit'}{'username'};
+    $args{'limit'}{'users.username'} = $tmp;
+  }
+
+  my $data = $self->_load(%args);
+  if ($data) {
+    ${$self}{'ONFILE'} = 1;
+  }
+  foreach my $key (keys(%{$data})) {
+    ${$self}{$key} = ${$data}{$key}; 
+  }
+  return $self;
 }
 
 

@@ -17,7 +17,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.011_1';
 
 AxKit::App::TABOO::Data::Plurals::Productsubtypes->dbtable("productsubtypes");
 AxKit::App::TABOO::Data::Plurals::Productsubtypes->dbfrom("productsubtypes");
@@ -43,8 +43,8 @@ sub new {
     my $class = ref($that) || $that;
     my $self = {
 	ENTRIES => [], # Internally, some methods finds it useful that the entries are stored in a array of this name.
-	XMLELEMENT => 'products',
-	XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Product/Output',
+	XMLELEMENT => undef,
+	XMLNS => undef,
 	ONFILE => undef,
     };
     bless($self, $class);
@@ -77,6 +77,7 @@ sub load {
 
 =head1 BUGS/TODO
 
+This class has not seen a lot of testing, and the documentation really needs more work. 
 
 =head1 FORMALITIES
 
@@ -85,5 +86,6 @@ See L<AxKit::App::TABOO>.
 =cut
 
 1;
+
 
 

@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.05_3';
+our $VERSION = '0.05';
 
 
 # Preloaded methods go here.
@@ -80,23 +80,26 @@ in the code, that's also rather important to make it maintainable.
 
 =head1 DESCRIPTION
 
-This is what TABOO allready contains:
+This is what TABOO contains at this point.:
 
-The base data object, L<AxKit::App::TABOO::Data> and four subclasses
-of it, L<User|AxKit::App::TABOO::Data::User>, which is again subclassed to L<Contributor|AxKit::App::TABOO::Data::User::Contributor>,
-L<Category|AxKit::App::TABOO::Data::Category>,
-L<Story|AxKit::App::TABOO::Data::Story> and
-L<Comment|AxKit::App::TABOO::Data::Comment>. They provide an
-abstraction layer that can manage the data for each of the types. They
-can load data from a data storage, currently a PostgreSQL data base,
-and they can write their data as XML. There are now also Plural subclasses, whcih makes it easier to work on more than one of the above objects at a time, sometning that's often necessary.  
+The base data object, L<AxKit::App::TABOO::Data> and a wealth of
+subclasses of it, some of which is again subclassed. There are too
+many to list.  They provide an abstraction layer that can manage the
+data for each of the types. They can load data from a data storage,
+currently a PostgreSQL data base, and they can write their data as
+XML, and write it back to the database. There are now also Plural
+subclasses, built on the L<AxKit::App::TABOO::Data::Plurals> base
+class. These classes makes it easier to work on more than one of the
+above objects at a time, something that's often necessary. It also
+provides some containment of complexity, taking worries off of your
+head!
 
 Then, there's an AxKit Provider L<AxKit::App::TABOO::Provider::News>,
 that makes use of the four above subclasses, especially Story and
 Comment, to create a page containing an editor-review story and
 user-submitted comments. By simply manipulating the URI in
 easy-to-understand ways, you can load just the story, view the
-comments, separately, in a list or as a thread. 
+comments, separately, in a list or as a thread.
 
 Currently, it supplies three Taglibs, L<User|AxKit::App::TABOO::XSP::User>,
 L<Story|AxKit::App::TABOO::XSP::Story> and L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide several tags that you may use interface with the Data objects. 
@@ -132,7 +135,7 @@ differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
 feedback hackers provide. 
 
-The new webshop code is very badly documented, and since the deadline for it whooshed by, it is now halted a bit... But I think it is quite OK code...
+The new webshop code is very badly documented, and since the deadline for it whooshed by, it is now halted a bit... Some of the code is quite OK though, allthough it doesn't work yet. TABOO will make a great webshop platform...!
 
 
 =head1 SUPPORT
@@ -142,11 +145,16 @@ http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
 =head1 BUGS
 
+In this release L<AxKit::App::TABOO::Data::Comment> doesn't work. It
+needs to be reworked to support the new Plurals concept, but that's
+not at the top of my list for the moment.
+
+
 There are surely some... Please report any you find through CPAN RT: http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO .
 
 =head1 AUTHOR
 
-Kjetil Kjernsmo, E<lt>kk@kjernsmo.netE<gt>
+Kjetil Kjernsmo, E<lt>kjetilk@cpan.orgE<gt>
 
 =head1 SEE ALSO
 

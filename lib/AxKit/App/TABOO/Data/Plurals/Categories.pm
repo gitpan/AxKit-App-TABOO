@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.05';
 
 AxKit::App::TABOO::Data::Plurals::Categories->dbtable("categories");
 AxKit::App::TABOO::Data::Plurals::Categories->dbfrom("categories");
@@ -45,8 +45,8 @@ sub new {
     my $class = ref($that) || $that;
     my $self = {
 	ENTRIES => [], # Internally, some methods finds it useful that the entries are stored in a array of this name.
-	XMLELEMENT => 'categories',
-	XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output',
+	XMLELEMENT => undef,
+	XMLNS => undef,
     };
     bless($self, $class);
     return $self;
@@ -78,6 +78,7 @@ sub load {
 
 =head1 BUGS/TODO
 
+This has been tested more than the other Plural classes, and seems to do it's job.
 
 =head1 FORMALITIES
 

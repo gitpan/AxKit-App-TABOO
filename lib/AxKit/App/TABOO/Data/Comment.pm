@@ -13,7 +13,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.023';
+our $VERSION = '0.023_1';
 
 
 
@@ -253,7 +253,8 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =head1 BUGS/TODO
 
-With the introduction of Plurals, the tree, root and generally the load code needs to be reworked a bit. It may still work as it used to, be expect some larger changes in both the code and API in shortly forthcoming releases.
+With the introduction of Plurals, the tree, root and generally the load code needs to be reworked a bit. It may still work as it used to, be expect some larger changes in both the code and API in shortly forthcoming releases. I<For that reason, comments really don't work in this release>.
+
 
 
 =head1 FORMALITIES

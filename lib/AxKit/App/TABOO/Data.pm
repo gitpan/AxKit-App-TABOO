@@ -105,25 +105,33 @@ sub _load {
     my $dbh = DBI->connect($self->dbstring(), 
 			   $self->dbuser(), 
 			   $self->dbpasswd(),  
-			   { PrintError => 0,
-			     RaiseError => 0,
-			     HandleError => Exception::Class::DBI->handler
+			   { PrintError => 1,
+			     RaiseError => 0 # ,
+			    # HandleError => Exception::Class::DBI->handler
 			     });
     # The subclass should give the dbfrom.
     my $query = "SELECT " . $what . " FROM " . $self->dbfrom() . " WHERE ";
     my $i=0;
+    my $nothing=1;
     my @keys = keys(%arg);
     foreach my $key (@keys) {
       $i++;
       next unless ($arg{$key});
+      $nothing = 0;
       $query .= $key . "=?";
       if ($i <= $#keys) {
 	$query .= " AND ";
       }
     }
-    warn $query;
+#    warn $query;
+    if ($nothing) {
+      # Then, none of the fields were actually sent with a value, so
+      # load won't return anything sensible...
+      return undef;
+    }
     my $sth = $dbh->prepare($query);
     $i=1;
+#    warn Dumper(%arg);
     foreach my $key (@keys) {
       $sth->bind_param($i, $arg{$key});
       $i++;
@@ -232,7 +240,7 @@ sub apache_request_changed {
 
 This is a generic save method, that will write a new record to the data store, or update an old one. It may have to be subclassed for certain classes. It takes an optional argument C<$olddbkey>, which is the primary key of an existing record in the data store. You may supply this in the case if you want to update the record with a new key. In that case, you'd better be sure it actually exists, because the method will trust you do. 
 
-It is not yet a very rigorous implementation: It may well fail badly if it is given something with a reference to other Data objects, which is the case if you have a full story with all comments (see C<_addinfo> below). Or it may cope. Only time will tell! Expect to see funny warnings in your logs if you try.
+It is not yet a very rigorous implementation: It may well fail badly if it is given something with a reference to other Data objects, which is the case if you have a full story with all comments. Or it may cope. Only time will tell! Expect to see funny warnings in your logs if you try.
 
 
 =cut
@@ -301,7 +309,6 @@ Checks if a record with the present object's identifier is allready present in t
 
 =cut
 
-#'
 
 sub stored {
   my $self = shift;
@@ -338,7 +345,6 @@ This method is I<intended> for internal use, but if you can use it without shoot
 
 =cut
 
-#' 
 
 sub xmlelement {
   my $self = shift;
@@ -365,34 +371,7 @@ sub xmlns {
 }
 
 
-
-=item C<_addinfo($add, $this, $that)>
-
-B<This method is for use by subclasses only.> It can be used by methods like C<adduserinfo()>, and will be used to replace a field (C<$this>) with another field (C<$that>) containing a reference to a different class that will be added, C<$add>. 
-
 =back
-
-=cut
-
-sub _addinfo {
-    my $self = shift;
-    my $add = shift;
-    my $this = shift;
-    my $that = shift;
-    if (${$self}{$this}) {
-      if (ref($add) eq 'AxKit::App::TABOO::Data::User') {
-	$add->load_name(${$self}{$this});
-      } else {
-	$add->load(${$self}{$this});
-      }
-      ${$self}{$that} = \$add;
-    } else {
-      carp $this . " had no value to replace.";
-    }
-    return $self;
-}
-
-
 
 =head2 Class Data Methods
 
@@ -418,9 +397,6 @@ The password to be passed to the DBI constructor. Currently defaults to an empty
 
 =cut
 
-#=item C<selectquery($string)>
-#
-#The load method of the present class will use this string as a SQL statement. This is a relatively simple way for subclasses to use the load method rather than implement their own. It can be used in the cases where the query is specific to the class rather than the specific instances. I<It is intended for use by subclasses only.>
 
 #=item C<elementorder($string)>
 

@@ -70,11 +70,11 @@
       <xsl:if test="../@type='multiple'">
 	<xsl:attribute name="multiple">multiple</xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates select="./cat:category"/>
+      <xsl:apply-templates select="./cat:category|cat:primcat"/>
     </html:select>
   </xsl:template>
   
-  <xsl:template match="cat:category">
+  <xsl:template match="cat:category|cat:primcat">
     <html:option value="{cat:catname}">
       <!-- This has to mark as selected both in the case where we have
       a single parameter found by param:get, but also where there are

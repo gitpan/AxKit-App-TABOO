@@ -16,7 +16,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.023';
+our $VERSION = '0.05';
 
 
 =head1 NAME
@@ -61,8 +61,9 @@ package AxKit::App::TABOO::XSP::Category::Handlers;
 
 This tag will replace itself with some structured XML containing all
 categories of type C<foo>.  It relates to the TABOO Data object
-L<AxKit::App::TABOO::Data::Category>, and calls on that to do the hard
-work. See the documentation of that class to see the available types.
+L<AxKit::App::TABOO::Data::Plurals::Category>, and calls on that to do
+the hard work. See the documentation of that class to see the
+available types.
 
 The root element of the returned object is C<categories> and each category is wrapped in an element (surprise!) C<category> and contains C<catname> and C<name>. 
 
@@ -71,12 +72,12 @@ The root element of the returned object is C<categories> and each category is wr
 sub get_categories : struct attribOrChild(type) {
     return << 'EOC'
     my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
-    $cats->load({type => $attr_type});
+    $cats->load(what => '*', limit => {type => $attr_type});
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'categories');
     $root->setAttribute('type', $attr_type);
     $doc->setDocumentElement($root);
-    $cats->xmlelement('category');
+    $cats->xmlelement('primcat');
     $doc = $cats->write_xml($doc, $root);
     $doc;
 EOC

@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.021_1';
 # Forked off Category
 
 =head1 NAME
@@ -23,12 +23,12 @@ AxKit::App::TABOO::Data::Productsubtype - Product Sub Types Data objects for TAB
 
   use AxKit::App::TABOO::Data::Productsubtype;
   $size = AxKit::App::TABOO::Data::Productsubtype->new();
-  $size->load('XXL');
+  $size->load(what => '*', limit => {prodsubid =>  'XXL'});
 
 
 =head1 DESCRIPTION
 
-
+The documentation for this class is not yet written. There isn't a lot of code in this class either, but in a webshop it plays the role of recording things like how many items you have in stock of a subtype of a product, for example a T-shirt size. With the inherited methods, it can actually perform this role in it's present form pretty much.
 
 =cut
 
@@ -37,7 +37,7 @@ AxKit::App::TABOO::Data::Productsubtype->dbfrom("productsubtypes");
 
 =head1 METHODS
 
-This class implements only one method, in addition to the constructor, the rest is inherited from L<AxKit::App::TABOO::Data>.
+This class implements only the constructor, the rest is inherited from L<AxKit::App::TABOO::Data>.
 
 =over
 
@@ -71,31 +71,19 @@ sub new {
 
 =back
 
-=head1 STORED DATA
-
-The data is stored in named fields, and for certain uses, it is good to know them. If you want to subclass this class, you might want to use the same names, see the documentation of L<AxKit::APP::TABOO::Data> for more about this. These are the names of the stored data of this class:
-
-=over
-
-=item * prodsubid
-
-A simple word containing a unique name and identifier for the productsubtypes.
-
-
-
-This may be extended. 
-
-=back
 
 
 
 =head1 XML representation
 
-The C<write_xml()> method, implemented in the parent class, can be used to create an XML representation of the data in the object. The above names will be used as element names. The C<xmlelement()> and C<xmlns()> methods can be used to set the name of the root element and the namespace respectively. Usually, it doesn't make sense to change the default namespace, which is
+The C<write_xml()> method, implemented in the parent class, can be used to create an XML representation of the data in the object. The above names will be used as element names. The C<xmlelement()> and C<xmlns()> methods can be used to set the name of the root element and the namespace respectively. The defaults are
+
 
 =over
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Productsubtypes/Output>
+
+=item * C<subtype>
 
 =back
 
@@ -108,5 +96,5 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 See L<AxKit::App::TABOO>.
 
 =cut
-    
+
 1;

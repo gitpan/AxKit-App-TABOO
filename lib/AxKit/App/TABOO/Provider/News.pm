@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 NAME
 
@@ -83,17 +83,8 @@ sub init {
 
   # We're just loading the part of the story we are sure to be using. 
   $self->{story} = AxKit::App::TABOO::Data::Story->new();
-  $self->{story}->load('storyname,sectionid,editorok,title,timestamp,lasttimestamp', $self->{section}, $self->{storyname});
-  $self->{editorok} = $self->{story}->editorok();
-  AxKit::Debug(10, "[News] Initial Story Fetched: " . Dumper($self->{story}));
-  # No point in going any further if the user isn't authorized:
-  unless ($self->{editorok}) {
-      if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) {
-	 	throw Apache::AxKit::Exception::Retval(
-					       return_code => 401,
-					       -text => "Authentication and higher priviliges required");
-	    }
-  } 
+  $self->{story}->load(what => 'storyname,sectionid,editorok,title,timestamp,lasttimestamp', limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
+
   # Get the timestamps of the story
   $self->{storytimestamp} =  $self->{story}->timestamp();
   if ($self->{getcomments}) {
@@ -107,8 +98,8 @@ sub init {
       $self->{commenttimestamp} = $self->{lasttimestamp};
     }
   }
-  AxKit::Debug(9, "[News] Parsed data: " . Dumper($self));
-  
+  AxKit::Debug(9, "[News] Data parsed in init: " . Dumper($self));
+  return $self;
 }
 
 
@@ -172,7 +163,7 @@ sub get_fh {
 	      -text => "No fh for News Provider");
 }
 
-# Here, the correct stuff is retrieved from the db.
+# Here, the correct stuff is retrieved from the data store.
 # We are fed URLs on the form 
 # /news/section/storyname/comment/username/username/thread
 sub get_strref {
@@ -188,6 +179,18 @@ sub get_strref {
     # simply check if we've been run before. 
     AxKit::Debug(5, "[News] Output allready created in earlier run, reusing");
   } else {
+      $self->{editorok} = $self->{story}->editorok();
+      # No point in going any further if the user isn't authorized:
+      unless ($self->{editorok}) {
+	if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) {
+	  throw Apache::AxKit::Exception::Retval(
+						 return_code => 401,
+						 -text => "Authentication and higher priviliges required");
+	}
+      } 
+
+
+
     my $doc = XML::LibXML::Document->new();
     my $rootel = $doc->createElement('taboo');
     $doc->setDocumentElement($rootel);
@@ -222,7 +225,7 @@ sub get_strref {
       } elsif($self->{showall}) {
 	# We shall show the full story and all the expanded comments OK
 	AxKit::Debug(7, "[News] We shall show the full story and all the expanded comments");
-	$self->{story}->load('*', $self->{section}, $self->{storyname});
+	$self->{story}->load(what => '*', limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
 	$self->{story}->write_xml($doc, $rootel);
@@ -230,7 +233,7 @@ sub get_strref {
       } else {
 	# We shall show the full story, but only headings of comments OK
 	AxKit::Debug(7, "[News] We shall show the full story, but only headings of comments");
-	$self->{story}->load('*', $self->{section}, $self->{storyname});
+	$self->{story}->load(what => '*', limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
 	$self->{story}->write_xml($doc, $rootel);
@@ -241,7 +244,7 @@ sub get_strref {
     } else {
       # We shall only display the story, no comments OK
       AxKit::Debug(7, "[News] We shall only display the story, no comments");
-      $self->{story}->load('*', $self->{section}, $self->{storyname});
+      $self->{story}->load(what => '*', limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
       $self->{story}->adduserinfo();
       $self->{story}->addcatinfo();
       $self->{story}->write_xml($doc, $rootel); 

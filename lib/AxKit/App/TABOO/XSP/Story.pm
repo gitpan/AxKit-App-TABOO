@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.041';
+our $VERSION = '0.05';
 
 =head1 NAME
 
@@ -185,7 +185,7 @@ sub merge : struct attribOrChild(storyname,sectionid) {
 	my %args = $r->args;
 
     my $story = AxKit::App::TABOO::Data::Story->new();
-    $story->load('*', $attr_sectionid, $attr_storyname);
+    $story->load(what => '*', limit => (sectionid => $attr_sectionid, storyname=> $attr_storyname});
 
 
 

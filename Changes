@@ -166,3 +166,13 @@ Revision history for Perl extension AxKit::App::TABOO.
 	stories.
 	- A few minor changes to some method APIs.
 	- And a few more excuses in the POD... 
+
+0.05	  2004-07-01 23:45
+	- Set the internal data XMLELEMENT and XMLNS to undef for the
+	Plural classes. 
+	- Removed the internal _addinfo method. 
+	- Moved some stuff from init to get_strref in the News
+	Provider.
+	- New Push method for plurals.
+	- Minor changes in most files, but too small and too numerous
+	to list them all....

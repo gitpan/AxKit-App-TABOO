@@ -20,5 +20,5 @@ WriteMakefile(
 			   }, # E.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
      (ABSTRACT_FROM => 'lib/AxKit/App/TABOO.pm', # retrieve abstract from module
-      AUTHOR     => 'Kjetil Kjernsmo <kk@kjernsmo.net>') : ()),
+      AUTHOR     => 'Kjetil Kjernsmo <kjetilk@cpan.org>') : ()),
 );
