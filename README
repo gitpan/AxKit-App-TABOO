@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.04
+AxKit/App/TABOO version 0.05
 ============================
 
 INTRODUCTION
@@ -29,9 +29,10 @@ that people can come in an add comments at any time. The other thing
 we start out with is more static and longer articles. 
 
 It is the intention, however, that TABOO should be a framework where
-one can add a Wiki, a webshop, etc. The AxKit::App::TABOO::User class
-will then be reused and probably subclassed with e.g. a Customer
-class, but the datasource will be the same. 
+one can add a Wiki, a webshop (which is a work now in progress),
+etc. The AxKit::App::TABOO::User class will then be reused and
+probably subclassed with e.g. a Customer class (now being done), but
+the datasource will be the same.
 
 TABOO makes extensive use of Providers. That is mostly because I like
 the abstraction and direct control of URIs that Providers provide. It

@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.04';
+our $VERSION = '0.041';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -34,7 +34,6 @@ use constant GOD       => 9;
 =head1 NAME
 
 AxKit::App::TABOO::XSP::User - User information management and authorization tag library for TABOO
-
 
 =head1 SYNOPSIS
 
@@ -153,7 +152,7 @@ sub store {
 	    }
 	}
     }
-    $user->apache_request_data(\%args);
+    $user->populate(\%args);
     $user->save();
 EOC
 }
@@ -183,7 +182,7 @@ sub new_user
         $args{'authlevel'} = 1;   
     }
     $args{'passwd'} = crypt($args{'passwd'}, AxKit::App::TABOO::XSP::User::makeSalt());
-    $user->apache_request_data(\%args);
+    $user->populate(\%args);
     AxKit::Debug(9, "Saving new user " . $args{'username'});
     $user->save();
 EOC

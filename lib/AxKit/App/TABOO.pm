@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05_1';
 
 
 # Preloaded methods go here.
@@ -89,7 +89,7 @@ L<Story|AxKit::App::TABOO::Data::Story> and
 L<Comment|AxKit::App::TABOO::Data::Comment>. They provide an
 abstraction layer that can manage the data for each of the types. They
 can load data from a data storage, currently a PostgreSQL data base,
-and they can write their data as XML. 
+and they can write their data as XML. There are now also Plural subclasses, whcih makes it easier to work on more than one of the above objects at a time, sometning that's often necessary.  
 
 Then, there's an AxKit Provider L<AxKit::App::TABOO::Provider::News>,
 that makes use of the four above subclasses, especially Story and
@@ -131,6 +131,9 @@ change, parameters may be different, and I may decide to do things
 differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
 feedback hackers provide. 
+
+The new webshop code is very badly documented... 
+
 
 =head1 SUPPORT
 

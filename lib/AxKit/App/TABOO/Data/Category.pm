@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.022';
+our $VERSION = '0.031';
 
 
 =head1 NAME
@@ -44,27 +44,6 @@ This class implements only one method, in addition to the constructor, the rest 
 =item C<new()>
 
 The constructor. Nothing special.
-
-=item C<all_of_type($type)>
-
-This method will return an arrayref containing the catnames of all categories of type C<$type>. This is a bit unelegant, since the typical use is to first call it on an object just created, then create an array containing Category objects based on it, but I didn't find a better solution right now... I what really needs to be done is to add plural versions of each data class, but there are details that I need to figure out. See comment in the parent class POD. 
-
-
-
-=cut
-
-sub all_of_type {
-  my $self = shift;
-  my $type = shift;
-  my $dbh = DBI->connect($self->dbstring(), 
-			 $self->dbuser(), 
-			 $self->dbpasswd(),  
-			 { PrintError => 0,
-			   RaiseError => 0,
-			   HandleError => Exception::Class::DBI->handler
-			 });
-  return $dbh->selectcol_arrayref("SELECT catname FROM categories WHERE type=?", {}, $type);
-}
 
 
 =item C<load_name($catname)>
@@ -177,5 +156,7 @@ sub new {
 See L<AxKit::App::TABOO>.
 
 =cut
-    
+
 1;
+
+

@@ -9,7 +9,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.022';
+our $VERSION = '0.023';
 
 
 =head1 NAME
@@ -124,9 +124,9 @@ sub load_passwd {
 
 =head1 STORED DATA
 
-The data is stored in named fields, and for certain uses, it is good to know them. If you want to subclass this class, you might want to use the same names, see the documentation of L<AxKit::APP::TABOO::Data> for more about this.
+The data is stored in named fields, and for certain uses, it is good to know them. If you want to subclass this class, you might want to use the same names, see the documentation of L<AxKit::App::TABOO::Data> for more about this.
 
-It is natural to subclass this as TABOO grows: One may record more information about contributors to the site, or customers for a webshop. For an example, see L<AxKit::APP::TABOO::Data::User:Contributor>
+It is natural to subclass this as TABOO grows: One may record more information about contributors to the site, or customers for a webshop. For an example, see L<AxKit::App::TABOO::Data::User::Contributor>
 
 These are the names of the stored data of this class:
 
@@ -164,7 +164,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 =item * C<user>
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output>
- 
+
 =back
 
 

@@ -14,12 +14,11 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.04';
+our $VERSION = '0.041';
 
 =head1 NAME
 
 AxKit::App::TABOO::XSP::Story - News story management tag library for TABOO
-
 
 =head1 SYNOPSIS
 
@@ -127,7 +126,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
 	delete $args{'auto-storyname'};
     }
     my $story = AxKit::App::TABOO::Data::Story->new();
-    $story->apache_request_data(\%args);
+    $story->populate(\%args);
 #    try {
 	$story->save($oldstorykey);
 #      }
@@ -168,7 +167,7 @@ sub this_story : struct {
       $args{'lasttimestamp'} = $timestamp->datetime;
     }
     my $story = AxKit::App::TABOO::Data::Story->new();
-    $story->apache_request_data(\%args);
+    $story->populate(\%args);
     $story->adduserinfo();
     $story->addcatinfo();
     
@@ -207,7 +206,7 @@ sub merge : struct attribOrChild(storyname,sectionid) {
 #        $args{'lasttimestamp'} = $timestamp->datetime;
 #      }
 #      my $story = AxKit::App::TABOO::Data::Story->new();
-#      $story->apache_request_data(\%args);
+#      $story->populate(\%args);
 #      $story->adduserinfo();
 #      $story->addcatinfo();
     

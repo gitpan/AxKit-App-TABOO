@@ -15,7 +15,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.04';
+our $VERSION = '0.041';
 
 
 =head1 NAME
@@ -211,7 +211,6 @@ This does exactly the same as the timestamp method, but instead returns the last
 
 It may require arguments like the timestamp method does, and it will return a Time::Piece object.
 
-=back
 
 =cut
 
@@ -244,6 +243,7 @@ sub editorok {
   }
   return ${$self}{'editorok'};
 }
+
 
 
 =head1 STORED DATA
@@ -298,7 +298,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 =item * C<story>
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output>
- 
+
 =back
 
 =head1 BUGS/TODO

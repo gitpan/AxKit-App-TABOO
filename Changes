@@ -140,3 +140,17 @@ Revision history for Perl extension AxKit::App::TABOO.
 		     + I had forgotten to document this-story in the
 		     previous release. 
 
+
+0.05_1	  2004-05-15 22:55
+	- There are quite a few big changes in this release, just
+	brief outline here.
+	- Adding "Plurals" Data subclasses. This is a rather big
+	conceptual change, which makes it possible to work on an array
+	of Data object. 
+	- Started working on a webshop for TABOO, and have added some
+	code to support that, mainly data objects. Some SQL too.  
+	- Renamed apache_request_data to populate after realizing it
+	is more generic than that...  
+	- AxKit::App::TABOO::Data::Category::all_of_type is obsoleted
+	by the introduction of plurals. 
+	- Numerous fixups in the POD. 

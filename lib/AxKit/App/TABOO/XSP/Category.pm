@@ -6,6 +6,7 @@ use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
 use AxKit;
 use AxKit::App::TABOO::Data::Category;
+use AxKit::App::TABOO::Data::Plurals::Categories;
 use Apache::AxKit::Plugin::BasicSession;
 use Time::Piece ':override';
 use Data::Dumper;
@@ -15,13 +16,12 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.021';
+our $VERSION = '0.023';
 
 
 =head1 NAME
 
 AxKit::App::TABOO::XSP::Category - Category management tag library for TABOO
-
 
 =head1 SYNOPSIS
 
@@ -70,18 +70,14 @@ The root element of the returned object is C<categories> and each category is wr
 
 sub get_categories : struct attribOrChild(type) {
     return << 'EOC'
-    my $tmp = AxKit::App::TABOO::Data::Category->new();
-    my $cats = $tmp->all_of_type($attr_type);
+    my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
+    $cats->load({type => $attr_type});
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'categories');
     $root->setAttribute('type', $attr_type);
     $doc->setDocumentElement($root);
-    foreach my $catname (@{$cats}) {
-	my $cat = AxKit::App::TABOO::Data::Category->new();
-	$cat->load_name($catname); # We don't care about the output
-	$cat->xmlelement('category');
-	$doc = $cat->write_xml($doc, $root);
-    }
+    $cats->xmlelement('category');
+    $doc = $cats->write_xml($doc, $root);
     $doc;
 EOC
 }
@@ -115,7 +111,7 @@ EOC
 #      if (! $args{'lasttimestamp'}) {
 #  	$args{'lasttimestamp'} = $timestamp->datetime;
 #      }
-#      $story->apache_request_data(\%args);
+#      $story->populate(\%args);
 #      $story->save();    
 #  EOC
 #  }

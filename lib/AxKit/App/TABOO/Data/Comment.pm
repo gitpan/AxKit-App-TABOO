@@ -13,7 +13,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 
 
 
@@ -248,7 +248,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 =item * C<reply>
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Output>
- 
+
 =back
 
 =head1 FORMALITIES

@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.04';
+our $VERSION = '0.043';
 
 
 use DBI;
@@ -31,6 +31,8 @@ In some subclasses, you will have some degree of control of what is loaded into 
 Similarly, if data is sent from a web application, the present implementation makes it possible to pass an L<Apache::Request> object to a Data object, and it is up to a method of the Data object to take what it wants from the Apache::Request object, and intelligently store it. 
 
 Some methods to access data will be implemented on an ad hoc basis, notably C<timestamp()>-methods, that will be important in determining the validity of cached data. 
+
+As of 0.05_1, there are also "Plural" subclasses. Sometimes you might want to retrieve more than one object from the data store, and do stuff on these objects as a whole. Furthermore, the load methods used to retrieve multiple objects may be optimized. This a conceptual change, and it'll take some time before it is being used in all parts of TABOO. 
 
 
 
@@ -135,26 +137,23 @@ sub write_xml {
 	  $element->appendChild($text);
 	  $topel->appendChild($element);
         }
-      } else {
-#	$writer->emptyTag($key);
       }
     }
-#    $writer->endTag($self->xmlelement());
     return $doc;
 }
 
-=item C<apache_request_data(\%args)>
+=item C<populate(\%args)>
 
-This method takes as argument a reference to the args hash of a L<Apache::Request> object. Note that in a request, the Request object is available as C<$r>, so you may create this hash by 
+This method takes as argument a reference to a hash and will populate the data object by adding any data from a key having the same name as is used in the data storage. Fields that are not specified by the data object or that has uppercase letters are ignored. 
+
+It may be used to insert data from an L<Apache::Request> object by first noting that in a HTTP request, the Request object is available as C<$r>, so you may create the hash to hand to this method by 
 
     my %args = $r->args;
-
-It will populate the data object by adding any data from a parameter having the same name as is used in the data storage. Fields that are not specified by the data object or that has uppercase letters are ignored. 
 
 =cut
 
 
-sub apache_request_data {
+sub populate {
     my $self = shift;
     my $args = shift;
     foreach my $key (keys(%{$self})) {
@@ -276,7 +275,21 @@ sub stored {
   ${$self}{'ONFILE'} = $check;
   return $check;
 }
+
+
+=item C<onfile>
+
+Method to set a flag to indicate that the record is in the data store.
+
+=cut
+
   
+sub onfile {
+  my $self = shift;
+  ${$self}{'ONFILE'} = 1;
+  return $self;
+}
+
 =item C<xmlelement($string)>
 
 This method is I<intended> for internal use, but if you can use it without shooting somebody in the foot (including yourself), fine by me... It sets the root element that will enclose an object's data to C<$string>.
@@ -399,7 +412,6 @@ Except for still being in alpha, and should have a few bugs, there is the issue 
 
 Every load-type method should throw an exception or do something similar if it finds that the record it tries to retrieve doesn't exist. 
 
-I think I may have slightly misdesigned the Data classes, in that they are only designed to operate on one entry at a time. Probably, it is easy to fix this by adding plural versions of each data class, but I need to try to keep some independence from SQL syntax, and I haven't quite figured that out yet. 
 
 =head1 FORMALITIES
 
