@@ -88,7 +88,7 @@
     </xsl:if>
     <xsl:if test="not($primcat = '')">
       <xsl:value-of select="$primcat"/>  
-    </xsl:if>    
+    </xsl:if>
   </xsl:template>
 
 

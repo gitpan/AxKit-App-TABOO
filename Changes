@@ -1,5 +1,12 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.098   2004-12-16 04:20
+	- Adds some more explanations particularly of Textile, but
+	  also some help for the editors.
+	- Sections listed in menu.
+	- front page points to /unpriv/
+
+
 0.097   2004-12-10 03:13
 	- Small polishing release.
 	- Forgot to document in the previous release that I had done

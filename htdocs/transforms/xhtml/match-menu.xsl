@@ -3,6 +3,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:menu="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Menu"
   xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
+  xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   extension-element-prefixes="i18n"
@@ -43,6 +44,19 @@
 		  </xsl:when>
 		</xsl:choose>
 	      </li>
+	    </xsl:for-each>
+	    <xsl:for-each select="./cat:categories/cat:category">
+	      <xsl:if test="not(./cat:catname = 'subqueue')">
+		<li>
+		  <a>
+		    <xsl:attribute name="href">
+		      <xsl:text>/news/</xsl:text>
+		      <xsl:value-of select="./cat:catname"/>
+		    </xsl:attribute>
+		    <xsl:value-of select="./cat:name"/>
+		  </a>
+		</li>
+	      </xsl:if>
 	    </xsl:for-each>
 	  </ul>
 	</div>

@@ -34,6 +34,8 @@
   <text id="content"> The content </text>
   <text id="content-descr"> Enter the rest of the content. </text>
 
+  <text id="textile-descr"> You may use <a href="#textile">Textile</a> in this field. </text>  <!-- TODO link -->
+
   <text id="descriptive-image"> A descriptive image </text>
   <text id="descriptive-image-descr"> The address of a descriptive image. </text>
 
@@ -49,6 +51,7 @@
   <text id="article-sectionid"> Section </text>
   <text id="article-sectionid-descr"> Choose the section to post the
   article to. </text>
+ <text id="article-sectionid-descr-editorhelp"> A newly posted article will be added to a separate section for editor's approval. The editor must move it over to the appropriate section when the article is approved. </text>
 
 
   <text id="editorok"> Editor's approval </text>
@@ -56,6 +59,7 @@
 
   <text id="storyname"> Storyname </text>
   <text id="storyname-descr"> A short, one-word name for the story. </text>
+  <text id="storyname-descr-editorhelp"> When an unprivileged user posts an article, the article will get a random five-digit number. The editor should replace this with a reasonably descriptive word.</text>
 
   <text id="submitterid"> Submitter ID </text>
   <text id="submitterid-descr"> The username of the person who

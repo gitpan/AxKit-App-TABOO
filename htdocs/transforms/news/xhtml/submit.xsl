@@ -20,6 +20,7 @@
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/ends-with.xsl"/>
+  <xsl:import href="/transforms/match-instructions.xsl"/>
   <xsl:import href="match-breadcrumbs.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -78,22 +79,28 @@
 	    
 	    <xsl:apply-templates select="./story:story-submission/story:story"/>
 	    
-	    <xsl:if test="//story:store=1">
-	      <xsl:value-of select="i18n:include('story-stored')"/>
-	      <p>
-		<xsl:value-of
-		  select="i18n:include('return-to-top-page')"/> 
-		<a rel="top" href="/"><xsl:value-of
-		    select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
-		</a>
-	      </p>
-	    </xsl:if>
+	    <xsl:choose>
+	      <xsl:when test="//story:store=1">
+		<xsl:value-of select="i18n:include('story-stored')"/>
+		<p>
+		  <xsl:value-of
+		      select="i18n:include('return-to-top-page')"/> 
+		  <a rel="top" href="/"><xsl:value-of
+		  select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
+		  </a>
+		</p>
+	      </xsl:when>
+	      <xsl:otherwise>
+		<form method="post" action="/news/submit">
+		  <div class="fields">
+		    <xsl:apply-templates select="./ct:control"/>
+		  </div>
+		</form>
+		
+		<xsl:call-template name="TextileInstructions"/>
+	      </xsl:otherwise>
+	    </xsl:choose>
 	    
-	    <form method="post" action="/news/submit">
-	      <div class="fields">
-		<xsl:apply-templates select="./ct:control"/>
-	      </div>
-	    </form>
 	  </div>
 	</div>
 	<xsl:call-template name="CreateFooter"/>
@@ -101,6 +108,8 @@
     </html>
   </xsl:template>
   
+
+
 </xsl:stylesheet>
 
 

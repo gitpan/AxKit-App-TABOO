@@ -19,6 +19,7 @@
   <xsl:import href="../../../transforms/xhtml/header.xsl"/>
   <xsl:import href="../../../transforms/xhtml/footer.xsl"/>
   <xsl:import href="../../../transforms/insert-i18n.xsl"/>
+  <xsl:import href="../../../transforms/match-instructions.xsl"/>
   <xsl:import href="match-breadcrumbs.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -123,6 +124,11 @@
 		<xsl:apply-templates select="./comm:comment-loaded/comm:reply"/>
 	      </div>
 	    </xsl:if>
+
+	    <xsl:if test="not(//comm:store=1)">
+	      <xsl:call-template name="TextileInstructions"/>
+	    </xsl:if>
+
 	  </div>
 	</div>
 	<xsl:call-template name="CreateFooter"/>

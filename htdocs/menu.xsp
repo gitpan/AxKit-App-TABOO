@@ -7,6 +7,7 @@
   xmlns:menu="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Menu"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
+  xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category"
   xmlns:session="http://www.axkit.org/2002/XSP/BasicSession"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User">
     
@@ -26,6 +27,7 @@
 	  </menu:li>
 	</user:true>
       </user:is-authorized>
+      <cat:get-categories type="stsec"/>
     </menu:section>
 
     <menu:section>

@@ -39,12 +39,18 @@
       </ct:control>
       <ct:control name="minicontent" element="textarea" rows="5" cols="60">
 	<ct:title><i18n:insert>minicontent</i18n:insert></ct:title>
-	<ct:descr><i18n:insert>minicontent-descr</i18n:insert></ct:descr>
+	<ct:descr>
+	  <i18n:insert>minicontent-descr</i18n:insert>	  
+	  <i18n:insert>textile-descr</i18n:insert> <!-- TODO link -->
+	</ct:descr>
 	<ct:value><val:insert name="minicontent"/></ct:value>
       </ct:control>
       <ct:control name="content" element="textarea" rows="12" cols="60">
 	<ct:title><i18n:insert>content</i18n:insert></ct:title>
-	<ct:descr><i18n:insert>content-descr</i18n:insert></ct:descr>
+	<ct:descr>
+	  <i18n:insert>content-descr</i18n:insert>
+	  <i18n:insert>textile-descr</i18n:insert> <!-- TODO link -->
+	</ct:descr>
 	<ct:value><val:insert name="content"/></ct:value>
       </ct:control>
       <!-- user:is-authorized authlevel="3">
@@ -88,7 +94,12 @@
 	<user:true>
 	  <ct:control name="sectionid">
 	    <ct:title><i18n:insert>article-sectionid</i18n:insert></ct:title>
-	    <ct:descr><i18n:insert>article-sectionid-descr</i18n:insert></ct:descr>
+	    <ct:descr>
+	      <i18n:insert>article-sectionid-descr</i18n:insert>
+	      <param:if name="sectionid" value="subqueue">
+		<i18n:insert>article-sectionid-descr-editorhelp</i18n:insert>
+	      </param:if>
+	    </ct:descr>
 	    <cat:get-categories type="stsec"/>
 	    <ct:value><val:insert name="sectionid"/></ct:value>
 	  </ct:control>
@@ -99,7 +110,12 @@
 	  </ct:control>
 	  <ct:control element="input" type="text" name="storyname" size="12" maxlength="12">
 	    <ct:title><i18n:insert>storyname</i18n:insert></ct:title>
-	    <ct:descr><i18n:insert>storyname-descr</i18n:insert></ct:descr>
+	    <ct:descr>
+	      <i18n:insert>storyname-descr</i18n:insert>
+	      <param:if-regex name="storyname" value="\d{5}">
+		<i18n:insert>storyname-descr-editorhelp</i18n:insert>
+	      </param:if-regex>
+	    </ct:descr>
 	    <ct:value><val:insert name="storyname"/></ct:value>
 	  </ct:control>
 	  <ct:control element="input" type="text" name="submitterid" size="8" maxlength="8">
