@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="NULL" type="application/x-xsp"?>
+<?xml-stylesheet href="control.xsl" type="text/xsl"?>
+<?xml-stylesheet href="html.xsl" type="text/xsl"?>
+<xsp:page
+  xmlns:xsp="http://www.apache.org/1999/XSP/Core"
+  xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"
+  xmlns:userinc="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Include"
+  xmlns:param="http://www.axkit.org/2002/XSP/QueryParam"
+  xmlns:session="http://www.axkit.org/2002/XSP/BasicSession"
+  xmlns:html="http://www.w3.org/1999/xhtml">
+  <user>
+    <title>User info</title>
+    <param:if-exists name="submitted">
+      <html:p>User info updated</html:p>
+      <user:store/>
+    </param:if-exists>
+    
+    <user:this-user>
+      <user:username><param:get name="username"/></user:username>
+    </user:this-user>
+    
+
+    
+    <user:is-authorized authlevel="6">
+      <user:username><xsp:expr><session:get-attribute
+      name="credential_0"/></xsp:expr></user:username>
+      <user:true>
+	
+	<html:h2>Edit user info</html:h2>
+		    
+	<control element="input" type="text" name="name">
+	  <title>Name</title>
+	  <!-- Have the XSLT include the value -->	  
+	  <value><userinc:name/></value> 
+	</control>
+	<control element="input" type="text" name="email">
+	  <title>Email</title>
+	  <!-- Have the XSLT include the value -->	  
+	  <value><userinc:email/></value> 
+	</control>
+
+	<control element="input" type="text" name="uri">
+	  <title>URI</title>
+	  <!-- Have the XSLT include the value -->	  
+	  <value><userinc:uri/></value> 
+	</control>
+
+
+      </user:true>
+    </user:is-authorized>
+    
+    <user:is-authorized>
+      <user:username><xsp:expr><session:get-attribute
+	    name="credential_0"/></xsp:expr></user:username>
+      <user:true>
+	<html:h3>Change password</html:h3>	
+	<control element="input" type="password" name="newpasswd1">
+	  <title>New password</title>
+	</control>
+
+	<control element="input" type="password" name="newpasswd2">
+	  <title>Repeat New password</title>
+	</control>
+
+
+      </user:true>
+    </user:is-authorized>
+
+
+    
+    <control element="select" name="authlevel">
+      <title>Change authlevel</title>
+      <value>
+	<user:valid-authlevels>      
+	  <user:username><xsp:expr><session:get-attribute
+		name="username"/></xsp:expr></user:username>
+	</user:valid-authlevels>
+      </value>
+    </control>
+
+
+    <user:is-authorized authlevel="4">
+      <user:username><xsp:expr><session:get-attribute
+	  name="credential_0"/></xsp:expr></user:username>
+      <user:true>
+	<control element="input" type="submit" name="submitted"> 
+	  <value>Update</value>
+	</control>
+      </user:true>
+    </user:is-authorized>
+
+
+
+  </user>
+</xsp:page>

@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.02
+AxKit/App/TABOO version 0.03
 ============================
 
 INTRODUCTION
@@ -43,13 +43,14 @@ For the stuff that goes into the database, OTOH, XSP is used, and
 several taglibs are used. 
 
 Uhm, well, that's not really true yet. This is a early release, but
-nearing alpha in that it does some useful things. It consists mainly
+sort of an alpha in that it does some useful things. It consists mainly
 of a News provider that constructs objects, instruct them to load
 their data based on the URI, get them to write their own XML, and pass
-this raw to the browser. There are also several XSP taglibs, and I
-have written some XSP pages and XSL Transformations that's not
-included in the system, but that can be found at the project home
-page: http://www.kjetil.kjernsmo.net/software/TABOO/
+this raw to the browser. There are also several XSP taglibs, and some
+some XSP pages and XSL Transformations are now included in the
+distribution. These are very much work-in-progress, and I don't feel I
+have quite gotten the hang of XSLT yet, but it is being worked on. Try
+them out if you understand what they're supposed to do. 
 
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a
@@ -71,13 +72,14 @@ DEPENDENCIES
 This module requires these other modules and libraries:
 - DBI
 - DBD::Pg. Version 1.31 has known problems due to that 
-  SQL3 Arrays are being used.
+  SQL3 Arrays are being used. 1.32_1 is currently on CPAN. 
 - Time::Piece
 - Class::Data::Inheritable
 - Apache::AxKit::Plugin::BasicSession
 - Data::Dumper lists out debugging information, but can be removed. 
 - and to use the XSP pages, you should have AxKit::XSP::QueryParam,
-AxKit::XSP::BasicAuth and AxKit::XSP::BasicSession.
+AxKit::XSP::BasicAuth and AxKit::XSP::BasicSession, the first is
+currently required.
 
 COPYRIGHT AND LICENCE
 

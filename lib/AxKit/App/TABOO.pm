@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.021';
+our $VERSION = '0.03';
 
 
 # Preloaded methods go here.
@@ -99,14 +99,17 @@ easy-to-understand ways, you can load just the story, view the
 comments, separately, in a list or as a thread. 
 
 Currently, it supplies three Taglibs, L<User|AxKit::App::TABOO::XSP::User>,
-L<Story|AxKit::App::TABOO::XSP::Story> and L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide several tags that you may use interface with the Data objects. Currently, they are mainly used to write data to the storage. Some XSP and XSLT is written as a prototype to do that.
+L<Story|AxKit::App::TABOO::XSP::Story> and L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide several tags that you may use interface with the Data objects. Currently, they are mainly used to write data to the storage. 
+
+Some XSP and XSLT is written as a prototype to do that, and they are as of 0.03 included in the distribution, but I'm not confident in writing XSLT yet, and this is worked on every day, but please try them out.
 
 
 =head1 TODO
 
 A lot. Because this is a POD, I'm stopping with my lofty visions here
-(there's more of that in the README). It is still in sort of a near-alpha state, but Real Soon Now it should be a beta useful
-enough to put on a test website and have random folks playing with.
+(there's more of that in the README). It is still in sort of an alpha
+state, but Real Soon Now it should be a beta useful enough to put on a
+test website and have random folks playing with.
 
 
 Allthough it is not included in the present distro, I have also mostly
@@ -123,7 +126,7 @@ feedback hackers provide.
 
 =head1 BUGS
 
-There are surely some... Please report any you find through L<CPAN RT|http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO>.
+There are surely some... Please report any you find through CPAN RT: http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO .
 
 =head1 AUTHOR
 

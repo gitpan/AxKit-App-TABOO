@@ -13,7 +13,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -282,6 +282,23 @@ EOC
 
 sub is_authorized___false {
   return '}'
+}
+
+=head2 C<<valid-authlevels/>>
+
+This returns simply a list of the authorization levels that the present user can legitimitely set. This is an ugly and temporary solution, I think it should be worked out elsewhere than the taglib, but I couldn't find a way to do it....
+
+=cut
+
+#'
+
+sub valid_authlevels : nodelist({http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output}level) attribOrChild(username) {
+    return << 'EOC';
+# my @levels = ("Guest", "New member", "Member", "Oldtimer", "Assistant", "Editor", "Administrator", "Director", "Guru", "God"); 
+my $authlevel = $Apache::AxKit::Plugin::BasicSession::session{authlevel};
+my $maxlevel = ($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0}) ? $authlevel : ($authlevel - 2);
+(0 .. $maxlevel);    
+EOC
 }
 
 
