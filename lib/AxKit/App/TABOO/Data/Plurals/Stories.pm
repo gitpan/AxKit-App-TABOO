@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.081';
+our $VERSION = '0.091';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -82,16 +82,14 @@ If there is no data that corresponds to the given arguments, this method will re
 
 sub load {
   my ($self, %args) = @_;
-  my @stories;
   my $data = $self->_load(%args); # Does the hard work
   return undef unless (@{$data});
   foreach my $entry (@{$data}) {
     my $story = AxKit::App::TABOO::Data::Story->new($self->dbconnectargs());
     $story->populate($entry);
     $story->onfile;
-    push(@stories, $story);
+    $self->Push($story);
   }
-  ${$self}{ENTRIES} = \@stories;
   return $self;
 }
 

@@ -33,6 +33,7 @@ lib/AxKit/App/TABOO/Data/Category.pm
 lib/AxKit/App/TABOO/Data/Comment.pm
 lib/AxKit/App/TABOO/Data/Plurals.pm
 lib/AxKit/App/TABOO/Data/Plurals/Categories.pm
+lib/AxKit/App/TABOO/Data/Plurals/Comments.pm
 lib/AxKit/App/TABOO/Data/Plurals/Stories.pm
 lib/AxKit/App/TABOO/Data/Story.pm
 lib/AxKit/App/TABOO/Data/User.pm

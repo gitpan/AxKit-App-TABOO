@@ -15,7 +15,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.081';
+our $VERSION = '0.091';
 
 
 =head1 NAME
@@ -24,16 +24,19 @@ AxKit::App::TABOO::Data::Plurals - Base class to handle multiple Data objects in
 
 =head1 DESCRIPTION
 
-Sometimes, it is desireable to retrieve and handle multiple instances of a data object, and most economic to do it in a single operation. That is what the Plural data objects are for. The load methods should generally retrieve all records as efficiently as they can, and then return an array of their singular counterparts.
-
-This is a conceptual advancement in TABOO, and the main new thing in the 0.05 release.
+Sometimes, it is desireable to retrieve and handle multiple instances
+of a data object, and most economic to do it in a single
+operation. That is what the Plural data objects are for. The load
+methods should generally retrieve all records as efficiently as they
+can, and then return an array of their singular counterparts.
 
 =head1 METHODS
 
-It implements a single new method, with a name that should ring bells
-for everyone. It also reimplements some methods, but nothing you
-really need to be aware of. If you want to raise your awareness
-anyway, the documentation of them is for you:
+It implements some new methods, with names that should ring bells for
+everyone. It also reimplements some methods, but nothing you really
+need to be aware of, unless you want to implement a C<load> method for
+a subclass. If you want to raise your awareness anyway, the
+documentation of them is for you:
 
 =over
 
@@ -41,7 +44,9 @@ anyway, the documentation of them is for you:
 
 =item C<Push($singular)>
 
-This does pretty much what C<push> does in a normal context, it adds a singular version C<$singular> of a object to the plural object that the method is used on. 
+This does pretty much what C<push> does in a normal context, it adds a
+singular version C<$singular> of a object to the plural object that
+the method is used on.
 
 =cut
 
@@ -90,12 +95,17 @@ As the underscore implies this is B<for internal use only>! It can do
 the hard work for subclasses of this class. It uses named parameters,
 the first C<what> is used to determine which fields to retrieve. It is
 a string consisting of a commaseparated list of fields, as specified
-in the data store. The C<limit> argument is to be used to determine
-which records to retrieve, these will be combined by logical AND. You
-may also supply a C<orderby> argument, which is an expression used to
-determine the order of entries returned. Usually, it would be a simple
-string with the field name to use, e.g. C<'timestamp'>, but you might
-want to append the keyword "C<DESC>" to it for descending
+in the data store. If not given, all fields will be fetched. The
+C<limit> argument is to be used to determine which records to
+retrieve, these will be combined by logical AND. By default, exact
+matches of the C<limit> arguments will be used, but you may also
+supply a C<regex> argument with an array containing the fields that
+should be fetched using case sensitive POSIX regular expressions.
+
+You may also supply a C<orderby> argument, which is an expression used
+to determine the order of entries returned. Usually, it would be a
+simple string with the field name to use, e.g. C<'timestamp'>, but you
+might want to append the keyword "C<DESC>" to it for descending
 order. Finally, you may supply a C<entries> argument, which is the
 maximum number of entries to retrieve.  It will return an arrayref
 containing the data from the storage.
@@ -104,7 +114,7 @@ containing the data from the storage.
 
 sub _load {
   my ($self, %args) = @_;
-  my $what = $args{'what'};
+  my $what = $args{'what'} || '*';
   my %arg =  %{$args{'limit'}};
   my $orderby = $args{'orderby'};
   my $entries = $args{'entries'};
@@ -116,7 +126,12 @@ sub _load {
   my $i=1;
   my @keys = keys(%arg);
   foreach my $key (@keys) {
-    $query .= $key . "=?";
+    $query .= $key;
+    if (grep($key, @{$args{'regex'}})) {
+      $query .= "~?";
+    } else {
+      $query .= "=?";
+    }
     if ($i <= $#keys) {
       $query .= " AND ";
     }

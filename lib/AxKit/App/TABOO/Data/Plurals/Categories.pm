@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.081';
+our $VERSION = '0.091';
 
 AxKit::App::TABOO::Data::Plurals::Categories->dbtable("categories");
 AxKit::App::TABOO::Data::Plurals::Categories->dbfrom("categories");
@@ -81,16 +81,14 @@ method will return C<undef>.
 
 sub load {
   my ($self, %args) = @_;
-  my @cats;
   my $data = $self->_load(%args); # Does the hard work
   return undef unless (@{$data});
   foreach my $entry (@{$data}) {
     my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
     $cat->populate($entry);
     $cat->onfile;
-    push(@cats, $cat);
+    $self->Push($cat);
   }
-  ${$self}{ENTRIES} = \@cats;
   return $self;
 }
 

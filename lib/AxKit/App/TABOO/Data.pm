@@ -11,7 +11,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.09';
+our $VERSION = '0.091';
 
 
 use DBI;
@@ -29,18 +29,37 @@ AxKit::App::TABOO::Data - Base class of abstracted Data objects for TABOO
 
 =head1 DESCRIPTION
 
-You would rarely if ever use this class directly. Instead, you would call a subclass of this class, depending on what kind of data you are operating on. This class does, however, define some very useful methods that its subclasses can use unaltered.
+You would rarely if ever use this class directly. Instead, you would
+call a subclass of this class, depending on what kind of data you are
+operating on. This class does, however, define some very useful
+methods that its subclasses can use unaltered.
 
-It is to be noted that I have not, neither in this class nor in the subclasses, created methods to access or set every field. Instead, I rely mainly on methods that will manipulate internal data based on the for example objects that are passed as arguments. For example, the C<write_xml>-method (below), will create XML based on all the available data in the object. This is usually all you want anyway. 
+It is to be noted that I have not, neither in this class nor in the
+subclasses, created methods to access or set every field. Instead, I
+rely mainly on methods that will manipulate internal data based on the
+for example objects that are passed as arguments. For example, the
+C<write_xml>-method (below), will create XML based on all the
+available data in the object. This is usually all you want anyway.
 
-In some subclasses, you will have some degree of control of what is loaded into the object data structure in the first place, by sending the names of the fields of the storage medium (e.g. database in the present implementation).
+In some subclasses, you will have some degree of control of what is
+loaded into the object data structure in the first place, by sending
+the names of the fields of the storage medium (e.g. database in the
+present implementation).
 
-Similarly, if data is sent from a web application, the present implementation makes it possible to pass an L<Apache::Request> object to a Data object, and it is up to a method of the Data object to take what it wants from the Apache::Request object, and intelligently store it. 
+Similarly, if data is sent from a web application, the present
+implementation makes it possible to pass an L<Apache::Request> object
+to a Data object, and it is up to a method of the Data object to take
+what it wants from the Apache::Request object, and intelligently store
+it.
 
-Some methods to access data will be implemented on an ad hoc basis, notably C<timestamp()>-methods, that will be important in determining the validity of cached data. 
+Some methods to access data will be implemented on an ad hoc basis,
+notably C<timestamp()>-methods, that will be important in determining
+the validity of cached data.
 
-As of 0.05_1, there are also "Plural" subclasses. Sometimes you might want to retrieve more than one object from the data store, and do stuff on these objects as a whole. Furthermore, the load methods used to retrieve multiple objects may be optimized. This a conceptual change, and it'll take some time before it is being used in all parts of TABOO. 
-
+Sometimes you might want to retrieve more than one object from the
+data store, and do stuff on these objects as a whole.  Furthermore,
+the load methods used to retrieve multiple objects may be optimized.
+For this, TABOO also has Plural classes.
 
 
 =head2 Methods
@@ -74,14 +93,15 @@ sub new {
 Will load and populate the data structure of an object with the data
 from a data store. It uses named parameters, the first C<what> is used
 to determine which fields to retrieve. It is a string consisting of a
-commaseparated list of fields, as specified in the data store. The
-C<limit> argument is to be used to determine which records to
-retrieve, and must be used to identify a record uniquely. It is itself
-a reference to a hash, containing data store field values as keys and
-values are corresponding values to retrieve. These will be combined by
-logical AND.
+commaseparated list of fields, as specified in the data store. If not
+given, all fields will be fetched. The C<limit> argument is to be used
+to determine which records to retrieve, and must be used to identify a
+record uniquely. It is itself a reference to a hash, containing data
+store field values as keys and values are corresponding values to
+retrieve. These will be combined by logical AND.
 
-If there is no data that corresponds to the given arguments, this method will return C<undef>.
+If there is no data that corresponds to the given arguments, this
+method will return C<undef>.
 
 =cut
 
@@ -103,16 +123,18 @@ sub load {
 =item C<_load(what => fields, limit => {key => value, [...]})>
 
 As the underscore implies this is B<for internal use only>! It is
-intended to do the hard work for this class and its subclasses. It returns a hashref of the data from the datastore.
+intended to do the hard work for this class and its subclasses. It
+returns a hashref of the data from the datastore.
 
 
-See the documentation for the C<load> method for the details on the parameters.
+See the documentation for the C<load> method for the details on the
+parameters.
 
 =cut
 
 sub _load {
     my ($self, %args) = @_;
-    my $what = $args{'what'};
+    my $what = $args{'what'} || '*';
     my %arg =  %{$args{'limit'}};
     my $dbh = DBI->connect($self->dbconnectargs());
     # The subclass should give the dbfrom.
@@ -225,11 +247,21 @@ sub write_xml {
 
 =item C<populate(\%args)>
 
-This method takes as argument a reference to a hash and will populate the data object by adding any data from a key having the same name as is used in the data storage. Fields that are not specified by the data object or that has uppercase letters are ignored. 
+This method takes as argument a reference to a hash and will populate
+the data object by adding any data from a key having the same name as
+is used in the data storage. Fields that are not specified by the data
+object or that has uppercase letters are ignored.
 
-It may be used to insert data from an L<Apache::Request> object by first noting that in a HTTP request, the Request object is available as C<$r>, so you may create the hash to hand to this method by 
+It may be used to insert data from a request by first noting that in a
+HTTP request, the Request object is available as C<$r>, so you may
+create the hash to hand to this method by
 
     my %args = $r->args;
+
+Note that this only the case for HTTP GET, in the case of POST, you
+may have to construct the hash by e.g.
+
+    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
 
 =cut
 

@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.09';
+our $VERSION = '0.091';
 
 
 1;
@@ -31,7 +31,7 @@ I don't know what the T stands for yet, suggestions are welcome!
 
 There are three main ideas that forms the basis for TABOO:
 
-=over 
+=over
 
 =item 1. The data should be abstracted to objects so that the AxKit
 things never have to deal with where and how the data are stored. 
@@ -85,7 +85,7 @@ subclasses of it, some of which is again subclassed. There are too
 many to list.  They provide an abstraction layer that can manage the
 data for each of the types. They can load data from a data storage,
 currently a PostgreSQL data base, and they can write their data as
-XML, and write it back to the database. There are now also Plural
+XML, and write it back to the database. There are also Plural
 subclasses, built on the L<AxKit::App::TABOO::Data::Plurals> base
 class. These classes makes it easier to work on more than one of the
 above objects at a time, something that's often necessary. It also
@@ -119,8 +119,8 @@ It can also format user-entered text with L<Formatter::HTML::Textile>.
 
 It also has some code for i18n, consisting of stylesheets that can
 take all strings of text from a separate XML file and insert them in
-the final product. This will make it easy to provide many translations
-with TABOO, but it needs elaboration, which is next on the TODO list.
+the final product. This makes it easy to provide many translations
+with TABOO, allthough a real multilingual site is not yet supported.
 
 =head1 CONFIGURATION EXAMPLE
 
@@ -276,8 +276,6 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   # extend their session, eg:
   PerlSetVar TABOODemoCookieExpires +14d
 
-  
-
   # /////////////////////////////
 
 
@@ -295,6 +293,9 @@ A lot. Because this is a POD, I'm stopping with my lofty visions here
 state, but Real Soon Now it should be a beta useful enough to put on a
 test website and have random folks playing with.
 
+Retrieving comments from the data store now works again, but
+stylesheets are needed to transform it, and code to enter comments
+have yet to be written.
 
 Allthough it is not included in the present distro, I have also mostly
 finished an Article Provider, which is intended to be used for more
@@ -322,15 +323,6 @@ http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
 =head1 BUGS
 
-This release is the first to offer virtual host capacity. It has not
-been very extensively tested, but in the tests I have done, it works
-well.
-
-In this release L<AxKit::App::TABOO::Data::Comment> doesn't work. It
-needs to be reworked to support the new Plurals concept, but that's
-not at the top of my list for the moment.
-
-
 There are surely some... Please report any you find through CPAN RT:
 http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO .
 
@@ -344,7 +336,7 @@ L<AxKit>, L<AxKit::App::TABOO::Data>, L<AxKit::App::TABOO::Provider::News>.
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003-2004 Kjetil Kjernsmo. Some rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself. 
+Copyright (c) 2003-2004 Kjetil Kjernsmo. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself. 
 
 
 =cut

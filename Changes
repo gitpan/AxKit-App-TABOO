@@ -1,5 +1,19 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.091   2004-10-30 05:40
+	- In changed lines, this release is actually pretty big, if
+	  there isn't a lot of very visible changes.
+	- Redoing the Comments stuff with Plurals. 
+	  * There are thus large changes in the Data::Comment
+	    class. Everything changed, pretty much... 
+	  * A brand new Data::Plural::Comments class.
+	  * News Provider now supports the new Comments Plurals.
+	- Plurals' _load can now take POSIX regexs to select records
+	  from the db, and a regex argument.
+	- load's what argument defaults to '*' and may be omitted.
+	- Some cleanups to actually use the fine Plural Push-method.
+	- Reviewing some documentation.
+
 0.09    2004-10-15 05:40
 	- Changed the DOCTYPE of HTML output. We should have valid
 	  HTML 4.01 Strict now. 
