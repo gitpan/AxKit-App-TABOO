@@ -47,37 +47,40 @@
       </head>
       <body>      
 	<xsl:call-template name="CreateHeader"/>
-	<div id="container">	
-	  <div id="breadcrumb">
-	    <xsl:call-template name="BreadcrumbTop"/>
-	    <xsl:call-template name="BreadcrumbNews"/>
-	    <xsl:if test="str:ends-with($request.uri, '/edit')">
-	      <!-- TODO: This won't work if one previews -->
-	      <xsl:text> &gt; </xsl:text>
-	      <a>
-		<xsl:attribute name="href">
-		  <xsl:text>/news/</xsl:text>
-		  <xsl:value-of select="/cust:submit/cat:categories/cat:category/cat:catname"/>
-		</xsl:attribute>
-		<xsl:value-of select="/cust:submit/cat:categories/cat:category/cat:name"/>
-	      </a>
-	      <xsl:text> &gt; </xsl:text>
-	      <!-- link to article without any comments -->
-	      <a rel="up" href="{substring-before($request.uri, 'edit')}">
-		<xsl:value-of select="i18n:include('article-no-comments')"/>
-	      </a>
-	    </xsl:if>
+	<div id="breadcrumb">
+	  <xsl:call-template name="BreadcrumbTop"/>
+	  <xsl:call-template name="BreadcrumbNews"/>
+	  <xsl:if test="str:ends-with($request.uri, '/edit')">
+	    <!-- TODO: This won't work if one previews -->
 	    <xsl:text> &gt; </xsl:text>
-	  </div>
+	    <a>
+	      <xsl:attribute name="href">
+		<xsl:text>/news/</xsl:text>
+		<xsl:value-of select="/cust:submit/cat:categories/cat:category/cat:catname"/>
+	      </xsl:attribute>
+	      <xsl:value-of select="/cust:submit/cat:categories/cat:category/cat:name"/>
+	    </a>
+	    <xsl:text> &gt; </xsl:text>
+	    <!-- link to article without any comments -->
+	    <a rel="up" href="{substring-before($request.uri, 'edit')}">
+	      <xsl:value-of select="i18n:include('article-no-comments')"/>
+	    </a>
+	  </xsl:if>
+	  <xsl:text> &gt; </xsl:text>
+	</div>
+	<div id="container">	
+	  
 	  <h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>
 	  
 	  <xsl:variable name="uri" select="concat('http://',
-	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+					   $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
 	  
 	  <div class="main">
 	    
-	    <xsl:apply-templates select="./story:story-submission/story:story"/>
+	    <div id="the-story">
+	      <xsl:apply-templates select="./story:story-submission/story:story"/>
+	    </div>  
 	    
 	    <xsl:choose>
 	      <xsl:when test="//story:store=1">

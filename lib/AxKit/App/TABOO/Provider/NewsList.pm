@@ -10,7 +10,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.082';
+our $VERSION = '0.1';
 
 =head1 NAME
 
@@ -314,7 +314,9 @@ want to view this and then select what they want to read more about.
 
 =head1 TODO
 
-Since every resource comes with a C<lasttimestamp>, it should be relatively simple to implement C<mtime> better than it is now, but the question is if all code updates C<lasttimestamp> reliably enough...
+Since every resource comes with a C<lasttimestamp>, it should be
+relatively simple to implement C<mtime> better than it is now, but the
+question is if all code updates C<lasttimestamp> reliably enough...
 
 The C<get_styles> method is implemented, but just to "make it work
 right now". It needs to take many conditions into account, such as the
@@ -323,8 +325,6 @@ going into a parent class.
 
 
 =head1 BUGS/QUIRKS
-
-Well, it is an alpha, so there can be bugs...
 
 It is non-trivial is to configure both the News and NewsList providers
 to work and at the same time having the submit.xsp in the same

@@ -7,7 +7,7 @@
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   extension-element-prefixes="i18n"
-  exclude-result-prefixes="menu ct i18n user"> 
+  exclude-result-prefixes="menu ct cat i18n user"> 
 
   
   <xsl:import href="/transforms/xhtml/match-control.xsl"/>

@@ -18,7 +18,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.095';
+our $VERSION = '0.1';
 
 
 =head1 NAME
@@ -384,12 +384,12 @@ that are
 
 =head1 BUGS/TODO
 
-Besides that it is in alpha, there is a quirk in the load method. I
-use SQL3 arrays in the underlying database, but the database driver
-doesn't support this. So, there is a very hackish ad hoc
-implementation to parse the arrays in that method. It is in fact the
-only reason why this class reimplements the load method. It works
-partly for reading, but just with L<DBD::Pg> greater than 1.32.
+There is a quirk in the load method. I use SQL3 arrays in the
+underlying database, but the database driver doesn't support this. So,
+there is a very hackish ad hoc implementation to parse the arrays in
+that method. It is in fact the only reason why this class reimplements
+the load method. It works partly for reading, but just with L<DBD::Pg>
+greater than 1.32.
 
 =head1 FORMALITIES
 

@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.096';
+our $VERSION = '0.1';
 
 =head1 NAME
 
@@ -452,7 +452,7 @@ but this is a problem that needs to be corrected in AxKit first.
 
 =head1 BUGS
 
-Well, it is an alpha, so there can be bugs...
+Well, it is a beta, so there can be bugs...
 
 =head1 SEE ALSO
 

@@ -10,7 +10,7 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
-  exclude-result-prefixes="user comm story rdf wn dc i18n texts"> 
+  exclude-result-prefixes="user comm story cat rdf wn dc i18n texts"> 
 
   <xsl:import href="match-story.xsl"/>
   <xsl:import href="match-comment.xsl"/>
@@ -131,7 +131,9 @@
 	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
 	  <div class="main">
-	    <xsl:apply-templates select="/taboo/story:story"/>
+	    <div id="the-story">
+	      <xsl:apply-templates select="/taboo/story:story"/>
+	    </div>
 	    <xsl:if test="not(@commentstatus = 'singlecomment' or @commentstatus = 'threadonly')">
 	      <div class="reply-link">
 		<a>

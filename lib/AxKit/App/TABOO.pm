@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.099';
+our $VERSION = '0.1';
 
 
 1;
@@ -116,7 +116,10 @@ Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
 editing the information of existing users.
 
-It allows attaching comments to the news stories and any comment can simply get a C</respond> appended on its URI to allow for entering a response to it, and this is also easily done through links. It needs a bit more polish, though.
+It allows attaching comments to the news stories and any comment can
+simply get a C</respond> appended on its URI to allow for entering a
+response to it, and this is also easily done through links. It needs a
+bit more polish, though.
 
 It can also format user-entered text with L<Formatter::HTML::Textile>.
 
@@ -302,15 +305,18 @@ feel good, but it was the way I it working...
 =head1 TODO
 
 A lot. Because this is a POD, I'm stopping with my lofty visions here
-(there's more of that in the README). It is still in sort of an alpha
-state, but Real Soon Now it should be a beta useful enough to put on a
-test website and have random folks playing with.
+(there's more of that in the README). This is the first beta of TABOO,
+and it seems to do what it is intended to, namely be a site where
+multiple users can post news stories, and comment them. That's
+something that has been done before, of course, but not within the
+design goals stated above.
 
-Allthough it is not included in the present distro, I have also mostly
-finished an Article Provider, which is intended to be used for more
-static content. However, most attention will be given to the News
-part, because that is the first thing that will give people something
-to play with.
+
+Allthough it is not included in the present distro, I have also come
+quite a long way with code to work on more static articles. The News
+was given attention to first part, because it was the first thing that
+gave people something to play with, but most of the attention will be
+on the static articles from now on.
 
 Finally note that things that are there are B<not stable>! Names may
 change, parameters may be different, and I may decide to do things
@@ -345,7 +351,9 @@ L<AxKit>, L<AxKit::App::TABOO::Data>, L<AxKit::App::TABOO::Provider::News>.
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003-2004 Kjetil Kjernsmo. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself. 
+Copyright (c) 2003-2005 Kjetil Kjernsmo. This program is free
+software; you can redistribute it and/or modify it under the same
+terms as Perl itself.
 
 
 =cut

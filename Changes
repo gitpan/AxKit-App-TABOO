@@ -1,5 +1,21 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+
+0.1     2005-02-05 23:58
+	- THE BETA!!!
+		* So, this pretty much does the News stuff!
+		* And it has seen some testing, so I think it can be,
+		  like, used... :-)
+        - Mainly changes in the CSS, it has a design. J. Shirley did
+	  the lion's share of this work, but I did quite some at the
+	  end.
+	- Updated to use the Formatter API v 0.93.
+	- A hidden control should not have more markup added, fixed 
+	  in match-control.xsl
+	- Some new divs in the HTML to assist the CSS.
+	- Quite some documentation clean-ups.
+
+
 0.099   2004-12-27 14:40
 	- The start of Cascading Stylesheets by J. Shirley. They work
 	  mostly for the front page.

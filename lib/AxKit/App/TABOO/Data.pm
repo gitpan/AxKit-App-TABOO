@@ -11,7 +11,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.095';
+our $VERSION = '0.1';
 
 
 use DBI;
@@ -212,9 +212,9 @@ sub write_xml {
 	  if ($self->elementneedsparse() =~ m/\b$key\b/) {
 	    # Here, we need to format the text coming in, and then
 	    # parse it do add it
-	    my $formatter = Formatter::HTML::Textile->new();
+	    my $formatter = Formatter::HTML::Textile->format($content);
 	    $formatter->charset('utf-8');
-	    my $html = $formatter->format($content);
+	    my $html = $formatter->fragment;
 	    if ($html) {
 	      my $parser = XML::LibXML->new();
 	      my $parsed = $parser->parse_balanced_chunk($html);
@@ -550,10 +550,9 @@ of the stored data.
 
 =head1 BUGS/TODO
 
-Except for still being in alpha, and should have a few bugs, there is
-the issue with the handling of references to other objects in the
-C<save()> method. It's possible it will cope, but it definately needs
-work.
+There is the issue with the handling of references to other objects in
+the C<save()> method. I think it may actually cope in most cases, but
+it definately could use some more attention.
 
 
 =head1 FORMALITIES

@@ -54,8 +54,10 @@
 	  <xsl:copy-of select="document($uri)"/>
 	  
 	  <div class="main">
-	    <xsl:apply-templates select="./*/user:user"/>
-	    
+	    <div id="user-info">
+	      <xsl:apply-templates select="./*/user:user"/>
+	    </div>
+
 	    <form method="post" action="/user/submit/">
 	      <div class="fields">
 		<xsl:apply-templates select="./ct:control"/>

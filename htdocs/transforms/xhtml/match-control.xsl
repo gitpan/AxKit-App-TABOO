@@ -18,95 +18,111 @@
   <xsl:import href="../../transforms/insert-i18n.xsl"/>
 
   <xsl:template match="ct:control">
-    <div class="control">
-      <label for="{@name}">
-	<xsl:apply-templates select="./ct:title/node()"/>
-      </label>
-      
-      <xsl:if test="./ct:descr">
-	<p class="description">
-	  <xsl:apply-templates select="./ct:descr/node()"/>
-	</p>
-      </xsl:if>
-
-      <xsl:choose>
-	<xsl:when test="@element='input'">
+    <xsl:choose>
+      <xsl:when test="@type='hidden'">
+	<xsl:choose>
+	  <xsl:when test="./ct:value/i18n:insert">
+	    <input name="{@name}" id="{@name}" type="{@type}" 
+		   value="{i18n:include(./ct:value/i18n:insert)}"/>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <input name="{@name}" id="{@name}" type="{@type}" 
+		   value="{./ct:value}"/>
+	  </xsl:otherwise>
+	</xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+	<div class="control">
+	  <label for="{@name}">
+	    <xsl:apply-templates select="./ct:title/node()"/>
+	  </label>
+	  
+	  <xsl:if test="./ct:descr">
+	    <p class="description">
+	      <xsl:apply-templates select="./ct:descr/node()"/>
+	    </p>
+	  </xsl:if>
+	  
 	  <xsl:choose>
-	    <xsl:when test="@type='checkbox'">
-	      <input name="{@name}" id="{@name}" type="checkbox"
-		value="1"> 
-		<xsl:if test="./ct:value='1'">
-		  <xsl:attribute name="checked">checked</xsl:attribute>
-		</xsl:if>
-	      </input>
-	    </xsl:when>
-	    <xsl:otherwise>
+	    <xsl:when test="@element='input'">
 	      <xsl:choose>
-		<xsl:when test="./ct:value/i18n:insert">
-		  <input name="{@name}" id="{@name}" type="{@type}" 
-		    value="{i18n:include(./ct:value/i18n:insert)}">
-		    <xsl:if test="@size">
-		      <xsl:attribute name="size">
-			<xsl:value-of select="@size"/>
-		      </xsl:attribute>
-		    </xsl:if>
-		    <xsl:if test="@maxlength">
-		      <xsl:attribute name="maxlength">
-			<xsl:value-of select="@maxlength"/>
-		      </xsl:attribute>
+		<xsl:when test="@type='checkbox'">
+		  <input name="{@name}" id="{@name}" type="checkbox"
+			 value="1"> 
+		    <xsl:if test="./ct:value='1'">
+		      <xsl:attribute name="checked">checked</xsl:attribute>
 		    </xsl:if>
 		  </input>
 		</xsl:when>
 		<xsl:otherwise>
-		  <input name="{@name}" id="{@name}" type="{@type}" 
-		    value="{./ct:value}">
-		    <xsl:if test="@size">
-		      <xsl:attribute name="size">
-			<xsl:value-of select="@size"/>
-		      </xsl:attribute>
-		    </xsl:if>
-		    <xsl:if test="@maxlength">
-		      <xsl:attribute name="maxlength">
-			<xsl:value-of select="@maxlength"/>
-		      </xsl:attribute>
-		    </xsl:if>
-		  </input>
+		  <xsl:choose>
+		    <xsl:when test="./ct:value/i18n:insert">
+		      <input name="{@name}" id="{@name}" type="{@type}" 
+			     value="{i18n:include(./ct:value/i18n:insert)}">
+			<xsl:if test="@size">
+			  <xsl:attribute name="size">
+			    <xsl:value-of select="@size"/>
+			  </xsl:attribute>
+			</xsl:if>
+			<xsl:if test="@maxlength">
+			  <xsl:attribute name="maxlength">
+			    <xsl:value-of select="@maxlength"/>
+			  </xsl:attribute>
+			</xsl:if>
+		      </input>
+		    </xsl:when>
+		    <xsl:otherwise>
+		      <input name="{@name}" id="{@name}" type="{@type}" 
+			     value="{./ct:value}">
+			<xsl:if test="@size">
+			  <xsl:attribute name="size">
+			    <xsl:value-of select="@size"/>
+			  </xsl:attribute>
+			</xsl:if>
+			<xsl:if test="@maxlength">
+			  <xsl:attribute name="maxlength">
+			    <xsl:value-of select="@maxlength"/>
+			  </xsl:attribute>
+			</xsl:if>
+		      </input>
+		    </xsl:otherwise>
+		  </xsl:choose>
 		</xsl:otherwise>
 	      </xsl:choose>
-	    </xsl:otherwise>
-	  </xsl:choose>
-	</xsl:when>
-	<xsl:when test="@element='textarea'">
-	  <textarea name="{@name}" id="{@name}"
-	    rows="{@rows}" cols="{@cols}">
-	    <xsl:apply-templates select="./ct:value/node()"/>
-	  </textarea>
-	</xsl:when>
-	<xsl:when test="@element='select'">
-	  <select name="{./@name}" id="{./@name}">
-	    <xsl:if test="../@type='multiple'">
-	      <xsl:attribute name="multiple">multiple</xsl:attribute>
-	    </xsl:if>
-	    <xsl:for-each select="./ct:value/user:level">
-	      <option>
-		<!-- xsl:attribute name="value"><xsl:number
-		from="0"/></xsl:attribute -->
-		<!-- This has to mark as selected both in the case where we have
-		a single parameter found by param:get, but also where there are
-		multiple as found by param:enumerate -->
+	    </xsl:when>
+	    <xsl:when test="@element='textarea'">
+	      <textarea name="{@name}" id="{@name}"
+			rows="{@rows}" cols="{@cols}">
+		<xsl:apply-templates select="./ct:value/node()"/>
+	      </textarea>
+	    </xsl:when>
+	    <xsl:when test="@element='select'">
+	      <select name="{./@name}" id="{./@name}">
+		<xsl:if test="../@type='multiple'">
+		  <xsl:attribute name="multiple">multiple</xsl:attribute>
+		</xsl:if>
+		<xsl:for-each select="./ct:value/user:level">
+		  <option>
+		    <!-- xsl:attribute name="value"><xsl:number
+			 from="0"/></xsl:attribute -->
+		    <!-- This has to mark as selected both in the case where we have
+			 a single parameter found by param:get, but also where there are
+			 multiple as found by param:enumerate -->
 		<xsl:if test=".=//user:authlevel">
 		  <xsl:attribute name="selected">selected</xsl:attribute>
 		</xsl:if>
 		<xsl:value-of select="."/>
-	      </option>
-	    </xsl:for-each>     
-	  </select>
-	</xsl:when>
-	<xsl:otherwise>
-	  <xsl:apply-templates select="./cat:categories"/>
-	</xsl:otherwise>
-      </xsl:choose>
-    </div>
+		  </option>
+		</xsl:for-each>     
+	      </select>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:apply-templates select="./cat:categories"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</div>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   

@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.099
-=============================
+AxKit/App/TABOO version 0.1
+===========================
 
 This release has not been signed with my GPG key. This is due to that
 I had to move development to another system where my secret key is
@@ -48,29 +48,21 @@ in the code, that's also rather important to make it maintainable.
 For the stuff that goes into the database, OTOH, XSP is used, and
 several taglibs are used.
 
-J. Shirley has now provided some more cascading stylesheets. He has
-focused on the front page, so it works mostly for that, but should
-give a general idea. This will see more work soon.
+J. Shirley has now provided some more cascading stylesheets, and they
+have been extended by the main developer, so there is a style for
+pretty much everything now.
 
-This is a early release, an alpha in that it does some useful
-things. It is nearly a useable framework for posting news-stories. It
-consists mainly of News and NewsList providers that constructs
-objects, instruct them to load their data based on the URI, get them
-to write their own XML, and pass this to some XSLT stylesheets, which
-makes some presentable XHTML. There are also several XSP taglibs, and
-quite a lot of XSP pages and XSL Transformations are now included in
-the distribution. There is also some user-management code, including
-authentication and authorization, to allow adding new users and
-editing the information of existing users. 
 
-Plural objects is a conceptual step up which has recently been
-introduced to allow manipulation of more than one Data object. 
-
-TABOO can now also list News stories with the NewsList Provider, and
-there is a rudimentary front page, which is an aggregate of a
-newslist. The "comments" code has been rewritten and stylesheets has
-been begun, but needs more work, and posting comments is now
-supported, but it needs some polishing.
+This is a first beta release. It is pretty much a useable framework
+for posting news-stories. It consists mainly of News and NewsList
+providers that constructs objects, instruct them to load their data
+based on the URI, get them to write their own XML, and pass this to
+some XSLT stylesheets, which makes some presentable XHTML. There are
+also several XSP taglibs, and quite a lot of XSP pages and XSL
+Transformations are now included in the distribution. There is also
+some user-management code, including authentication and authorization,
+to allow adding new users and editing the information of existing
+users.
 
 TABOO can run on different virtual hosts and operate on different
 databases. 
@@ -80,10 +72,9 @@ simple syntax like Textile http://www.textism.com/tools/textile/ and
 convert that to HTML.
 
 I'm following the mantra "release early", and have made everything
-I've done available from the start? From 0.09, it has evolved into
-something I can put on a website and have random people come by and
-use, and soon, I'll call it a beta of some sort... I'll be thrilled if
-other hackers are willing to poke at TABOO allready at this point!
+I've done available from the start. Several fine folks have poked at
+it, and I love that, feel free to poke some more! 
+
 
 INSTALLATION
 
@@ -140,11 +131,13 @@ SUPPORT
 There is a list taboo-dev@kjernsmo.net you can subscribe to at 
 http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
-Beware that TABOO is in development, so it is not yet software
-that you just install and use. 
+Beware that TABOO is in development, so it is not yet software that
+you just install and use. For those who likes the design goals, and
+likes to continue development along these lines, I think they will
+find it so usable it is worth an install.
 
 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003-2004 Kjetil Kjernsmo. This program is free
+Copyright (c) 2003-2005 Kjetil Kjernsmo. This program is free
 software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
