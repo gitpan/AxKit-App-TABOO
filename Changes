@@ -1,5 +1,10 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.18_08 2005-03-07 02:30	
+	- This is another developer release! 
+	- To be thanked this time is tsw of #css for helping me sort
+	  out some stuff that made it look bad on IE.
+
 0.18_05 2005-02-17 14:10
 	- This is a developer release! _Developer_. Got it? :-)
 	- There are huge changes, I'm documenting it later. See the

@@ -19,9 +19,11 @@ htdocs/transforms/articles/insert-values-edit.xsl
 htdocs/transforms/articles/xhtml/article-provider.xsl
 htdocs/transforms/articles/xhtml/match-author.xsl
 htdocs/transforms/articles/xhtml/match-content.xsl
+htdocs/transforms/articles/xhtml/match-metadata.xsl
 htdocs/transforms/articles/xhtml/oo2html.xsl
 htdocs/transforms/articles/xhtml/oocommon.xsl
 htdocs/transforms/articles/xhtml/submit.xsl
+htdocs/transforms/categories/xhtml/class-provider.xsl
 htdocs/transforms/categories/xhtml/submit.xsl
 htdocs/transforms/ends-with.xsl
 htdocs/transforms/index-aggregate.xsl
@@ -55,6 +57,7 @@ lib/AxKit/App/TABOO/Data/Category.pm
 lib/AxKit/App/TABOO/Data/Comment.pm
 lib/AxKit/App/TABOO/Data/MediaType.pm
 lib/AxKit/App/TABOO/Data/Plurals.pm
+lib/AxKit/App/TABOO/Data/Plurals/Articles.pm
 lib/AxKit/App/TABOO/Data/Plurals/Categories.pm
 lib/AxKit/App/TABOO/Data/Plurals/Comments.pm
 lib/AxKit/App/TABOO/Data/Plurals/MediaTypes.pm

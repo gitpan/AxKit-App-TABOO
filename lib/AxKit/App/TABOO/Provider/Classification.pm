@@ -11,7 +11,7 @@ use Carp;
 # module.
 
 
-our $VERSION = '0.19';
+our $VERSION = '0.19_01';
 
 =head1 NAME
 
@@ -27,7 +27,7 @@ In the Apache config:
   </Location>
 
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This is a Provider, it implements the AxKit Provider API, and
 therefore contains no method that anybody should use for anything. For
@@ -89,6 +89,7 @@ use AxKit::App::TABOO::Data::Plurals::Stories;
 use AxKit::App::TABOO::Data::Category;
 use AxKit::App::TABOO::Data::Plurals::Categories;
 use AxKit::App::TABOO::Data::Article;
+use AxKit::App::TABOO::Data::Plurals::Articles;
 
 use Apache::AxKit::Plugin::BasicSession;
 
@@ -125,10 +126,13 @@ sub process {
       $self->{foundcats}->Push($category);
       $self->{exists} = 1;
     }
-    if ($self->{exists}) {
-      my $tmpart = AxKit::App::TABOO::Data::Article->new();
-      my $tmpstory = AxKit::App::TABOO::Data::Story->new();
-      unless (($tmpart->incat($catname)) || ($tmpstory->incat($catname))) {
+  }
+  if ($self->{exists}) {
+    $self->{articles} = AxKit::App::TABOO::Data::Plurals::Articles->new();
+    $self->{stories} = AxKit::App::TABOO::Data::Plurals::Stories->new();
+    unless ($self->{articles}->incat(@{$self->{cats}})) {
+      $self->{articles} = undef;
+      unless ($self->{stories}->incat(shift(@{$self->{cats}}))) { 
 	$self->{exists} = 0;
       }
     }
@@ -164,23 +168,92 @@ sub get_fh {
 	      -text => "No fh for Classification Provider");
 }
 
-sub get_strref {
+sub get_dom {
   my $self = shift;
-  unless ($self->{exists}) {
-    throw Apache::AxKit::Exception::Retval(
-					   return_code => 404,
-					   -text => "Category " . $self->{catnotfound} . " was not found");
-  }
-  my $doc = XML::LibXML::Document->new();
-  my $rootel = $doc->createElement('taboo');
-  $doc->setDocumentElement($rootel);
-  $self->{foundcats}->write_xml($doc, $rootel);
-  $self->{out} = $doc;
-  AxKit::Debug(10, Dumper($self->{out}->toString(1)));
+  unless ($self->{dom}) {
+    unless ($self->{exists}) {
+      throw Apache::AxKit::Exception::Retval(
+					     return_code => 404,
+					     -text => "Category " . $self->{catnotfound} . " was not found");
+    }
+    
+    if (scalar(@{$self->{cats}} == 1)) {
+      my %limit;
+      if (! defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})
+	  || ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4)) {
+	$limit{'editorok'} = 1;
+      } elsif ($self->{editor}) {
+	$limit{'editorok'} = 0;
+      }
+      $limit{'primcat'} = ${$self->{cats}}[0];
+      
+      $self->{stories}->load(what => 'storyname,sectionid,primcat,editorok,title,submitterid,timestamp',
+			     limit => \%limit, 
+			     orderby => 'timestamp DESC');
+      $self->{stories}->addcatinfo;
+      $self->{stories}->adduserinfo;
+    } else {
+      $self->{stories} = undef;
+    }
+    my $doc = XML::LibXML::Document->new();
+    my $rootel = $doc->createElement('taboo');
+    $rootel->setAttribute('type', 'catlists');
+    $rootel->setAttribute('origin', 'Classification');
+    $doc->setDocumentElement($rootel);
+    if ($self->{stories}) {
+      $self->{stories}->write_xml($doc, $rootel);
+    }
+    $self->{foundcats}->write_xml($doc, $rootel);
+    my $anyarticles = 0;
+    if($self->{articles}) {
+      my %limit;
+      if (! defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})
+	  || ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4)) {
+	$limit{'editorok'} = 1;
+	$limit{'authorok'} = 1;
+      }
+      if ($self->{articles}->load(limit => \%limit)) {
+	$anyarticles = 1;
+      }
+      $self->{articles}->addcatinfo;
+      $self->{articles}->adduserinfo;
+      $self->{articles}->addformatinfo;
+      $self->{articles}->write_xml($doc, $rootel);
+    }
+    unless (($anyarticles) || ($self->{stories})) {
+      if (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})) {
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => 403,
+					       -text => "Articles or stories exist, but are only accessible to editors.");
+      } else {
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => 401,
+					       -text => "Articles or stories exist, but are only accessible to editors, you have to log in as one.");
+      }
+    }
 
-  return \$self->{out}->toString(1);
+    $self->{dom} = $doc;
+  }
+  return $self->{dom};
 }
 
+sub get_strref {
+  my $self = shift;
+  return \ $self->get_dom->toString(1);
+}
+
+
+
+sub get_styles {
+  my $self = shift;
+  
+  my @styles = (
+		{ type => "text/xsl",
+		  href => "/transforms/categories/xhtml/class-provider.xsl" },
+	       );
+		
+  return \@styles;
+}
 
 
 

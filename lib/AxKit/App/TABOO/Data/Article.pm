@@ -21,7 +21,7 @@ use MIME::Types;
 use DBI;
 
 
-our $VERSION = '0.18_06';
+our $VERSION = '0.18_08';
 
 
 =head1 NAME
@@ -65,6 +65,7 @@ sub new {
 		primcat => undef,
 		seccat => [],
 		freesubject => [],
+		angles => [],
 		authorok => undef,
 		editorok => undef,
 		title => undef,
@@ -104,20 +105,47 @@ sub load
   my $data = $self->_load(%args);
   return undef unless ($data);
   ${$self}{'ONFILE'} = 1;
-  my @keys = grep(/[a-z]+/, keys(%{$self})); # all the lower-case keys
-  foreach my $key (@keys) {
-    if (defined(${$data}{$key}) && (${$data}{$key} =~ m/^\{(\S+)\}$/)) { # Support SQL3 arrays ad hoc
-      my @arr = split(/\,/, $1);
-      ${$self}{$key} = \@arr;
-    } else {
-      ${$self}{$key} = Encode::decode_utf8(${$data}{$key});
-    }
-  }
-  ${$self}{'lang'} = ${$data}{'code'};
-  ${$self}{'format'} = ${$data}{'mimetype'};
   my $dbh = DBI->connect($self->dbconnectargs());
   # TODO: check 'what'
   my $categories = $dbh->selectall_arrayref("SELECT categories.catname, articlecats.field FROM categories JOIN articlecats ON (categories.ID = Cat_ID) JOIN articles ON (articlecats.Article_ID=articles.ID) WHERE articlecats.Article_ID=?", {}, (${$data}{'id'}));
+
+  my $users = $dbh->selectcol_arrayref("SELECT users.username FROM users JOIN articleusers ON (users.ID = Users_ID) JOIN articles ON (articleusers.Article_ID=articles.ID) WHERE articleusers.Article_ID=? ORDER BY articleusers.Users_ID", {}, (${$data}{'id'}));
+
+  $self->populate($data,$categories,$users);
+  return $self;
+}
+
+=item C<populate($articles, $categories, $users)>
+
+This class reimplements the C<populate> method and gives it a new
+interface. C<$articles> must be a hashref where the keys correspond to
+that of the data store. C<categories> must be an arrayref where the
+elements contain another arrayref, where the first element is the
+C<catname>, i.e. identifier for the category, and the second is the
+field type, i.e. whether it is a primary category, free subject words,
+etc. C<$users> must contain an arrayref with the C<username>s of the
+authors.
+
+=cut
+
+
+
+sub populate {
+  my $self = shift;
+  my $articles = shift;
+  my $categories = shift;
+  my @keys = grep(/[a-z]+/, keys(%{$self})); # all the lower-case keys
+  foreach my $key (@keys) {
+    if (defined(${$articles}{$key}) && (${$articles}{$key} =~ m/^\{(\S+)\}$/)) { # Support SQL3 arrays ad hoc
+      my @arr = split(/\,/, $1);
+      ${$self}{$key} = \@arr;
+    } else {
+      ${$self}{$key} = Encode::decode_utf8(${$articles}{$key});
+    }
+  }
+  ${$self}{'authorids'} = shift;
+  ${$self}{'lang'} = ${$articles}{'code'};
+  ${$self}{'format'} = ${$articles}{'mimetype'};
   foreach my $cat (@{$categories}) {
     if (${$cat}[1] eq 'primcat') {
       ${$self}{'primcat'} = ${$cat}[0];
@@ -125,12 +153,8 @@ sub load
       push(@{${$self}{${$cat}[1]}}, ${$cat}[0]);
     }
   }
-  ${$self}{'authorids'} = $dbh->selectcol_arrayref("SELECT users.username FROM users JOIN articleusers ON (users.ID = Users_ID) JOIN articles ON (articleusers.Article_ID=articles.ID) WHERE articleusers.Article_ID=? ORDER BY articleusers.Users_ID", {}, (${$data}{'id'}));
   return $self;
 }
-
-
-
 
 =item C<adduserinfo()>
 
@@ -295,12 +319,6 @@ sub authorids {
 }
 
 
-sub incat {
-  my $self = shift;
-  my $catname = shift;
-  my $dbh = DBI->connect($self->dbconnectargs());
-  return scalar($dbh->selectrow_array("SELECT 1 FROM articlecats JOIN categories ON (articlecats.Cat_ID = categories.id) WHERE categories.catname=? LIMIT 1", {}, $catname));
-}
 
 =back
 

@@ -123,7 +123,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="taboo[@type='list']/story:story">
+  <xsl:template match="taboo[@type='list']/story:story|taboo[@type='catlists']/story:story">
     <tr>
       <xsl:attribute name="class">
 	<xsl:choose>

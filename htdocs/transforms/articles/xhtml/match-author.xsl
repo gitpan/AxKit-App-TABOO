@@ -8,7 +8,7 @@
   exclude-result-prefixes="user art i18n texts html"> 
 
   <xsl:template name="ArticleAuthors">
-    <xsl:for-each select="art:article/user:author">
+    <xsl:for-each select="user:author">
       <span class="authorname">  
 	<a>
 	  <xsl:attribute name="href">

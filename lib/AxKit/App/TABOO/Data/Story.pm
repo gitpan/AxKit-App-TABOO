@@ -289,22 +289,6 @@ sub editorok {
   return ${$self}{'editorok'};
 }
 
-=item C<incat($catname)>
-
-This checks if there exists a story categorised into the C<$catname> category. 
-
-It will return 1 if the is such a story, undef if not.
-
-=cut
-
-sub incat {
-  my $self = shift;
-  my $catname = shift;
-  if ($self->_load(what => 1, limit => {primcat => $catname})) {
-    return 1; } 
-  else { return undef; }
-}
-
 
 =back
 

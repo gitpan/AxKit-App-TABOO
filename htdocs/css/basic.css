@@ -51,13 +51,13 @@ div.main-header h1 a:active, div.main-header a:hover {
 }
 
 div.menu { 
-  float: left;
   margin: 0 0 0 0.5ex;
   padding: 0 5px;
-  width: 15%;
+  width: 10em;
   background: #b7cae7;
   border: 2px solid #369;
   font-size: large;
+  float: left;
 }
 
 div.menu .menu-header {
@@ -83,9 +83,8 @@ div.menu input {
 }
 
 div.main { 
-  margin-left: 17%;
+  margin-left: 15em;
   padding: 0 1em;
-  width: 80%;
 }
 
 div.menu-section ul li { 
@@ -141,6 +140,15 @@ div.byline, div.catinfo, div.timeinfo, div#byline, div#catinfo, div#timeinfo, di
   padding: 0 4px;
 }
 
+dl.articlelist dt a.article-title {  
+  font-size: larger;
+  font-weight: bold;
+}
+
+dl.articlelist dt span.byline {  
+  font-size: small;
+}
+
 div.timeinfo, div.comm-timeinfo {
   border-bottom: 1px solid #333;
 }
@@ -173,10 +181,6 @@ div.main div.control {
   margin-bottom: 1em;
 }
 
-div.main div.control label {  
-  font-weight: bold;
-}
-
 div.main div.control p {  
   font-style: italic;
   margin: 0.4em 1em;
@@ -203,14 +207,18 @@ div.fields {
   margin-top: 0.5em 0;
 }
 
-div.fields div.control  { 
+div.fields div.control, table  { 
   margin-top: 1em;
   padding: 0.3em;
   border: 1px solid #338;
   background: #f0f0ff;
 }
 
-div.fields div.control label {  
+
+
+
+div.fields div.control label, table caption {  
+  font-weight: bold;
   color: #473000;
 }
 

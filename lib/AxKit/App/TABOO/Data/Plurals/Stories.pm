@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.093';
+our $VERSION = '0.18';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -119,6 +119,23 @@ sub adduserinfo {
   }
   return $self;
 }
+
+=item C<incat($catname)>
+
+This checks if there exists a story categorised into the C<$catname> category. 
+
+It will return the number of such stories.
+
+=cut
+
+
+sub incat {
+  my $self = shift;
+  my $catname = shift;
+  return scalar(@{$self->_load(what => '*', limit => {primcat => $catname})});
+}
+
+
 
 
 =back

@@ -95,8 +95,6 @@ sub _sanatize_username {
 sub _exists_check {
   my $username = shift;
   my $user = AxKit::App::TABOO::Data::User->new();
-  warn "SAN: " ._sanatize_username($username);
-  warn "IF: " . ($username eq _sanatize_username($username));
   if (($username =~ m/comment|thread|all|respond|edit/) || ($user->load_name($username)) || ($username ne _sanatize_username($username))) {
     return 1;
   } else {
