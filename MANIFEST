@@ -1,12 +1,12 @@
 Changes
-Data.pm
-Data/Category.pm
-Data/Comment.pm
-Data/Story.pm
-Data/User.pm
+TABOO/Data.pm
+TABOO/Data/Category.pm
+TABOO/Data/Comment.pm
+TABOO/Data/Story.pm
+TABOO/Data/User.pm
 Makefile.PL
 MANIFEST			This list of files
-Provider/News.pm
+TABOO/Provider/News.pm
 README
 TABOO.pm
 test.pl
