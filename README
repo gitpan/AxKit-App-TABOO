@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.084
+AxKit/App/TABOO version 0.085
 =============================
 
 INTRODUCTION
@@ -73,6 +73,10 @@ newslist.
 From 0.081, TABOO can run on different virtual hosts and operate on
 different databases.
 
+It can also take user-entered text that has been marked up with some
+simple syntax like Textile http://www.textism.com/tools/textile/ and
+convert that to HTML.
+
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a
 website and have random people come by and use, a beta of some
@@ -103,6 +107,7 @@ This module requires these other modules and libraries:
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
 - AxKit::XSP::BasicSession, you must have 0.21 or later.
+- Formatter::HTML::Textile for formatting.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
 - Apache::AxKit::Plugin::AddXSLParams::Request for virtual hosts, but

@@ -17,6 +17,7 @@ WriteMakefile(
 			     Crypt::GeneratePassword => 0,
 			     Apache::AxKit::Exception => 0,
 			     AxKit::XSP::BasicSession => 0.21,
+			     Formatter::HTML::Textile => 0,
 			     Apache::AxKit::Plugin::AddXSLParams::Request => 0,
 			   }, # E.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005

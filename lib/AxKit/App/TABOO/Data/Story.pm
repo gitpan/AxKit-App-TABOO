@@ -2,6 +2,8 @@ package AxKit::App::TABOO::Data::Story;
 use strict;
 use warnings;
 use Carp;
+use Encode;
+
 
 use Data::Dumper;
 use AxKit::App::TABOO::Data;
@@ -10,13 +12,13 @@ use vars qw/@ISA/;
 @ISA = qw(AxKit::App::TABOO::Data);
 use AxKit::App::TABOO::Data::User;
 use AxKit::App::TABOO::Data::Category;
-use  AxKit::App::TABOO::Data::Plurals::Categories;
+use AxKit::App::TABOO::Data::Plurals::Categories;
 use Time::Piece;
 
 use DBI;
 
 
-our $VERSION = '0.081';
+our $VERSION = '0.085';
 
 
 =head1 NAME
@@ -54,6 +56,7 @@ AxKit::App::TABOO::Data::Story->dbtable("stories");
 AxKit::App::TABOO::Data::Story->dbfrom("stories");
 AxKit::App::TABOO::Data::Story->dbprimkey("storyname");
 AxKit::App::TABOO::Data::Story->elementorder("storyname, sectionid, image, primcat, seccat, freesubject, editorok, title, minicontent, content, USER, SUBMITTER, linktext, timestamp, lasttimestamp");
+AxKit::App::TABOO::Data::Story->elementneedsparse("minicontent, content");
 
 sub new {
     my $that  = shift;
@@ -120,7 +123,7 @@ sub load
       my @arr = split(/\,/, $1);
       ${$self}{$key} = \@arr;
     } else {
-      ${$self}{$key} = ${$data}{$key};
+      ${$self}{$key} = Encode::decode_utf8(${$data}{$key});
     }
   }
   return $self;

@@ -2,6 +2,7 @@ package AxKit::App::TABOO::Data::Category;
 use strict;
 use warnings;
 use Carp;
+use Encode;
 
 use Data::Dumper;
 use AxKit::App::TABOO::Data;
@@ -12,7 +13,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.081';
+our $VERSION = '0.085';
 
 
 =head1 NAME
@@ -62,7 +63,7 @@ sub load_name {
     if (@data) {
       ${$self}{'ONFILE'} = 1;
     }
-    ${$self}{'name'} = join('', @data);
+    ${$self}{'name'} = Encode::decode_utf8(join('', @data));
     ${$self}{'catname'} = $catname;
     return ${$self}{'name'};
 }

@@ -2,19 +2,26 @@ package AxKit::App::TABOO::Data;
 use strict;
 use warnings;
 use Carp;
+use Encode;
+
+
 
 use Data::Dumper;
 use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.081';
+our $VERSION = '0.085';
 
 
 use DBI;
 use Exception::Class::DBI;
 
 use XML::LibXML;
+
+# This needs to change if other formatters are added
+use Formatter::HTML::Textile;
+
 
 =head1 NAME
 
@@ -87,7 +94,7 @@ sub load {
     return undef;
   }
   foreach my $key (keys(%{$data})) {
-    ${$self}{$key} = ${$data}{$key}; 
+    ${$self}{$key} = Encode::decode_utf8(${$data}{$key}) 
   }
   return $self;
 }
@@ -149,7 +156,10 @@ class, it should be sufficiently generic to rarely require
 subclassing. References to subclasses will be followed, and
 C<write_xml> will call the C<write_xml> of that object. Arrays will be
 represented with multiple instances of the same element. Fields that
-have undefined values will not be included.
+have undefined values will not be included. It will also format and
+parse fields indicated by C<elementneedsparse()>, see below. For those
+fields, the unparsed counterparts will have an attribute
+C<raw="Textile">.
 
 =cut
 
@@ -166,6 +176,22 @@ sub write_xml {
 	if (ref($content) eq '') {
 	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	  my $text = XML::LibXML::Text->new($content);
+	  if ($self->elementneedsparse() =~ m/\b$key\b/) {
+	    # Here, we need to format the text coming in, and then
+	    # parse it do add it
+	    my $formatter = Formatter::HTML::Textile->new();
+	    $formatter->charset('utf-8');
+	    my $html = $formatter->format($content);
+	    my $parser = XML::LibXML->new();
+	    my $parsed = XML::LibXML::Text->new($content);
+	    $parsed = $parser->parse_balanced_chunk($html);
+	    my $fragment = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);	    
+	    $fragment->appendChild($parsed);
+	    $topel->appendChild($fragment);
+	    # Add an attribute to the other element containing the
+	    # unparsed stuff
+	    $element->setAttribute('raw', 'Textile');
+	  } 
 	  $element->appendChild($text);
 	  $topel->appendChild($element);
 	} elsif (ref($content) eq "ARRAY") {
@@ -214,7 +240,7 @@ sub populate {
     my $args = shift;
     foreach my $key (keys(%{$self})) {
 	next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
-	${$self}{$key} = ${$args}{$key};
+	${$self}{$key} = Encode::decode_utf8(${$args}{$key});
     }
     return $self;
 }
@@ -339,7 +365,8 @@ sub onfile {
 This method will set or retrieve the arguments that are passed to
 L<DBI>'s C<connect> method. Since this needs to be done for every
 object, you may also pass these arguments to the C<new> constructor of
-each subclass.
+each subclass. However, it is recommended that you use environment
+variables instead.
 
 =cut
 
@@ -352,6 +379,13 @@ sub dbconnectargs {
 } 
 
 
+=item C<elementneedsparse($string)>
+
+One may use e.g. L<Formatter::HTML::Textile> to make HTML from simple
+markup syntax, but such formatting must be parsed to be included in
+the output. This method takes a string consisting of a comma-separated
+list of fields that needs parsing as argument, or will return such a
+list if it is not given.
 
 =item C<xmlelement($string)>
 
@@ -424,6 +458,7 @@ AxKit::App::TABOO::Data->mk_classdata('dbfrom');
 AxKit::App::TABOO::Data->mk_classdata('dbtable');
 AxKit::App::TABOO::Data->mk_classdata('dbprimkey');
 AxKit::App::TABOO::Data->mk_classdata('elementorder');
+AxKit::App::TABOO::Data->mk_classdata('elementneedsparse');
 
 
 

@@ -33,10 +33,10 @@
       <xsl:apply-templates select="story:lasttimestamp"/>
     </div>
     <div class="minicontent">
-      <xsl:value-of select="story:minicontent"/>
+      <xsl:copy-of select="story:minicontent[not(@raw)]"/>
     </div>
     <div class="content">
-      <xsl:value-of select="story:content"/>
+      <xsl:copy-of select="story:content[not(@raw)]"/>
     </div>
       
   </xsl:template>
@@ -80,7 +80,7 @@
 	<xsl:apply-templates select="story:lasttimestamp"/>
       </div>
       <div class="minicontent">
-	<xsl:value-of select="story:minicontent"/>
+	<xsl:copy-of select="story:minicontent[not(@raw)]"/>
       </div>
       <div class="readmorelink">
 	<a>

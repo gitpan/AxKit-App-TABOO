@@ -2,6 +2,7 @@ package AxKit::App::TABOO::Data::User;
 use strict;
 use warnings;
 use Carp;
+use Encode;
 
 use AxKit::App::TABOO::Data;
 use vars qw/@ISA/;
@@ -9,7 +10,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.081';
+our $VERSION = '0.085';
 
 
 =head1 NAME
@@ -84,7 +85,7 @@ sub load_name {
     if (@data) {
       ${$self}{'ONFILE'} = 1;
     }
-    ${$self}{'name'} = join('', @data);
+    ${$self}{'name'} = Encode::decode_utf8(join('', @data));
     ${$self}{'username'} = $username;
     return ${$self}{'name'};
 }

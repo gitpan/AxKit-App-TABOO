@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.084';
+our $VERSION = '0.085';
 
 
 1;
@@ -115,10 +115,12 @@ Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
 editing the information of existing users.
 
+It can also format user-entered text with L<Formatter::HTML::Textile>.
+
 It also have some code for i18n, consisting of stylesheets that can
 take all strings of text from a separate XML file and insert them in
-the final product. This will make it easy to provide many
-translations with TABOO, but it needs elaboration.
+the final product. This will make it easy to provide many translations
+with TABOO, but it needs elaboration, which is next on the TODO list.
 
 =head1 CONFIGURATION EXAMPLE
 

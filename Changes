@@ -1,5 +1,10 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.085	2004-10-05 21:30
+	- Support Textile for formatting is the big thing in this release.
+	- Add some explicit UTF-8 decoding.
+	- Some more small documentation changes. 
+
 0.084	2004-09-22 05:30
 	- The login-stuff has seen a facelift.
 	- The config example is now redone and has actually been
