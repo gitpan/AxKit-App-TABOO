@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 
 
 =head1 NAME
@@ -47,7 +47,7 @@ The constructor. Nothing special.
 
 =item C<all_of_type($type)>
 
-This method will return an arrayref containing the catnames of all categories of type C<$type>. This is a bit unelegant, since the typical use is to first call it on an object just created, then create an array containing Category objects based on it, but I didn't find a better solution right now... 
+This method will return an arrayref containing the catnames of all categories of type C<$type>. This is a bit unelegant, since the typical use is to first call it on an object just created, then create an array containing Category objects based on it, but I didn't find a better solution right now... I what really needs to be done is to add plural versions of each data class, but there are details that I need to figure out. See comment in the parent class POD. 
 
 
 

@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 
 
 use DBI;
@@ -283,7 +283,7 @@ This method is I<intended> for internal use, but if you can use it without shoot
 
 =cut
 
-
+#' 
 
 sub xmlelement {
   my $self = shift;
@@ -396,6 +396,10 @@ Consult the documentation for each individual Data class for the names of the st
 =head1 BUGS/TODO
 
 Except for still being near-alpha, and should have a few bugs, there is the issue with the handling of references to other objects in the C<save()> method. It's possible it will cope, but it definately needs work.
+
+Every load-type method should throw an exception or do something similar if it finds that the record it tries to retrieve doesn't exist. 
+
+I think I may have slightly misdesigned the Data classes, in that they are only designed to operate on one entry at a time. Probably, it is easy to fix this by adding plural versions of each data class, but I need to try to keep some independence from SQL syntax, and I haven't quite figured that out yet. 
 
 =head1 FORMALITIES
 

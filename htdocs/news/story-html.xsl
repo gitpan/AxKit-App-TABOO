@@ -6,31 +6,7 @@
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
   xmlns:html="http://www.w3.org/1999/xhtml">  
   <xsl:output method="xml" version="1.0" encoding="utf-8"
-    media-type="text/xml" indent="yes"/>  
-
-  <xsl:template match="html:*">
-    <xsl:copy>
-      <xsl:apply-templates/>
-    </xsl:copy>   
-  </xsl:template>
-  
-  <xsl:template match="node()|@*" >
-    <xsl:copy >
-      <xsl:apply-templates select="node()|@*" />
-    </xsl:copy>
-  </xsl:template> 
-  
-<!-- xsl:template match="html:html">
-    <html:html>
-      <xsl:apply-templates/>
-    </html:html>
-  </xsl:template>
-
-
-  <xsl:template match="html:*">
-    <xsl:copy-of select="."/>
-    <xsl:apply-templates/>
-  </xsl:template -->
+    media-type="text/xml" indent="yes"/>
 
   <xsl:template match="story:story">
     <html:h2><xsl:value-of select="story:title"/></html:h2>

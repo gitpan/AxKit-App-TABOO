@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 NAME
 
@@ -41,6 +41,8 @@ use Apache::AxKit::Provider;
 use AxKit;
 use AxKit::App::TABOO::Data::Story;
 use AxKit::App::TABOO::Data::Comment;
+
+use Apache::AxKit::Plugin::BasicSession;
 
 
 # sub: Init
@@ -82,7 +84,16 @@ sub init {
   # We're just loading the part of the story we are sure to be using. 
   $self->{story} = AxKit::App::TABOO::Data::Story->new();
   $self->{story}->load('storyname,sectionid,editorok,title,timestamp,lasttimestamp', $self->{section}, $self->{storyname});
+  $self->{editorok} = $self->{story}->editorok();
   AxKit::Debug(10, "[News] Initial Story Fetched: " . Dumper($self->{story}));
+  # No point in going any further if the user isn't authorized:
+  unless ($self->{editorok}) {
+      if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) {
+	 	throw Apache::AxKit::Exception::Retval(
+					       return_code => 401,
+					       -text => "Authentication and higher priviliges required");
+	    }
+  } 
   # Get the timestamps of the story
   $self->{storytimestamp} =  $self->{story}->timestamp();
   if ($self->{getcomments}) {
@@ -102,29 +113,21 @@ sub init {
 
 
 # sub: process
-# We're making it really simple now. 
 sub process {
-  return 1;
-#  my $self = shift;
-#  if($self->{showall} && $self->{showthread}) {
-#    # These options should never occur together
-#    throw Apache::AxKit::Exception::Retval(
-#					   return_code => 403,
-#					   -text => "all and thread can't be combined.");
-#  }
-#  if($self->{getcomments} && ($self->{commentpath} ne '/') && ($self->{uri} =~ m|/$|)) {
-#    # URIs should never end with / if they have a bunch of comments
-#     throw Apache::AxKit::Exception::Retval(
-#					   return_code => 403,
-#					   -text => "URIs should not end with /");
-#  }
-#  my $exists = $self->exists();
-#  if (! $exists) {
-#    throw Apache::AxKit::Exception::Retval(
-#					   return_code => 404,
-#					   -text => "Not found by News Provider.");
-#  }
-#  return $exists;
+    my $self = shift;
+    if($self->{getcomments} && ($self->{commentpath} ne '/') && ($self->{uri} =~ m|/$|)) {
+	# URIs should never end with / if they have a bunch of comments
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => 404,
+					       -text => "URIs should not end with /");
+    }
+    my $exists = $self->exists();
+    if (! $exists) {
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => 404,
+					       -text => "Not found by News Provider.");
+    }
+    return $exists;
 }
 
 
@@ -139,18 +142,19 @@ sub key {
 # sub: exists
 # should return 1 only if the resource actually exists.
 sub exists {
-  return 1;
-#  my $self = shift;
-#  my $exists = 0;
-#  if ($self->{story}) 
-#  {
-#      $exists = 1;
-#  }
-#  if($self->{getcomments})
-#  {
-#      $exists = ($self->{rootcomment} != undef) ?1:0;
-#  } 
-# return $exists;
+  my $self = shift;
+  my $exists = 0;
+  if ($self->{storytimestamp}) # This exists iff the story is OK
+  {
+      $exists = 1;
+  }
+  if($self->{getcomments})
+  {
+      $exists = ($self->{commenttimestamp}) ?1:0;
+  } else {
+      $exists = ($self->{uri} =~ m|^/news/.*?/.*?/$|i) ?1:0;
+  }
+  return $exists;
 }
 
 
@@ -213,7 +217,7 @@ sub get_strref {
 	$self->{rootcomment}->write_xml($doc, $rootel);
 	# But we want a list of headers too. 
 	my $commentlistel = $doc->createElement('commentlist');
-	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $doc, $rootel);
+	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $doc, $commentlistel);
 	$rootel->appendChild($commentlistel);
       } elsif($self->{showall}) {
 	# We shall show the full story and all the expanded comments OK
@@ -231,7 +235,7 @@ sub get_strref {
 	$self->{story}->addcatinfo();
 	$self->{story}->write_xml($doc, $rootel);
 	my $commentlistel = $doc->createElement('commentlist');
-	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $doc, $rootel);
+	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $doc, $commentlistel);
 	$rootel->appendChild($commentlistel);
       }
     } else {
@@ -297,6 +301,7 @@ There are a few things worth noting:
 
 
 # This is a method to return the transformations
+# ******* Quite unlikely I'll ever use this, rather use Conf Directives
 #  sub get_styles {
 #      my $self = shift;
 #      my @transforms;

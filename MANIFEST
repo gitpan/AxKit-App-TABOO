@@ -17,6 +17,7 @@ lib/AxKit/App/TABOO/XSP/User.pm
 htdocs/news/submit.xsp
 htdocs/news/html.xsl
 htdocs/news/test.xsl
+htdocs/news/to-html.xsl
 htdocs/news/story-html.xsl
 htdocs/user/control.xsl
 htdocs/user/user.xsp

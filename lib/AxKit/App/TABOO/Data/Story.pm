@@ -225,6 +225,27 @@ sub lasttimestamp {
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
 
+
+=item C<editorok([($section, $storyname)])>
+
+This is similar to the timestamp method, but instead returns the editorok, which is a boolean variable that says can be used to see if an editor has approved a story.
+
+It may require arguments like the timestamp method does, and it will return 1 if the story has been approved, 0 if not. 
+
+=back
+
+=cut
+
+sub editorok {
+  my $self = shift;
+  if (! ${$self}{'editorok'}) {
+    my ($section, $storyname) = @_;
+    $self->load('editorok', $section, $storyname);
+  }
+  return ${$self}{'editorok'};
+}
+
+
 =head1 STORED DATA
 
 The data is stored in named fields, and for certain uses, it is good to know them. If you want to subclass this class, you might want to use the same names, see the documentation of L<AxKit::APP::TABOO::Data> for more about this. 

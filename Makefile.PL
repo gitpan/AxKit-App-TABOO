@@ -10,7 +10,7 @@ WriteMakefile(
 			     Exception::Class::DBI => 0,
 			     Time::Piece => 0,
 			     Class::Data::Inheritable => 0,
-			     XML::LibXML => 0,
+			     XML::LibXML => 1.57,
 			     AxKit => 1.62,
 			     AxKit::XSP::QueryParam => 0.02,
 			     Apache::AxKit::Exception => 0,
