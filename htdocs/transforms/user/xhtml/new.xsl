@@ -20,7 +20,7 @@
 
 
 
-	<form method="GET" action="new.xsp">
+	<form method="GET" action="/user/submit/new">
 	  <fieldset>
 	    <xsl:apply-templates select="./control"/>
 	  </fieldset>

@@ -14,30 +14,33 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 7765013aa3134470ecbe6046fbb2dfa240434fce Changes
-SHA1 d5e004209f79988b686c55330665871fd0295d44 MANIFEST
-SHA1 557203db21ece8592ab6adf430235689728304a7 MANIFEST.SKIP
-SHA1 737908cea5ce53bab9884a157cad150b2332a235 META.yml
-SHA1 7d37dca70c9f04ade44a79b566ecc615f0b7ecfb Makefile.PL
-SHA1 a49ec4520f1551fa8d647f2a826ca760828b4cb1 README
-SHA1 8b6b99d82af969d3b2de6471d88020c041df3969 htdocs/i18n.en.xml
-SHA1 d94282ab08765e24d62a88d498b18c500411f6a9 htdocs/links.xsp
+SHA1 2ae39de9b51b15622d7d47c7fba0ad4b505c2972 Changes
+SHA1 1e906f13da922fdc56eaefc2e7ebbd11c2f15395 MANIFEST
+SHA1 0d1331331f07a4d2ee52e251cc123f04634d7675 MANIFEST.SKIP
+SHA1 413541b8ec33b60edf2d4b2064844c7df03db277 META.yml
+SHA1 5b0569bb0f02c6b8a5bdb21af057e88e40bae97f Makefile.PL
+SHA1 74624c84aee95697c55f86603044a89129789a48 README
+SHA1 c18248e6ce242912117e85a51408e13f0736c642 htdocs/guest-login.xsp
+SHA1 c0042c6d299546932a7a936c7844f62707ee26f6 htdocs/i18n.en.xml
+SHA1 0f39811cc6253b4a77953a7f954e4807aecc48c5 htdocs/index.xsp
 SHA1 bab4324c47f53497eda340deb76ea197d778ea6d htdocs/login.xsp
-SHA1 87dc4f0398c0da187be759b7fecdd67eca0b321a htdocs/news/submit.xsp
+SHA1 d61ab31e19f9fc73c2fc036aeaa968b411808f3f htdocs/news/submit.xsp
+SHA1 468ee5500216e60767216918d909cab3fe5a5383 htdocs/transforms/index-aggregate.xsl
 SHA1 2ca4f19433acf270711922bb59801b1acb4f48af htdocs/transforms/insert-i18n.xsl
 SHA1 649f16c7ed2a0e0df60aa6e8f945555bcd409ca8 htdocs/transforms/news/insert-values-edit.xsl
-SHA1 9fefab90cec6566e0921dd9f1b9b8f5b3a82b430 htdocs/transforms/news/xhtml/match-story.xsl
+SHA1 d9a8ef43727992a26560db618e9a7b3dbc6a47cb htdocs/transforms/news/xhtml/match-story.xsl
 SHA1 c98f8df8659ca537720d8d6a6a7de07c8d8ac6f9 htdocs/transforms/news/xhtml/news-provider.xsl
-SHA1 c46891dcf5764f5dc668210ea529a2041f4e020e htdocs/transforms/news/xhtml/newslist-provider.xsl
+SHA1 462431814b058d0d221b37344f0b3499754ad00f htdocs/transforms/news/xhtml/newslist-provider.xsl
 SHA1 eceb3add4086d83855a7b5690fda9509ca817606 htdocs/transforms/news/xhtml/submit.xsl
 SHA1 946101be58fe6ad85db92c9830ddc5987985e4fd htdocs/transforms/user/make-control.xsl
 SHA1 78d5f0a76f3e172e8a45866bb307ad1e32ece41c htdocs/transforms/user/xhtml/match-user.xsl
-SHA1 15294585722ae55ed3b232d34f17a91677cfb735 htdocs/transforms/user/xhtml/new.xsl
+SHA1 c5a3992548301eac3155d40350a59c2f6dd3a937 htdocs/transforms/user/xhtml/new.xsl
 SHA1 0c543f68784c6a260ac3bc1404b571656989b6d4 htdocs/transforms/user/xhtml/user.xsl
+SHA1 a8e203529822e130f26a216a9a616b8a76bac0ad htdocs/transforms/xhtml/index.xsl
 SHA1 be613ee2ab288725f4618cbd5eb4273df0299354 htdocs/transforms/xhtml/match-control.xsl
 SHA1 8c4bf658d6b49e31f40aa2006ab7931b1ddea88c htdocs/user/submit/new.xsp
 SHA1 aeed722c3cfbc902ce7db87bbdf3f2afac0f5534 htdocs/user/submit/user.xsp
-SHA1 b4447800087beef3f765be4a3fd09766609fd9fb lib/AxKit/App/TABOO.pm
+SHA1 b161263deaf05c58620a6a084552e4e216537d5c lib/AxKit/App/TABOO.pm
 SHA1 06ba6c57c5a3d18f99c43b3d1dc8a002f6c5b33f lib/AxKit/App/TABOO/Data.pm
 SHA1 c487361cbc4ed904629f5f3e55d1dff9095ab91f lib/AxKit/App/TABOO/Data/Category.pm
 SHA1 90a93b832441475d14a0b55c595166555e21d035 lib/AxKit/App/TABOO/Data/Comment.pm
@@ -56,8 +59,8 @@ SHA1 d31cd9c511397bc22cc482da2f8d73eb779bf1bc lib/AxKit/App/TABOO/Data/User/Cust
 SHA1 20a4cc4e67300c83026d2e80d85c4b923442c320 lib/AxKit/App/TABOO/Provider/News.pm
 SHA1 dc82a6765976a4a0a586057066c46067e28d339a lib/AxKit/App/TABOO/Provider/NewsList.pm
 SHA1 9b386c26b6309dc59f0ce39190943b0126099e7b lib/AxKit/App/TABOO/XSP/Category.pm
-SHA1 d41e33bcd7622d45ea78cb66fdf6305c4ce69d7a lib/AxKit/App/TABOO/XSP/Story.pm
-SHA1 4c2f1c9ba86a137e782cd7861262164b830e113a lib/AxKit/App/TABOO/XSP/User.pm
+SHA1 49f39df2a88db355a609d1f3a34672e8f14b87cf lib/AxKit/App/TABOO/XSP/Story.pm
+SHA1 a06330ef25758d287e078f80f2e53c4691b61e4d lib/AxKit/App/TABOO/XSP/User.pm
 SHA1 46b9ea8ec3e817b33b758e1d9def1d7415b4cb9c sql/testdata.sql
 SHA1 45270ea965b886991c372a1b18c656b562af1203 sql/webshop-create.sql
 SHA1 7e6285b33321df84de7243acabb0b89fb222cbb5 sql/webshop-test.sql
@@ -65,7 +68,7 @@ SHA1 ac7c7caf70464548714893c8a12aa40919fe6523 test.pl
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.4 (GNU/Linux)
 
-iD8DBQFBEueFlE/Gp2pqC7wRAkbIAJoDqSaQHnl8c6uW9vnZGe39eGOBuQCeL/dh
-byxB/Q0V9afaPjqz/mOsB3U=
-=CI/d
+iD8DBQFBKAVflE/Gp2pqC7wRAljwAJ9yZsUEmnHMyKT2DjGqkrPGWfkzRACbBCNC
+11hDzEsCL3r9vEmrsveTUX4=
+=ShnB
 -----END PGP SIGNATURE-----

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
+  xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output"
+  xmlns:category="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
+  xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
+  xmlns:aggr="http://www.kjetil.kjernsmo.net/software/TABOO/NS/IndexAggr"
+  xmlns="http://www.w3.org/1999/xhtml">
+  <xsl:output encoding="utf-8"
+    media-type="text/xml" indent="yes"/>
+  
+  <xsl:template match="/aggr:stories">
+    <xsl:variable name="uri" select="concat('http://localhost', aggr:story, '?passthru=1')"/>
+    <xsl:copy-of select="document($uri)"/>
+  </xsl:template>
+</xsl:stylesheet>
+  

@@ -14,30 +14,17 @@
     <html lang="en">
       <head>
 	<title>
-	  <xsl:choose>
-	    <xsl:when test="taboo/category:category/category:type='stsec'">
-	      <xsl:value-of select="taboo/category:category/category:name"/>
-	    </xsl:when>
-	    <xsl:otherwise>
-	      <i18n:insert name="listing-everything"/>
-	    </xsl:otherwise>
-	  </xsl:choose>
+	  <i18n:insert name="mainpage-title"/>
 	</title>
-	<link rel="up" href=".."/>
      </head>
-      <body> 
+      <body>
      	<h2>
-	  <xsl:choose>
-	    <xsl:when test="taboo/category:category/category:type='stsec'">
-	      <xsl:value-of select="taboo/category:category/category:name"/>
-	    </xsl:when>
-	    <xsl:otherwise>
-	      <i18n:insert name="listing-everything"/>
-	    </xsl:otherwise>
-	  </xsl:choose>
+	  <xsl:if test="//taboo/category:category/category:type='stsec'">
+	    <xsl:value-of select="//taboo/category:category/category:name"/>
+	  </xsl:if>
 	</h2>
 	<xsl:choose>
-	  <xsl:when test="taboo[@type='list']">
+	  <xsl:when test="//taboo[@type='list']">
 	    <table>
 	      <xsl:apply-templates select="//story:story"/>
 	    </table>

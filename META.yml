@@ -1,13 +1,13 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         AxKit-App-TABOO
-version:      0.075
+version:      0.076
 version_from: lib/AxKit/App/TABOO.pm
 installdirs:  site
 requires:
     Apache::AxKit::Exception:      0
     AxKit:                         1.62
-    AxKit::XSP::BasicSession:      0.18
+    AxKit::XSP::BasicSession:      0.19
     AxKit::XSP::QueryParam:        0.02
     AxKit::XSP::Sendmail:          0
     Class::Data::Inheritable:      0

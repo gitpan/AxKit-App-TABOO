@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.075';
+our $VERSION = '0.076';
 
 
 # Preloaded methods go here.
@@ -135,10 +135,10 @@ C<skepsis> or at least create this database and tables.
 
   RewriteEngine on
 
-  Alias /user/submit/ /var/www/user/submit/user.xsp 
-  RewriteRule /user/submit/new(.*) /var/www/user/submit/new.xsp$1 
+  RewriteRule ^/user/([^/]+)$ /user/submit/user.xsp?username=$1
 
-  RewriteRule ^/user/([^submit/].*) /user/submit/user.xsp?username=$1 
+  RewriteRule ^/user/submit/$ /user/submit/user.xsp
+  RewriteRule ^/user/submit/new$ /user/submit/new.xsp
 
   Alias /news/submit /var/www/news/submit.xsp 
 
@@ -146,6 +146,8 @@ C<skepsis> or at least create this database and tables.
   SetHandler AxKit
 
   PerlModule Apache::AxKit::Plugin::BasicAuth
+
+  AxAddPlugin Apache::AxKit::Plugin::Passthru
 
   AxAddStyleMap application/x-xsp Apache::AxKit::Language::XSP
 

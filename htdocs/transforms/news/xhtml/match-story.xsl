@@ -9,7 +9,7 @@
   <xsl:output method="xml" version="1.0" encoding="utf-8"
     media-type="text/xml" indent="yes"/>
 
-  <xsl:template match="/taboo[@type='story']/story:story|/submit//story:story">
+  <xsl:template match="//taboo[@type='story']/story:story|/submit//story:story">
     <h2><xsl:value-of select="story:title"/></h2>
     <div id="byline">
       <i18n:insert name="submit-by"/>
@@ -36,7 +36,7 @@
       
   </xsl:template>
 
-  <xsl:template match="/taboo[@type='stories']/story:story">
+  <xsl:template match="//taboo[@type='stories']/story:story">
     <div>
       <xsl:attribute name="class">
 	<xsl:choose>
@@ -48,7 +48,7 @@
 	  </xsl:otherwise>
 	</xsl:choose>
       </xsl:attribute>
-      <h2>
+      <h3>
 	<a>
 	  <xsl:attribute name="href">
 	    <xsl:text>/news/</xsl:text><xsl:value-of
@@ -57,7 +57,7 @@
 	  </xsl:attribute>
 	  <xsl:value-of select="story:title"/>
 	</a>
-      </h2>
+      </h3>
       <div class="byline">
 	<i18n:insert name="submit-by"/>
 	<xsl:apply-templates select="user:submitter"/>
@@ -87,7 +87,7 @@
 	  <xsl:value-of select="story:linktext"/>
 	</a>
       </div>
-      <xsl:if test="/taboo[@can-edit]">
+      <xsl:if test="//taboo[@can-edit]">
 	<a>
 	  <xsl:attribute name="href">
 	    <xsl:text>/news/submit?edit=true&amp;sectionid=</xsl:text>
@@ -101,7 +101,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="/taboo[@type='list']/story:story">
+  <xsl:template match="//taboo[@type='list']/story:story">
     <tr>
       <xsl:attribute name="class">
 	<xsl:choose>
@@ -127,7 +127,7 @@
       <td><xsl:apply-templates select="cat:primcat"/></td>
       <td><xsl:apply-templates select="story:timestamp"/></td>
       <td><xsl:apply-templates select="story:lasttimestamp"/></td>
-      <xsl:if test="/taboo[@can-edit]">
+      <xsl:if test="//taboo[@can-edit]">
 	<td>
 	  <a>
 	    <xsl:attribute name="href">

@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.074
+AxKit/App/TABOO version 0.076
 =============================
 
 INTRODUCTION
@@ -67,7 +67,9 @@ The whole "Comments" code need a review to conform with the new
 ideas. Thus, there are some code in the present release that used to
 work that is somewhat flaky. And it is only second on the TODO list...
 
-TABOO can now also list News stories with the NewsList Provider. 
+TABOO can now also list News stories with the NewsList Provider, and
+there is a rudimentary front page, which is an aggregate of a
+newslist. It has some XSLT problems to do next.
 
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a
@@ -94,7 +96,7 @@ This module requires these other modules and libraries:
 - Time::Piece
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
-- AxKit::XSP::BasicSession, you should have 0.18 or later.
+- AxKit::XSP::BasicSession, you should have 0.19 or later.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
 - Data::Dumper lists out debugging information, but can be removed. 
@@ -113,4 +115,3 @@ COPYRIGHT AND LICENCE
 Copyright (c) 2003-2004 Kjetil Kjernsmo. Some rights reserved. This
 program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
-

@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.06';
+our $VERSION = '0.076';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -102,7 +102,7 @@ sub store {
     my $editinguser = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
     AxKit::Debug(9, $editinguser . " logged in at level " . $authlevel);
-    unless ($authlevel) {
+    unless (defined($authlevel)) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => AUTH_REQUIRED,
 					       -text => "Not authenticated and authorized with an authlevel");
@@ -338,7 +338,7 @@ sub is_authorized : attribOrChild(username,authlevel) {
 
 sub is_authorized___true__open {
     return << 'EOC';
-    unless ($Apache::AxKit::Plugin::BasicSession::session{authlevel}) {
+    unless (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => AUTH_REQUIRED,
 					       -text => "Not authenticated and authorized with an authlevel");

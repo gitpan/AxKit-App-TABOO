@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.07';
+our $VERSION = '0.076';
 
 =head1 NAME
 
@@ -84,7 +84,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
 
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
   AxKit::Debug(6, "Logged in as $args{'username'} at level $authlevel");
-    unless ($authlevel) {
+    unless (defined($authlevel)) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => AUTH_REQUIRED,
 					       -text => "Not authenticated and authorized with an authlevel");
