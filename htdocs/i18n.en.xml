@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <translations
-  xmlns="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts" lang="en">
+  xmlns="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts" xml:lang="en">
 
   <text id="mainpage-title"> The TABOO Framework </text>
   <text id="mainpage-header"> The TABOO Framework </text>
@@ -14,17 +14,89 @@
 
 
   <text id="submit-story"> Submit Story </text>
+  <text id="story-stored"> Story Stored </text>
+  <text id="submit-story-menu"> Submit Story </text>
   <text id="article-descr"> The title of the article </text>
+  <text id="article-title"> Title </text>
 
-  <text id="user-name"> Name </text>
+  <text id="minicontent"> First paragraph </text>
+  <text id="minicontent-descr"> Enter the first paragraph or so
+  here. This will appear on lists of stories, with links on to the rest. </text>
+
+  <text id="content"> The content </text>
+  <text id="content-descr"> Enter the rest of the content. </text>
+
+  <text id="descriptive-image"> A descriptive image </text>
+  <text id="descriptive-image-descr"> The address of a descriptive image. </text>
+
+  <text id="linktext"> Linktext </text>
+  <text id="linktext-descr"> A good, descriptive text to be used for
+  the link to the rest of the story. "Read More" is a common, but very
+  bad choice. </text>
+
+  <text id="primcat"> Primary Category </text>
+  <text id="primcat-descr"> Give the primary categorization for the
+  story. Uses a controlled vocabulary. </text>
+
+  <text id="article-sectionid"> Section </text>
+  <text id="article-sectionid-descr"> Choose the section to post the
+  article to. </text>
+
+
+  <text id="editorok"> Editor's approval </text>
+  <text id="editorok-descr"> Check to approve for publication. </text>
+
+  <text id="storyname"> Storyname </text>
+  <text id="storyname-descr"> A short, one-word name for the story. </text>
+
+  <text id="submitterid"> Submitter ID </text>
+  <text id="submitterid-descr"> The username of the person who
+  submitted the story. </text>
+
+
+
+  <text id="user-name"> Full name </text>
+  <text id="username"> Username </text>
   <text id="user-email"> Email </text>
+  <text id="user-bio"> Biography </text>
   <text id="uri"> URI </text>
+  <text id="homepage"> Homepage </text>
+  <text id="login"> Login </text>
+  <text id="password"> Password </text>
+  <text id="authlevel"> authorization level </text>
+  <text id="new-password"> New Password </text>
+  <text id="register"> Register </text>
 
   <text id="suggested-user-exists"> User name is allready in use! </text>
   <text id="suggested-user-stored"> User information was successfully stored! </text>
 
   <text id="listing-everything"> Listing all stories </text>
   <text id="edit"> Edit </text>
+  <text id="send"> Send </text>
+  <text id="preview"> Preview </text>
+  <text id="update"> Update </text>
+  <text id="change"> Change </text>
+  <text id="repeat"> Repeat </text>
+
+  <text id="me"> Me </text>
+  <text id="for"> for </text>
+
+  <text id="stories-title-menu"> News </text>
+  <text id="users-title-menu"> User </text>
+  <text id="subqueue-story-menu"> Review posts </text>
+  <text id="submit-new-user"> New user </text>
+  <text id="user-info"> User Information </text>
+
+  <text id="new-username-descr"> Choose a single-word username </text>
+  <text id="new-fullname-descr"> Give your full name </text>
+  <text id="new-email-descr"> A valid e-mail address </text>
+  <text id="new-uri-descr"> The address of a web page that describes you </text>
+
+  <text id="to-change-passwd-descr"> To change password, enter new
+  password twice </text>
+
+  <text id="authlevel-descr"> The authorization level determines what
+  kind of actions you are allowed to do. </text>
 
 
 </translations>

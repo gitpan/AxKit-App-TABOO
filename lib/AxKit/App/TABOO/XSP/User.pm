@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.076';
+our $VERSION = '0.082';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -322,42 +322,57 @@ sub exists___false {
 
 =head2 C<<is-authorized authlevel="5" username="foo">>
 
-This is a boolean tag, which has child elements C<<true>> and C<<false>>. It takes an autherization level in an attribute or child element named C<authlevel>, and an attribute or child element named C<username>. If the authenticated user has it least this level I<or> the given C<username> matches the username of the authenticated user, the contents of the C<<true>> element will be included in the output document. Conversely, if the user has insufficient privileges the contents of C<<false>> will be in the result document. If the user has not been authenticated at all, the tag will throw a exception with an C<AUTH_REQUIRED> code. 
+This is a boolean tag, which has child elements C<<true>> and
+C<<false>>. It takes an autherization level in an attribute or child
+element named C<authlevel>, and an attribute or child element named
+C<username>. If the authenticated user has it least this level I<or>
+the given C<username> matches the username of the authenticated user,
+the contents of the C<<true>> element will be included in the output
+document. Conversely, if the user has insufficient privileges the
+contents of C<<false>> will be in the result document. 
 
-
-B<NOTE:> This should I<not> be looked upon as a "security feature".  While it is possible to use it to make sure that an input control is not shown to someone who is not authorized to modify it (and this may indeed be its primary use), a malicious user could still insert data to that field by supplying arguments in a POST or GET request. Consequently, critical data must be checked for sanity before they are passed to the Data objects. The Data objects themselves are designed to believe anything they're fed, so it is most natural to do it in a taglib before handing the data to a Data object. See e.g. the internals of the C<<store/>> tag for an example. 
+B<NOTE:> This should I<not> be looked upon as a "security feature".
+While it is possible to use it to make sure that an input control is
+not shown to someone who is not authorized to modify it (and this may
+indeed be its primary use), a malicious user could still insert data
+to that field by supplying arguments in a POST or GET
+request. Consequently, critical data must be checked for sanity before
+they are passed to the Data objects. The Data objects themselves are
+designed to believe anything they're fed, so it is most natural to do
+it in a taglib before handing the data to a Data object. See e.g. the
+internals of the C<<store/>> tag for an example.
 
 
 =cut
-
-#' 
 
 sub is_authorized : attribOrChild(username,authlevel) {
     return ''; # Gotta be something here
 } 
 
 sub is_authorized___true__open {
-    return << 'EOC';
-    unless (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})) {
-	throw Apache::AxKit::Exception::Retval(
-					       return_code => AUTH_REQUIRED,
-					       -text => "Not authenticated and authorized with an authlevel");
-    }
-    if (($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0}) || (($attr_authlevel) && ($attr_authlevel <= $Apache::AxKit::Plugin::BasicSession::session{authlevel}))) # Grant access
-{
+return << 'EOC';
+  if ((defined($Apache::AxKit::Plugin::BasicSession::session{credential_0}))
+      && (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel}))) {
+    if (($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0})
+      || (($attr_authlevel) 
+	  && ($attr_authlevel <= $Apache::AxKit::Plugin::BasicSession::session{authlevel}))) # Grant access
+	{
 EOC
 }
 
 
 sub is_authorized___true {
-  return '}'
+  return '} }'
 }
 
 
 sub is_authorized___false__open { 
-    return << 'EOC'; 
-    if (($attr_username ne $Apache::AxKit::Plugin::BasicSession::session{credential_0}) && ($attr_authlevel > $Apache::AxKit::Plugin::BasicSession::session{authlevel})) # Deny access
-{ 
+return << 'EOC'; 
+  if ((! defined($Apache::AxKit::Plugin::BasicSession::session{credential_0})
+       || ($attr_username ne $Apache::AxKit::Plugin::BasicSession::session{credential_0}))
+      && ((! defined($Apache::AxKit::Plugin::BasicSession::session{authlevel}))
+	  || ($attr_authlevel > $Apache::AxKit::Plugin::BasicSession::session{authlevel}))) # Deny access
+    {
 EOC
 }  
 

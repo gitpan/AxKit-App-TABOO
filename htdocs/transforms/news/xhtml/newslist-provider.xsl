@@ -8,8 +8,10 @@
   xmlns:wn="http://xmlns.com/wordnet/1.6/"      
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
+  xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
   xmlns="http://www.w3.org/1999/xhtml">
  
+  <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/news/xhtml/match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
   <xsl:output encoding="utf-8"
@@ -23,7 +25,7 @@
 	      <xsl:value-of select="taboo/category:category/category:name"/>
 	    </xsl:when>
 	    <xsl:otherwise>
-	      <i18n:insert name="listing-everything"/>
+	      <xsl:value-of select="i18n:include('listing-everything')"/>
 	    </xsl:otherwise>
 	  </xsl:choose>
 	  <xsl:text> | </xsl:text>
@@ -40,7 +42,7 @@
 	      <xsl:value-of select="taboo/category:category/category:name"/>
 	    </xsl:when>
 	    <xsl:otherwise>
-	      <i18n:insert name="listing-everything"/>
+	      <xsl:value-of select="i18n:include('listing-everything')"/>
 	    </xsl:otherwise>
 	  </xsl:choose>
 	</h2>

@@ -4,6 +4,7 @@ htdocs/i18n.en.xml
 htdocs/index.xsp
 htdocs/login.xsp
 htdocs/main.rdf
+htdocs/menu.xsp
 htdocs/news/submit.xsp
 htdocs/transforms/index-aggregate.xsl
 htdocs/transforms/insert-i18n.xsl
@@ -19,6 +20,7 @@ htdocs/transforms/user/xhtml/user.xsl
 htdocs/transforms/xhtml/header.xsl
 htdocs/transforms/xhtml/index.xsl
 htdocs/transforms/xhtml/match-control.xsl
+htdocs/transforms/xhtml/match-menu.xsl
 htdocs/user/submit/new.xsp
 htdocs/user/submit/user.xsp
 lib/AxKit/App/TABOO.pm

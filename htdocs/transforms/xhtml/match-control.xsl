@@ -1,20 +1,33 @@
 <?xml version="1.0"?>
+<!-- The control stuff here is actually just a bad reinvention of -->
+<!-- XForms... At this point, I think it is too much to change to go -->
+<!-- with XForms, but it is certainly desireable for the future. -->
+
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
   xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
+  xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
+  xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
+  extension-element-prefixes="i18n"
   xmlns="http://www.w3.org/1999/xhtml">
 
-  <xsl:template match="control">
+
+  <xsl:import href="/transforms/insert-i18n.xsl"/>
+
+  <xsl:template match="ct:control">
     <div class="control">
       <label for="{@name}">
-	<xsl:value-of select="./title"/>
+	<xsl:apply-templates select="./ct:title/node()"/>
       </label>
       
-      <p class="description">
-	<xsl:copy-of select="./descr/node()"/>
-      </p>
+      <xsl:if test="./ct:descr">
+	<p class="description">
+	  <xsl:apply-templates select="./ct:descr/node()"/>
+	</p>
+      </xsl:if>
 
       <xsl:choose>
 	<xsl:when test="@element='input'">
@@ -22,19 +35,28 @@
 	    <xsl:when test="@type='checkbox'">
 	      <input name="{@name}" id="{@name}" type="checkbox"
 		value="1"> 
-		<xsl:if test="./value='1'">
+		<xsl:if test="./ct:value='1'">
 		  <xsl:attribute name="checked">checked</xsl:attribute>
 		</xsl:if>
 	      </input>
 	    </xsl:when>
 	    <xsl:otherwise>
-	      <input name="{@name}" id="{@name}" type="{@type}" value="{./value}"/>
+	      <xsl:choose>
+		<xsl:when test="./ct:value/i18n:insert">
+		  <input name="{@name}" id="{@name}" type="{@type}" 
+		    value="{i18n:include(./ct:value/i18n:insert)}"/>
+		</xsl:when>
+		<xsl:otherwise>
+		  <input name="{@name}" id="{@name}" type="{@type}" 
+		    value="{./ct:value}"/>
+		</xsl:otherwise>
+	      </xsl:choose>
 	    </xsl:otherwise>
 	  </xsl:choose>
 	</xsl:when>
 	<xsl:when test="@element='textarea'">
 	  <textarea name="{@name}" id="{@name}">
-	    <xsl:value-of select="./value"/>
+	    <xsl:apply-templates select="./ct:value/node()"/>
 	  </textarea>
 	</xsl:when>
 	<xsl:when test="@element='select'">
@@ -42,7 +64,7 @@
 	    <xsl:if test="../@type='multiple'">
 	      <xsl:attribute name="multiple">multiple</xsl:attribute>
 	    </xsl:if>
-	    <xsl:for-each select="./value/user:level">
+	    <xsl:for-each select="./ct:value/user:level">
 	      <option>
 		<!-- xsl:attribute name="value"><xsl:number
 		from="0"/></xsl:attribute -->
@@ -79,7 +101,7 @@
       <!-- This has to mark as selected both in the case where we have
       a single parameter found by param:get, but also where there are
       multiple as found by param:enumerate -->
-      <xsl:if test="../..//value=cat:catname">
+      <xsl:if test="../..//ct:value=cat:catname">
 	<xsl:attribute name="selected">selected</xsl:attribute>
       </xsl:if>
       <xsl:value-of select="cat:name"/>

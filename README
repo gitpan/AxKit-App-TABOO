@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.081
+AxKit/App/TABOO version 0.082
 =============================
 
 INTRODUCTION
@@ -106,10 +106,15 @@ This module requires these other modules and libraries:
   it is easy to remove this dependency if one wishes.
 - Data::Dumper lists out debugging information, but can be removed. 
 
+You will also need some XML libraries, for example libxml2 and
+libxslt. You will probably have gotten these along with AxKit. TABOO
+should be able to use any AxKit uses, with the exception that it makes
+use of some self-defined EXSLT, so you'll need a library that supports
+that.
 
 SUPPORT
 
-There is a list taboo-dev@kjernsmo.net, you can subscribe to at 
+There is a list taboo-dev@kjernsmo.net you can subscribe to at 
 http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
 Beware that TABOO is in development, so it is not yet software

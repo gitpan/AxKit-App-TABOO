@@ -10,7 +10,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.074';
+our $VERSION = '0.082';
 
 =head1 NAME
 
@@ -256,8 +256,6 @@ sub get_styles {
   my @styles = (
 		{ type => "text/xsl",
 		  href => "/transforms/news/xhtml/newslist-provider.xsl" },
-		{ type => "text/xsl",
-		  href => "/transforms/insert-i18n.xsl" },
 	       );
 		
   return \@styles;

@@ -107,8 +107,6 @@ sub _load {
     my ($self, %args) = @_;
     my $what = $args{'what'};
     my %arg =  %{$args{'limit'}};
-    warn Dumper($self->dbconnectargs());
-    #warn Dumper(%ENV);
     my $dbh = DBI->connect($self->dbconnectargs());
     # The subclass should give the dbfrom.
     my $query = "SELECT " . $what . " FROM " . $self->dbfrom() . " WHERE ";
@@ -133,7 +131,6 @@ sub _load {
     }
     my $sth = $dbh->prepare($query);
     $i=1;
-#    warn Dumper(%arg);
     foreach my $key (@keys) {
       $sth->bind_param($i, $arg{$key});
       $i++;

@@ -1,30 +1,35 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:cust="http://www.kjetil.kjernsmo.net/software/TABOO/NS/CustomGrammar"
   xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
+  xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
   xmlns="http://www.w3.org/1999/xhtml">  
+  <xsl:import href="/transforms/insert-i18n.xsl"/>
+
   <xsl:output method="xml" version="1.0" encoding="utf-8"
     media-type="text/xml" indent="yes"/>
 
-  <xsl:template match="//taboo[@type='story']/story:story|/submit//story:story">
+
+  <xsl:template match="//taboo[@type='story']/story:story|/cust:submit//story:story">
     <h2><xsl:value-of select="story:title"/></h2>
     <div id="byline">
-      <i18n:insert name="submit-by"/>
+      <xsl:value-of select="i18n:include('submit-by')"/>
       <xsl:apply-templates select="user:submitter"/>
-      <i18n:insert name="posted-by"/>
+      <xsl:value-of select="i18n:include('posted-by')"/>
        <xsl:apply-templates select="user:user"/>
     </div>
     <div id="catinfo">
-      <i18n:insert name="to-cat"/>
+      <xsl:value-of select="i18n:include('to-cat')"/>
       <xsl:apply-templates select="cat:primcat"/>
     </div>
     <div id="timeinfo">
-      <i18n:insert name="on"/>
+      <xsl:value-of select="i18n:include('on')"/>
       <xsl:apply-templates select="story:timestamp"/>
-      <i18n:insert name="last-changed"/>
+      <xsl:value-of select="i18n:include('last-changed')"/>
       <xsl:apply-templates select="story:lasttimestamp"/>
     </div>
     <div class="minicontent">
@@ -59,19 +64,19 @@
 	</a>
       </h3>
       <div class="byline">
-	<i18n:insert name="submit-by"/>
+	<xsl:value-of select="i18n:include('submit-by')"/>
 	<xsl:apply-templates select="user:submitter"/>
-	<i18n:insert name="posted-by"/>
+	<xsl:value-of select="i18n:include('posted-by')"/>
 	<xsl:apply-templates select="user:user"/>
       </div>
       <div class="catinfo">
-	<i18n:insert name="to-cat"/>
+	<xsl:value-of select="i18n:include('to-cat')"/>
 	<xsl:apply-templates select="cat:primcat"/>
       </div>
       <div class="timeinfo">
-	<i18n:insert name="on"/>
+	<xsl:value-of select="i18n:include('on')"/>
 	<xsl:apply-templates select="story:timestamp"/>
-	<i18n:insert name="last-changed"/>
+	<xsl:value-of select="i18n:include('last-changed')"/>
 	<xsl:apply-templates select="story:lasttimestamp"/>
       </div>
       <div class="minicontent">
@@ -95,7 +100,7 @@
 	    <xsl:text>&amp;storyname=</xsl:text>
 	    <xsl:value-of select="story:storyname"/>
 	  </xsl:attribute>
-	  <i18n:insert name="edit"/>
+	  <xsl:value-of select="i18n:include('edit')"/>
 	</a>
       </xsl:if>
     </div>
@@ -136,7 +141,7 @@
 	      <xsl:text>&amp;storyname=</xsl:text>
 	      <xsl:value-of select="story:storyname"/>
 	    </xsl:attribute>
-	    <i18n:insert name="edit"/>
+	    <xsl:value-of select="i18n:include('edit')"/>
 	  </a>
 	</td>
       </xsl:if>
@@ -167,8 +172,3 @@
   </xsl:template>
 
 </xsl:stylesheet>
-
-
-
-
-

@@ -2,21 +2,21 @@
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
 <?xml-stylesheet href="/transforms/user/make-control.xsl" type="text/xsl"?>
 <?xml-stylesheet href="/transforms/user/xhtml/new.xsl" type="text/xsl"?>
-<?xml-stylesheet href="/transforms/insert-i18n.xsl" type="text/xsl"?>
 <xsp:page
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"
+  xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
+  xmlns:cust="http://www.kjetil.kjernsmo.net/software/TABOO/NS/CustomGrammar"
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam"
   xmlns:sendmail="http://axkit.org/NS/xsp/sendmail/v1"
-  xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
-  xmlns:html="http://www.w3.org/1999/xhtml">
-  <user>
+  xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N">
+  <cust:user>
     <param:if-exists name="submitted">
       
       
       <user:exists>
 	<user:username><param:get name="username"/></user:username>
-	<user:true><title><i18n:insert name="suggested-user-exists"/></title></user:true>
+	<user:true><cust:title><i18n:insert>suggested-user-exists</i18n:insert></cust:title></user:true>
 	<user:false>
 	  <sendmail:send-mail>
 	    <sendmail:smtphost>pooh.kjernsmo.net</sendmail:smtphost>
@@ -29,41 +29,47 @@
 	    </sendmail:body>
 	  </sendmail:send-mail>
 	  <user:new-user/>
-	  <title><i18n:insert name="suggested-user-stored"/></title>
+	  <cust:title><i18n:insert>suggested-user-stored</i18n:insert></cust:title>
 	</user:false>
       </user:exists>
     </param:if-exists>
 
     <param:unless-exists name="submitted">
-      <title>New User</title>
+      <cust:title><i18n:insert>submit-new-user</i18n:insert></cust:title>
       
-      <control element="input" type="text" name="username">
-	<title>Username</title>
-	<descr>Choose a single-word username</descr>
-      </control>
-      <control element="input" type="text" name="name">
-	<title>Name</title>
-      </control>
-      <control element="input" type="text" name="email">
-	<title>Email</title>
-      </control>
+      <ct:control element="input" type="text" name="username">
+	<ct:title><i18n:insert>username</i18n:insert></ct:title>
+	<ct:descr><i18n:insert>new-username-descr</i18n:insert></ct:descr>
+      </ct:control>
+      <ct:control element="input" type="text" name="name">
+	<ct:title><i18n:insert>user-name</i18n:insert></ct:title>
+	<ct:descr><i18n:insert>new-fullname-descr</i18n:insert></ct:descr>
+      </ct:control>
+      <ct:control element="input" type="text" name="email">
+	<ct:title><i18n:insert>user-email</i18n:insert></ct:title>
+ 	<ct:descr><i18n:insert>new-email-descr</i18n:insert></ct:descr>
+     </ct:control>
 
-      <control element="input" type="text" name="uri">
-	<title>URI</title>
-      </control>
+      <ct:control element="input" type="text" name="uri">
+	<ct:title>
+	  <i18n:insert>homepage</i18n:insert>
+	  <i18n:insert>uri</i18n:insert>
+	</ct:title>
+  	<ct:descr><i18n:insert>new-uri-descr</i18n:insert></ct:descr>
+     </ct:control>
 
-      <control element="input" type="hidden" name="passwd">
-	<value><user:random-password/></value>
-      </control>
+      <ct:control element="input" type="hidden" name="passwd">
+	<ct:value><user:random-password/></ct:value>
+      </ct:control>
 
 
       
-      <control element="input" type="submit" name="submitted"> 
-	<value>Register</value>
-      </control>
+      <ct:control element="input" type="submit" name="submitted"> 
+	<ct:value><i18n:insert>register</i18n:insert></ct:value>
+      </ct:control>
     </param:unless-exists>
 
-  </user>
+  </cust:user>
 </xsp:page>
 
 

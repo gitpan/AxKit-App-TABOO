@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.081';
 
 
 =head1 NAME

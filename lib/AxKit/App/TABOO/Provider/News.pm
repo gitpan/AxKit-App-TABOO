@@ -283,8 +283,6 @@ sub get_styles {
   my @styles = (
 		{ type => "text/xsl",
 		  href => "/transforms/news/xhtml/news-provider.xsl" },
-		{ type => "text/xsl",
-		  href => "/transforms/insert-i18n.xsl" },
 	       );
 		
   return \@styles;

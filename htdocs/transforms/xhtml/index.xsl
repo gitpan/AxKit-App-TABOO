@@ -29,6 +29,9 @@
 	    <xsl:value-of select="//taboo/category:category/category:name"/>
 	  </xsl:if>
 	</h2>
+	<xsl:variable name="uri" select="concat('http://',
+	$request.headers.host, '/menu.xsp')"/>
+	<xsl:copy-of select="document($uri)"/>
 	<xsl:choose>
 	  <xsl:when test="//taboo[@type='list']">
 	    <table>

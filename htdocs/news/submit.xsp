@@ -2,9 +2,10 @@
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
 <?xml-stylesheet href="../transforms/news/insert-values-edit.xsl" type="text/xsl"?>
 <?xml-stylesheet href="../transforms/news/xhtml/submit.xsl" type="text/xsl"?>
-<?xml-stylesheet href="../transforms/insert-i18n.xsl" type="text/xsl"?>
 <xsp:page
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
+  xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
+  xmlns:cust="http://www.kjetil.kjernsmo.net/software/TABOO/NS/CustomGrammar"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"
   xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category"
@@ -12,9 +13,9 @@
   xmlns:val="http://www.kjetil.kjernsmo.net/software/TABOO/NS/FormValues"
   xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam">
-  <submit>
+  <cust:submit>
     <xi:include href="../guest-login.xsp"/>
-    <title><i18n:insert name="submit-story"/></title>
+    <cust:title><i18n:insert>submit-story</i18n:insert></cust:title>
     <param:if-exists name="submitted">
       <story:store/>
     </param:if-exists>
@@ -28,99 +29,108 @@
       </story:get-story>
     </param:if-exists>    
     <param:unless-exists name="submitted">
-      <control name="title" type="text" element="input">
-	<title>Title</title>
-	<descr><i18n:insert name="article-descr"/></descr>
-	<value><val:insert name="title"/></value>
-      </control>
-      <control name="minicontent" element="textarea">
-	<title>Minicontent</title>
-	<value><val:insert name="minicontent"/></value>
-      </control>
-      <control name="content" element="textarea">
-	<title>Content</title>
-	<value><val:insert name="content"/></value>
-      </control>
+      <ct:control name="title" type="text" element="input">
+	<ct:title><i18n:insert>article-title</i18n:insert></ct:title>
+	<ct:descr><i18n:insert>article-descr</i18n:insert></ct:descr>
+	<ct:value><val:insert name="title"/></ct:value>
+      </ct:control>
+      <ct:control name="minicontent" element="textarea">
+	<ct:title><i18n:insert>minicontent</i18n:insert></ct:title>
+	<ct:descr><i18n:insert>minicontent-descr</i18n:insert></ct:descr>
+	<ct:value><val:insert name="minicontent"/></ct:value>
+      </ct:control>
+      <ct:control name="content" element="textarea">
+	<ct:title><i18n:insert>content</i18n:insert></ct:title>
+	<ct:descr><i18n:insert>content-descr</i18n:insert></ct:descr>
+	<ct:value><val:insert name="content"/></ct:value>
+      </ct:control>
       <user:is-authorized authlevel="3">
 	<user:true>
-	  <control element="input" type="text" name="image">
-	    <title>Image</title>
-	    <descr>URL of an image</descr>
-	    <value><val:insert name="image"/></value>
-	  </control>
+	  <ct:control element="input" type="text" name="image">
+	    <ct:title><i18n:insert>descriptive-image</i18n:insert></ct:title>
+	    <ct:descr><i18n:insert>descriptive-image-descr</i18n:insert></ct:descr>
+	    <ct:value><val:insert name="image"/></ct:value>
+	  </ct:control>
 	</user:true>
       </user:is-authorized>
-      <control name="linktext" type="text" element="input">
-	<title>Linktext</title>
-	<value><val:insert name="linktext"/></value>
-      </control>
-      <control name="primcat">
-	<title>Primcat</title>
+      <ct:control name="linktext" type="text" element="input">
+	<ct:title><i18n:insert>linktext</i18n:insert></ct:title>
+	<ct:descr><i18n:insert>linktext-descr</i18n:insert></ct:descr>
+	<ct:value><val:insert name="linktext"/></ct:value>
+      </ct:control>
+      <ct:control name="primcat">
+	<ct:title><i18n:insert>primcat</i18n:insert></ct:title>
+	<ct:descr><i18n:insert>primcat-descr</i18n:insert></ct:descr>
 	<cat:get-categories type="categ"/>
-	<value><val:insert name="primcat"/></value>
-      </control>
+	<ct:value><val:insert name="primcat"/></ct:value>
+      </ct:control>
       
       <!-- Arrays are not yet supported well by the underlying
       database driver, so these fields with multiples are problematic.
-      <control name="seccat" type="multiple">
-      <title>Seccat</title>
+      <ct:control name="seccat" type="multiple">
+      <ct:title>Seccat</ct:title>
       <cat:get-categories type="categ"/>
       <param:enumerate name="seccat"/>
-    </control>
+    </ct:control>
       <user:is-authorized authlevel="2">
       <user:true>
-      <control name="freesubject" type="multiple">
-      <title>Free subject</title>
+      <ct:control name="freesubject" type="multiple">
+      <ct:title>Free subject</ct:title>
       <cat:get-categories type="frees"/>
       <param:enumerate name="freesubject"/>
-    </control>
+    </ct:control>
     </user:true>
     </user:is-authorized -->
       <user:is-authorized authlevel="5">
 	<user:true>
-	  <control element="input" type="text" name="sectionid">
-	    <title>Sectionid</title>
-	    <value><val:insert name="sectionid"/></value>
-	  </control>
-	  <control element="input" type="checkbox" name="editorok">
-	    <title>Editor's approval</title>
-	    <value><val:insert name="editorok"/></value>
-	  </control>
-	  <control element="input" type="text" name="storyname">
-	    <title>Storyname</title>
-	    <value><val:insert name="storyname"/></value>
-	  </control>
-	  <control element="input" type="text" name="submitterid">
-	    <title>Submitter ID</title>
-	    <value><val:insert name="submitterid"/></value>
-	  </control>
+	  <ct:control name="sectionid">
+	    <ct:title><i18n:insert>article-sectionid</i18n:insert></ct:title>
+	    <ct:descr><i18n:insert>article-sectionid-descr</i18n:insert></ct:descr>
+	    <cat:get-categories type="stsec"/>
+	    <ct:value><val:insert name="sectionid"/></ct:value>
+	  </ct:control>
+	  <ct:control element="input" type="checkbox" name="editorok">
+	    <ct:title><i18n:insert>editorok</i18n:insert></ct:title>
+	    <ct:descr><i18n:insert>editorok-descr</i18n:insert></ct:descr>
+	    <ct:value><val:insert name="editorok"/></ct:value>
+	  </ct:control>
+	  <ct:control element="input" type="text" name="storyname">
+	    <ct:title><i18n:insert>storyname</i18n:insert></ct:title>
+	    <ct:descr><i18n:insert>storyname-descr</i18n:insert></ct:descr>
+	    <ct:value><val:insert name="storyname"/></ct:value>
+	  </ct:control>
+	  <ct:control element="input" type="text" name="submitterid">
+	    <ct:title><i18n:insert>submitterid</i18n:insert></ct:title>
+	    <ct:descr><i18n:insert>submitterid-descr</i18n:insert></ct:descr>
+	    <ct:value><val:insert name="submitterid"/></ct:value>
+	  </ct:control>
 	  <param:if-exists name="auto-storyname">
-	    <control element="input" type="hidden" name="auto-storyname"> 
-	      <value><param:get name="auto-storyname"/></value>
-	    </control>
+	    <ct:control element="input" type="hidden" name="auto-storyname"> 
+	      <ct:value><param:get name="auto-storyname"/></ct:value>
+	    </ct:control>
 	  </param:if-exists>
 	  <param:unless-exists name="auto-storyname">
 	    <param:if-exists name="edit">
-	      <control element="input" type="hidden" name="auto-storyname"> 
-		<value><param:get name="storyname"/></value>
-	      </control>
+	      <ct:control element="input" type="hidden" name="auto-storyname"> 
+		<ct:value><param:get name="storyname"/></ct:value>
+	      </ct:control>
 	    </param:if-exists>
 	  </param:unless-exists>
 	</user:true>
 	<user:false>
-	  <control element="input" type="hidden" name="sectionid"> 
-	    <value>subqueue</value>
-	  </control>
+	  <ct:control element="input" type="hidden" name="sectionid"> 
+	    <ct:value>subqueue</ct:value>
+	  </ct:control>
 	</user:false>
       </user:is-authorized>
-      <control element="input" type="submit" name="submitted"> 
-	<value>Send</value>
-      </control>
-      <control element="input" type="submit" name="previewed"> 
-	<value>See</value>
-      </control>
+      <ct:control element="input" type="submit" name="submitted"> 
+	<ct:value><i18n:insert>send</i18n:insert></ct:value>
+      </ct:control>
+      <ct:control element="input" type="submit" name="previewed"> 
+	<ct:value><i18n:insert>preview</i18n:insert></ct:value>
+      </ct:control>
       
     </param:unless-exists>
-  </submit>
+  </cust:submit>
 </xsp:page>
 

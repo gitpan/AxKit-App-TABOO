@@ -2,7 +2,6 @@
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
 <?xml-stylesheet href="/transforms/index-aggregate.xsl" type="text/xsl"?>
 <?xml-stylesheet href="/transforms/xhtml/index.xsl" type="text/xsl"?>
-<?xml-stylesheet href="/transforms/insert-i18n.xsl" type="text/xsl"?>
 
 <xsp:page
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
@@ -10,7 +9,7 @@
   xmlns="http://www.w3.org/1999/xhtml">
 
   <aggr:stories>
-    <aggr:story>/news/testsec/2</aggr:story>
+    <aggr:story>/news/3</aggr:story>
   </aggr:stories>
 </xsp:page>
 
