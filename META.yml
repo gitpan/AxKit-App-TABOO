@@ -1,10 +1,20 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         AxKit-App-TABOO
-version:      0.011
+version:      0.021_1
 version_from: TABOO.pm
 installdirs:  site
 requires:
+    Apache::AxKit::Exception:      0
+    Apache::AxKit::Plugin::BasicSession: 0
+    AxKit:                         1.62
+    Class::Data::Inheritable:      0
+    Data::Dumper:                  0
+    DBD::Pg:                       0
+    DBI:                           0
+    Exception::Class::DBI:         0
+    Time::Piece:                   0
+    XML::LibXML:                   0
 
 distribution_type: module
 generated_by: ExtUtils::MakeMaker version 6.17

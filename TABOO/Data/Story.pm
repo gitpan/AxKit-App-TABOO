@@ -74,6 +74,7 @@ sub new {
 	timestamp => undef,
 	lasttimestamp => undef,
 	XMLELEMENT => 'story',
+	XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output',
 	ONFILE => undef,
     };
     bless($self, $class);
@@ -264,6 +265,18 @@ These are the names of the stored data of this class:
 
 =back
 
+=head1 XML representation
+
+The C<write_xml()> method, implemented in the parent class, can be used to create an XML representation of the data in the object. The above names will be used as element names. The C<xmlelement()> and C<xmlns()> methods can be used to set the name of the root element and the namespace respectively. Usually, it doesn't make sense to change the defaults, which are 
+
+
+=over
+
+=item * C<story>
+
+=item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output>
+ 
+=back
 
 =head1 BUGS/TODO
 

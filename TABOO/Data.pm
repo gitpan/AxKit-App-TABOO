@@ -47,7 +47,8 @@ sub new {
     my $username = shift;
     my $class = ref($that) || $that;
     my $self = {
-		XMLELEMENT => 'taboo'
+		XMLELEMENT => 'taboo',
+		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Output'
 	       };
 
     bless($self, $class);
@@ -93,13 +94,13 @@ sub write_xml {
     my $self = shift;
     my $doc = shift;
     my $parent = shift;
-    my $topel = $doc->createElement($self->xmlelement());
+    my $topel = $doc->createElementNS($self->xmlns(), $self->xmlelement());
     $parent->appendChild($topel);
     foreach my $key (split(/,\s*/, $self->elementorder())) {
       if (defined(${$self}{$key})) {
 	my $content = ${$self}{$key};
 	if (ref($content) eq '') {
-	  my $element = $doc->createElement($key);
+	  my $element = $doc->createElementNS($self->xmlns(), $key);
 	  my $text = XML::LibXML::Text->new($content);
 	  $element->appendChild($text);
 	  $topel->appendChild($element);
@@ -107,7 +108,7 @@ sub write_xml {
 	  # The content is an array, we must go through it and add an element for each.
 	  foreach (@{$content}) {
 	    if (ref($_) eq '') {
-	      my $element = $doc->createElement($key);
+	      my $element = $doc->createElementNS($self->xmlns(), $key);
 	      my $text = XML::LibXML::Text->new($_);
 	      $element->appendChild($text);
 	      $topel->appendChild($element);
@@ -123,7 +124,7 @@ sub write_xml {
 	  # a reference to one of our subclasses, it must be written too. 
 	  ${$content}->write_xml($doc, $topel);
         } else {
-	  my $element = $doc->createElement($key);
+	  my $element = $doc->createElementNS($self->xmlns(), $key);
 	  my $text = XML::LibXML::Text->new($content);
 	  $element->appendChild($text);
 	  $topel->appendChild($element);
@@ -247,7 +248,7 @@ sub stored {
   
 =item C<xmlelement($string)>
 
-This method is I<intended> for internal use, but if you can use it without shooting somebody in the foot (including yourself), fine by me... It sets the parent element of an object to C<$string>.
+This method is I<intended> for internal use, but if you can use it without shooting somebody in the foot (including yourself), fine by me... It sets the root element that will enclose an object's data to C<$string>.
 
 =cut
 
@@ -259,6 +260,22 @@ sub xmlelement {
     ${$self}{'XMLELEMENT'} = shift;
   }
   return ${$self}{'XMLELEMENT'};
+}
+
+=item C<xmlns($string)>
+
+Like  C<xmlelement()>, this method is I<intended> for internal use. It sets the namespace URI of the XML representation of an object to C<$string>.
+
+=cut
+
+
+
+sub xmlns {
+  my $self = shift;
+  if (@_) { 
+    ${$self}{'XMLNS'} = shift;
+  }
+  return ${$self}{'XMLNS'};
 }
 
 

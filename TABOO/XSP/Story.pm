@@ -10,10 +10,11 @@ use AxKit;
 use AxKit::App::TABOO::Data::Story;
 use Apache::AxKit::Plugin::BasicSession;
 use Time::Piece ':override';
-use Data::Dumper;
+use XML::LibXML;
 
 use vars qw/$NS/;
 
+our $VERSION = '0.021';
 
 =head1 NAME
 
@@ -75,6 +76,8 @@ Finally, the Data object is instructed to save itself.
 
 
 =cut
+
+# '
 
 sub store {
     return << 'EOC'
@@ -138,6 +141,35 @@ sub store {
 EOC
 }
 
+sub this_story : struct {
+    return << 'EOC'
+	my %args = $r->args;
+    $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+    
+    if (! $args{'submitterid'}) {
+      # If the submitterid is not set, we set it to the current username
+	$args{'submitterid'} = $args{'username'}
+    }
+    
+    
+    my $timestamp = localtime;
+    if (! $args{'timestamp'}) {
+      $args{'timestamp'} = $timestamp->datetime;
+    }
+    if (! $args{'lasttimestamp'}) {
+      $args{'lasttimestamp'} = $timestamp->datetime;
+    }
+    my $story = AxKit::App::TABOO::Data::Story->new();
+    $story->apache_request_data(\%args);
+    $story->adduserinfo();
+    $story->addcatinfo();
+    
+    my $doc = XML::LibXML::Document->new();
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story-submission');
+    $doc->setDocumentElement($root);
+    $story->write_xml($doc, $root); # Return an XML representation
+EOC
+}
 1;
 
 =head1 Quirks 

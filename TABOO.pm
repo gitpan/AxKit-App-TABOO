@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.021_1';
 
 
 # Preloaded methods go here.
@@ -120,6 +120,10 @@ change, parameters may be different, and I may decide to do things
 differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
 feedback hackers provide. 
+
+=head1 BUGS
+
+There are surely some... Please report any you find through L<CPAN RT|http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO>.
 
 =head1 AUTHOR
 

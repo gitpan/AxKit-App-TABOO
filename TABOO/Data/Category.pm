@@ -130,6 +130,19 @@ A longer description of a category, intended as an explanation to a human what k
 =back
 
 
+
+=head1 XML representation
+
+The C<write_xml()> method, implemented in the parent class, can be used to create an XML representation of the data in the object. The above names will be used as element names. The C<xmlelement()> and C<xmlns()> methods can be used to set the name of the root element and the namespace respectively. Usually, it doesn't make sense to change the default namespace, which is
+
+=over
+
+=item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output>
+
+=back
+
+However, the root element may change depending on what kind of category we have. The default is C<primcat>.
+
 =cut
 
 sub new {
@@ -141,7 +154,9 @@ sub new {
 		type => undef,
 		uri => undef,
 		description => undef,
-		XMLELEMENT => 'primcat',
+		XMLELEMENT => 'primcat',	
+		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output',
+		ONFILE => undef,
     };
     bless($self, $class);
     return $self;

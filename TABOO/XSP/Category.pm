@@ -71,7 +71,7 @@ sub get_categories : struct attribOrChild(type) {
     my $tmp = AxKit::App::TABOO::Data::Category->new();
     my $cats = $tmp->all_of_type($attr_type);
     my $doc = XML::LibXML::Document->new();
-    my $root = $doc->createElement('categories');
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'categories');
     $root->setAttribute('type', $attr_type);
     $doc->setDocumentElement($root);
     foreach my $catname (@{$cats}) {

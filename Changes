@@ -37,6 +37,19 @@ Revision history for Perl extension AxKit::App::TABOO.
 	changes in this must be expected.  
 	- Quite a lot of minor changes in the internals.
 	
-
-
+0.021_1	  2004-02-14 00:10
+	- Throwing a slightly unfinished development version out the
+	door for various reasons. 
+	- Adds namespaces to all XML representations. The namespace
+	can be set by an xmlns() method, but has sensible defaults.
+	- New elements
+		* AxKit::App::TABOO::XSP::Story
+		 	+ this_story
+		* AxKit::App::TABOO::XSP::User
+			+ this_user
+			+ store (not very well tested)
+	- Added an username attribute to is_authorized, to allow for
+	checking access for a particular user (e.g. the owner). 
+	- Starting to add version numbers to all files. 
+		
 
