@@ -29,9 +29,7 @@ AxKit::App::TABOO::Data::Story - Story Data object for TABOO
   $story->addcatinfo();
   $timestamp = $story->timestamp();
   $lasttimestamp = $story->lasttimestamp();
-  $writer = new XML::Writer();
-  $story->write_xml($writer);
-  $writer->end();
+
 
 =head1 DESCRIPTION
 
@@ -49,38 +47,41 @@ The constructor. Nothing special.
 
 =cut
 
-AxKit::App::TABOO::Data::Story->elementorder("STORYNAME, SECTIONID, IMAGE, PRIMCAT, SECCAT, FREESUBJECT, EDITOROK, TITLE, MINICONTENT, CONTENT, USER, SUBMITTER, LINKTEXT, TIMESTAMP, LASTTIMESTAMP");
+AxKit::App::TABOO::Data::Story->dbtable("stories");
+AxKit::App::TABOO::Data::Story->dbprimkey("storyname");
+AxKit::App::TABOO::Data::Story->elementorder("storyname, sectionid, image, primcat, seccat, freesubject, editorok, title, minicontent, content, USER, SUBMITTER, linktext, timestamp, lasttimestamp");
 
 sub new {
     my $that  = shift;
     my $username = shift;
     my $class = ref($that) || $that;
     my $self = {
-	STORYNAME  => undef,
-	SECTIONID => undef,
-	IMAGE => undef,
-	PRIMCAT => undef,
-	SECCAT => [],
-	FREESUBJECT => [],
-	EDITOROK => 0,
-	TITLE => undef,
-	MINICONTENT => undef,
-	CONTENT => undef,
-	USERNAME => undef,
+	storyname  => undef,
+	sectionid => undef,
+	image => undef,
+	primcat => undef,
+	seccat => [],
+	freesubject => [],
+	editorok => 0,
+	title => undef,
+	minicontent => undef,
+	content => undef,
+	username => undef,
 	USER => undef,
-	SUBMITTERID => undef,
+	submitterid => undef,
 	SUBMITTER => undef,
-	LINKTEXT => undef,
-	TIMESTAMP => undef,
-	LASTTIMESTAMP => undef,
+	linktext => undef,
+	timestamp => undef,
+	lasttimestamp => undef,
 	XMLELEMENT => 'story',
+	ONFILE => undef,
     };
     bless($self, $class);
     return $self;
 }
 
-use Alias qw(attr);
-our ($STORYNAME, $SECTIONID, $IMAGE, $PRIMCAT, $SECCAT, $FREESUBJECT, $EDITOROK, $TITLE, $MINICONTENT, $CONTENT, $USERNAME, $USER, $SUBMITTERID, $SUBMITTER, $LINKTEXT, $TIMESTAMP, $LASTTIMESTAMP);
+#use Alias qw(attr);
+#our ($storyname, $sectionid, $image, $primcat, $seccat, $freesubject, $editorok, $title, $minicontent, $content, $username, $USER, $submitterid, $SUBMITTER, $linktext, $timestamp, $lasttimestamp, $ONFILE);
 
 
 =item C<load($what, $section, $storyname)>
@@ -105,17 +106,23 @@ sub load
 {
   my $self = shift;
   my ($what, $section, $storyname) = @_;
-  my $dbh = DBI->connect($self->dbstring(), $self->dbuser(), $self->dbpasswd());
+  my $dbh = DBI->connect($self->dbstring(), 
+			 $self->dbuser(), 
+			 $self->dbpasswd(),  
+			 { PrintError => 0,
+			   RaiseError => 0,
+			   HandleError => Exception::Class::DBI->handler
+			   });
   my $sth = $dbh->prepare("SELECT " . $what . " FROM stories WHERE sectionid=? AND storyname=?");
   $sth->execute($section, $storyname);
   my $data = $sth->fetchrow_hashref;
+  if ($data) { ${$self}{'ONFILE'} = 1; }
   foreach my $key (keys(%{$data})) {
-    (my $up = $key) =~ tr/[a-z]/[A-Z]/;
     if (defined(${$data}{$key}) && (${$data}{$key} =~ m/^\{(\S+)\}$/)) { # Support SQL3 arrays ad hoc
       my @arr = split(/\,/, $1);
-      ${$self}{$up} = \@arr;
+      ${$self}{$key} = \@arr;
     } else {
-      ${$self}{$up} = ${$data}{$key};
+      ${$self}{$key} = ${$data}{$key};
     }
   }
   return $self;
@@ -135,10 +142,10 @@ sub adduserinfo {
     $user->dbuser($self->dbuser());
     $user->dbpasswd($self->dbpasswd());
     # This calls a _addinfo method in the parent class, which should only be used by subclasses for this purpose. It adds the reference itself.
-    $self->_addinfo($user,'USERNAME','USER');
+    $self->_addinfo($user,'username','USER');
     $user = AxKit::App::TABOO::Data::User->new();
     $user->xmlelement("submitter");
-    $self->_addinfo($user,'SUBMITTERID','SUBMITTER');
+    $self->_addinfo($user,'submitterid','SUBMITTER');
     return $self;
 }
 
@@ -155,23 +162,23 @@ sub addcatinfo {
     $category->dbuser($self->dbuser());
     $category->dbpasswd($self->dbpasswd());
     # There is only one primary category allowed.
-    $self->_addinfo($category,'PRIMCAT','PRIMCAT');
+    $self->_addinfo($category,'primcat','primcat');
 
     # We allow several secondary categories, so we may get an array to run through. 
     my $i = 0;
-    foreach my $catname (@{${$self}{'SECCAT'}}) {
+    foreach my $catname (@{${$self}{'seccat'}}) {
       my $cat = AxKit::App::TABOO::Data::Category->new();
       $cat->xmlelement("seccat");
       $cat->load($catname);
-      ${$self}{'SECCAT'}[$i] = \$cat;
+      ${$self}{'seccat'}[$i] = \$cat;
       $i++;
     }
     $i = 0;
-    foreach my $catname (@{${$self}{'FREESUBJECT'}}) {
+    foreach my $catname (@{${$self}{'freesubject'}}) {
       my $cat = AxKit::App::TABOO::Data::Category->new();
       $cat->xmlelement("freesubject");
       $cat->load($catname);
-      ${$self}{'FREESUBJECT'}[$i] = \$cat;
+      ${$self}{'freesubject'}[$i] = \$cat;
       $i++;
     }
     return $self;
@@ -186,12 +193,12 @@ The timestamp method will return a Time::Piece object with the requested time in
 =cut
 
 sub timestamp {
-  my $self = attr shift;
-  if (! $TIMESTAMP) {
+  my $self = shift;
+  if (! ${$self}{'timestamp'}) {
     my ($section, $storyname) = @_;
     $self->load('timestamp', $section, $storyname);
   }
-  (my $tmp = $TIMESTAMP) =~ s/\+\d{2}$//;
+  (my $tmp = ${$self}{'timestamp'}) =~ s/\+\d{2}$//;
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
 
@@ -206,12 +213,12 @@ It may require arguments like the timestamp method does, and it will return a Ti
 =cut
 
 sub lasttimestamp {
-  my $self = attr shift;
-  if (! $LASTTIMESTAMP) {
+  my $self = shift;
+  if (! ${$self}{'lasttimestamp'}) {
     my ($section, $storyname) = @_;
     $self->load('lasttimestamp', $section, $storyname);
   }
-  (my $tmp = $LASTTIMESTAMP) =~ s/\+\d{2}$//;
+  (my $tmp = ${$self}{'lasttimestamp'}) =~ s/\+\d{2}$//;
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
 
@@ -260,7 +267,7 @@ These are the names of the stored data of this class:
 
 =head1 BUGS/TODO
 
-Besides that it is a pre-alpha, there is a quirk in the load method. I use SQL3 arrays in the underlying database, but it is not clear to me whether the database driver supports this. Apparently, it doesn't. So, there is a very hackish ad hoc implementation to parse the arrays in that method. It works for me, but not with all versions of L<DBD::Pg>, notably 1.31, it'll segfault. 
+Besides that it is a pre-alpha, there is a quirk in the load method. I use SQL3 arrays in the underlying database, but the database driver doesn't support this. So, there is a very hackish ad hoc implementation to parse the arrays in that method. It works for me, but not with all versions of L<DBD::Pg>, notably 1.31, it'll segfault. 1.32 will fix the segfault, but probbably not add the needed support.
 
 =head1 FORMALITIES
 

@@ -10,8 +10,9 @@ use base qw(Class::Data::Inheritable);
 
 
 use DBI;
-use XML::Writer;
+use Exception::Class::DBI;
 
+use XML::LibXML;
 
 =head1 NAME
 
@@ -25,7 +26,7 @@ It is to be noted that I have not, neither in this class nor in the subclasses, 
 
 In some subclasses, you will have some degree of control of what is loaded into the object data structure in the first place, by sending the names of the fields of the storage medium (e.g. database in the present implementation).
 
-Similarly, if data is sent from a web application, I expect that the Data objects will be passed an Apache::Request object, and it is up to a method of the Data object to take what it wants from the Apache::Request object, and intelligently store it. 
+Similarly, if data is sent from a web application, the present implementation makes it possible to pass an L<Apache::Request> object to a Data object, and it is up to a method of the Data object to take what it wants from the Apache::Request object, and intelligently store it. 
 
 Some methods to access data will be implemented on an ad hoc basis, notably C<timestamp()>-methods, that will be important in determining the validity of cached data. 
 
@@ -62,66 +63,188 @@ Will load and populate the data structure of an instance with the data from a th
 sub load {
     my $self = shift;
     my $dbkey = shift;
-    my $dbhandle = DBI->connect($self->dbstring(), $self->dbuser(), $self->dbpasswd());
-    # just get the data, the subclass should give of the dbquery.
-    my $sth = $dbhandle->prepare($self->dbquery());
+    my $dbh = DBI->connect($self->dbstring(), 
+			   $self->dbuser(), 
+			   $self->dbpasswd(),  
+			   { PrintError => 0,
+			     RaiseError => 0,
+			     HandleError => Exception::Class::DBI->handler
+			     });
+    # just get the data, the subclass should give of the selectquery.
+    my $sth = $dbh->prepare($self->selectquery());
     $sth->execute($dbkey);
     my $data = $sth->fetchrow_hashref;
-    # DB fields are lower case, class fields are upper. 
     foreach my $key (keys(%{$data})) {
-      (my $up = $key) =~ tr/[a-z]/[A-Z]/;
-      ${$self}{$up} = ${$data}{$key}; 
+      ${$self}{$key} = ${$data}{$key}; 
     }
     $sth->finish;
-    $dbhandle->disconnect;
+    $dbh->disconnect;
     return $self;
 }
 
-=item C<write_xml($writer)>
+=item C<write_xml($doc, $parent)>
 
-Takes an argument C<$writer>, which must be an XML::Writer object, and appends it with the data contained in the data structure of the class in XML. This method is the jewel of this class, it should be sufficiently generic to rarely require subclassing. References to subclasses will be followed, and C<write_xml> will call the C<write_xml> of that object. Arrays will be represented with multiple instances of the same element. Fields that have undefined values will be represented by an empty element. 
+Takes arguments C<$doc>, which must be an L<XML::LibXML::Document> object, and C<$parent>, a reference to the parent node. The method will append the object it is handed it with the data contained in the data structure of the class in XML. This method is the jewel of this class, it should be sufficiently generic to rarely require subclassing. References to subclasses will be followed, and C<write_xml> will call the C<write_xml> of that object. Arrays will be represented with multiple instances of the same element. Fields that have undefined values will not be included.
 
 =cut
 
 
 sub write_xml {
     my $self = shift;
-    my $writer = shift;
-    $writer->startTag($self->xmlelement());
+    my $doc = shift;
+    my $parent = shift;
+    my $topel = $doc->createElement($self->xmlelement());
+    $parent->appendChild($topel);
     foreach my $key (split(/,\s*/, $self->elementorder())) {
-      # Fields are in uppercase, elements in lower
-      (my $low = $key) =~ tr/[A-Z]/[a-z]/;
       if (defined(${$self}{$key})) {
 	my $content = ${$self}{$key};
 	if (ref($content) eq '') {
-	  $writer->dataElement($low, $content);
+	  my $element = $doc->createElement($key);
+	  my $text = XML::LibXML::Text->new($content);
+	  $element->appendChild($text);
+	  $topel->appendChild($element);
 	} elsif (ref($content) eq "ARRAY") {
 	  # The content is an array, we must go through it and add an element for each.
 	  foreach (@{$content}) {
 	    if (ref($_) eq '') {
-	      $writer->dataElement($low, $_);
+	      my $element = $doc->createElement($key);
+	      my $text = XML::LibXML::Text->new($_);
+	      $element->appendChild($text);
+	      $topel->appendChild($element);
 	    } else {
 	      my $el = ${$_};
 	      if (ref($el) =~ m/^AxKit::App::TABOO::Data/) {
 		# An element in the array contained a reference to one of our subclasses, it must be written too. 
-		$el->write_xml($writer);
+		$el->write_xml($doc, $topel);
 	      }
 	    }
 	  }
 	} elsif (ref(${$content}) =~ m/^AxKit::App::TABOO::Data/) {
 	  # a reference to one of our subclasses, it must be written too. 
-	  ${$content}->write_xml($writer);
+	  ${$content}->write_xml($doc, $topel);
         } else {
-	  $writer->dataElement($low, $content);
+	  my $element = $doc->createElement($key);
+	  my $text = XML::LibXML::Text->new($content);
+	  $element->appendChild($text);
+	  $topel->appendChild($element);
         }
       } else {
-	$writer->emptyTag($low);
+#	$writer->emptyTag($key);
       }
     }
-    $writer->endTag($self->xmlelement());
-    return $writer;
+#    $writer->endTag($self->xmlelement());
+    return $doc;
 }
 
+=item C<apache_request_data(\%args)>
+
+This method takes as argument a reference to the args hash of a L<Apache::Request> object. Note that in a request, the Request object is available as C<$r>, so you may create this hash by 
+
+    my %args = $r->args;
+
+It will populate the data object by adding any data from a parameter having the same name as is used in the data storage. Keys with uppercase letters are ignored. 
+
+=cut
+
+
+sub apache_request_data {
+    my $self = shift;
+    my $args = shift;
+    foreach my $key (keys(%{$self})) {
+	next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
+	${$self}{$key} = ${$args}{$key};
+    }
+    return $self;
+}
+
+=item C<save([$olddbkey])>
+
+This is a generic save method, that will write a new record to the data store, or update an old one. It may have to be subclassed for certain classes. It takes an optional argument C<$olddbkey>, which is the primary key of an existing record in the data store. You may supply this in the case if you want to update the record with a new key. In that case, you'd better be sure it actually exists, because the method will trust you do. 
+
+It is not yet a very rigorous implementation: It may well fail badly if it is given something with a reference to other Data objects, which is the case if you have a full story with all comments (see C<_addinfo> below). Or it may cope. Only time will tell! Expect to see funny warnings in your logs if you try.
+
+
+=cut
+
+sub save {
+  my $self = shift;
+  my $olddbkey = shift;
+  my $dbh = DBI->connect($self->dbstring(), 
+			 $self->dbuser(), 
+			 $self->dbpasswd());  
+#			 { PrintError => 1,
+#			   RaiseError => 0,
+#			   HandleError => Exception::Class::DBI->handler
+#			   });
+  my @fields;
+  my $i=0;
+  foreach my $key (keys(%{$self})) {
+      next if ($key =~ m/[A-Z]/); # Uppercase keys are not in db
+      next unless (${$self}{$key}); # No need to insert something that isn't there
+      push(@fields, $key);
+      $i++;
+  }
+  if ($i == 0) {
+      carp "No data fields with anything to save";
+  } else {
+      my $sth;
+      my $dbkey = ${$self}{$self->dbprimkey()};
+      # First we check if we should update rather than insert
+      if (($olddbkey) || ($self->stored)) {
+	${$self}{'ONFILE'} = 1;
+	# Yep, we update, but do we change the primary key?
+	if ($olddbkey) { 
+	  $dbkey = $olddbkey;
+	}
+	$sth = $dbh->prepare("UPDATE ". $self->dbtable() . " SET " . join('=?,', @fields) . "=? WHERE " . $self->dbprimkey() . "=?");
+	
+      } else {
+	$sth = $dbh->prepare("INSERT INTO ". $self->dbtable() . " (" . join(',', @fields) . ") VALUES (" . '?,' x ($i-1) . '?)');
+      }
+      $i = 1;
+      foreach my $key (@fields) {
+	  my $content = ${$self}{$key};
+	  if (ref($content) eq '') {
+	      $sth->bind_param($i, $content);
+	  } elsif (ref($content) eq "ARRAY") {
+	      # The content is an array, save it as such, ad hoc SQL3 for now.
+	      $sth->bind_param($i, "{" . join(',', @{$content}) . "}");
+	  } else {
+	      warn "Advanced forms of references aren't implemented meaningfully yet. Don't be surprised if I crash or corrupt something.";
+	      ${$content}->save(); # IOW: Panic!! Everybody save yourselves if you can! :-)
+	  }
+	  $i++;
+      }
+      if (${$self}{'ONFILE'}) {
+	  $sth->bind_param($i, $dbkey);
+      }
+      $sth->execute();
+  }
+  return $self;
+}
+
+
+=item C<stored()>
+
+Checks if a record with the present object's identifier is allready present in the datastore. Returns 1 if this is so. 
+
+=cut
+
+sub stored {
+  my $self = shift;
+  return 1 if ${$self}{'ONFILE'};
+  my $dbh = DBI->connect($self->dbstring(), 
+			 $self->dbuser(), 
+			 $self->dbpasswd(),  
+			 { PrintError => 0,
+			   RaiseError => 0,
+			   HandleError => Exception::Class::DBI->handler
+			 });
+  my $check = scalar($dbh->selectrow_array("SELECT 1 FROM " . $self->dbtable() . " WHERE " . $self->dbprimkey() . "=?", {}, ${$self}{$self->dbprimkey()}));
+  ${$self}{'ONFILE'} = $check;
+  return $check;
+}
+  
 =item C<xmlelement($string)>
 
 This method is I<intended> for internal use, but if you can use it without shooting somebody in the foot (including yourself), fine by me... It sets the parent element of an object to C<$string>.
@@ -137,6 +260,8 @@ sub xmlelement {
   }
   return ${$self}{'XMLELEMENT'};
 }
+
+
 
 =item C<_addinfo($add, $this, $that)>
 
@@ -190,7 +315,7 @@ The password to be passed to the DBI constructor. Currently defaults to an empty
 
 =cut
 
-#=item C<dbquery($string)>
+#=item C<selectquery($string)>
 #
 #The load method of the present class will use this string as a SQL statement. This is a relatively simple way for subclasses to use the load method rather than implement their own. It can be used in the cases where the query is specific to the class rather than the specific instances. I<It is intended for use by subclasses only.>
 
@@ -203,7 +328,9 @@ The password to be passed to the DBI constructor. Currently defaults to an empty
 AxKit::App::TABOO::Data->mk_classdata('dbstring');
 AxKit::App::TABOO::Data->mk_classdata('dbuser');
 AxKit::App::TABOO::Data->mk_classdata('dbpasswd');
-AxKit::App::TABOO::Data->mk_classdata('dbquery');
+AxKit::App::TABOO::Data->mk_classdata('selectquery');
+AxKit::App::TABOO::Data->mk_classdata('dbtable');
+AxKit::App::TABOO::Data->mk_classdata('dbprimkey');
 AxKit::App::TABOO::Data->mk_classdata('elementorder');
 
 AxKit::App::TABOO::Data->dbstring("dbi:Pg:dbname=skepsis");
@@ -220,7 +347,7 @@ Consult the documentation for each individual Data class for the names of the st
 
 =head1 BUGS/TODO
 
-Hey, it is a pre-alpha!
+Except for still being near-alpha, and should have a few bugs, there is the issue with the handling of references to other objects in the C<save()> method. It's possible it will cope, but it definately needs work.
 
 =head1 FORMALITIES
 

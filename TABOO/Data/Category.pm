@@ -9,7 +9,7 @@ use vars qw/@ISA/;
 @ISA = qw(AxKit::App::TABOO::Data);
 
 use DBI;
-
+use Exception::Class::DBI;
 
 =head1 NAME
 
@@ -28,18 +28,64 @@ It is often convenient to lump articles together in categories. People do that t
 
 =cut
 
-AxKit::App::TABOO::Data::Category->elementorder("CATNAME, NAME, TYPE, URI, DESCRIPTION");
-AxKit::App::TABOO::Data::Category->dbquery("SELECT * FROM categories WHERE catname=?");
+AxKit::App::TABOO::Data::Category->elementorder("catname, name, type, uri, description");
+AxKit::App::TABOO::Data::Category->selectquery("SELECT * FROM categories WHERE catname=?");
 
 =head1 METHODS
 
-This class implements only one method, the rest is inherited from L<AxKit::App::TABOO::Data>.
+This class implements only one method, in addition to the constructor, the rest is inherited from L<AxKit::App::TABOO::Data>.
 
 =over
 
 =item C<new()>
 
 The constructor. Nothing special.
+
+=item C<all_of_type($type)>
+
+This method will return an arrayref containing the catnames of all categories of type C<$type>. This is a bit unelegant, since the typical use is to first call it on an object just created, then create an array containing Category objects based on it, but I didn't find a better solution right now... 
+
+
+
+=cut
+
+sub all_of_type {
+  my $self = shift;
+  my $type = shift;
+  my $dbh = DBI->connect($self->dbstring(), 
+			 $self->dbuser(), 
+			 $self->dbpasswd(),  
+			 { PrintError => 0,
+			   RaiseError => 0,
+			   HandleError => Exception::Class::DBI->handler
+			 });
+  return $dbh->selectcol_arrayref("SELECT catname FROM categories WHERE type=?", {}, $type);
+}
+
+
+=item C<load_name($catname)>
+
+This is an ad hoc method to retrieve the full name of a category, and it takes a C<$catname> key to identify the category to retrieve. It will return a string with the name, but it will also populate the corresponding data fields of the object. You may therefore call C<write_xml> on the object afterwards and have markup for the categoryname and name. 
+
+=cut
+
+sub load_name {
+    my $self = shift;
+    my $catname = shift;
+    my $dbh = DBI->connect($self->dbstring(), 
+			   $self->dbuser(), 
+			   $self->dbpasswd(),  
+			   { PrintError => 0,
+			     RaiseError => 0,
+			     HandleError => Exception::Class::DBI->handler
+			   });
+    my $sth = $dbh->prepare("SELECT name FROM categories WHERE catname=?");
+    $sth->execute($catname);
+    my @data = $sth->fetchrow_array;
+    ${$self}{'name'} = join('', @data);
+    ${$self}{'catname'} = $catname;
+    return ${$self}{'name'};
+}
 
 =back
 
@@ -90,11 +136,11 @@ sub new {
     my $that  = shift;
     my $class = ref($that) || $that;
     my $self = {
-		CATNAME => undef,
-		NAME => undef,
-		TYPE => undef,
-		URI => undef,
-		DESCRIPTION => undef,
+		catname => undef,
+		name => undef,
+		type => undef,
+		uri => undef,
+		description => undef,
 		XMLELEMENT => 'primcat',
     };
     bless($self, $class);

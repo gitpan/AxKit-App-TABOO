@@ -43,19 +43,19 @@ The constructor. Nothing special.
 
 =cut
 
-AxKit::App::TABOO::Data::Comment->elementorder("COMMENTPATH, TITLE, CONTENT, TIMESTAMP, USER, REPLIES");
+AxKit::App::TABOO::Data::Comment->elementorder("commentpath, title, content, timestamp, USER, REPLIES");
 
 sub new {
     my $that  = shift;
     my $class = ref($that) || $that;
     my $self = {
-	COMMENTPATH => undef,
-	STORYNAME => undef,
-	SECTIONID => undef,
-	TITLE => undef,
-	CONTENT => undef,
-	TIMESTAMP => undef,
-	USERNAME => undef,
+	commentpath => undef,
+	storyname => undef,
+	sectionid => undef,
+	title => undef,
+	content => undef,
+	timestamp => undef,
+	username => undef,
 	USER => undef,
 	REPLIES => [],
 	XMLELEMENT => 'reply',
@@ -64,8 +64,8 @@ sub new {
     return $self;
 }
 
-use Alias qw(attr);
-our ($COMMENTPATH, $STORYNAME, $SECTIONID, $TITLE, $CONTENT, $TIMESTAMP, $USERNAME, @REPLIES);
+#use Alias qw(attr);
+#our ($commentpath, $storyname, $sectionid, $title, $content, $timestamp, $username, @REPLIES);
 
 =item C<load($what, $commentpath, $section, $storyname)>
 
@@ -92,7 +92,13 @@ When loaded, the comment object will also contain an array of commentpaths of th
 sub load {
     my $self = shift;
     my ($what, $commentpath, $section, $storyname) = @_;
-    my $dbh = DBI->connect($self->dbstring(), $self->dbuser(), $self->dbpasswd());
+    my $dbh = DBI->connect($self->dbstring(), 
+			   $self->dbuser(), 
+			   $self->dbpasswd(),  
+			   { PrintError => 0,
+			     RaiseError => 0,
+			     HandleError => Exception::Class::DBI->handler
+			   });
     my $sth = $dbh->prepare("SELECT $what FROM comments WHERE commentpath=? AND sectionid=? AND storyname=?");
     $sth->execute($commentpath, $section, $storyname);
     my $data = $sth->fetchrow_hashref;
@@ -101,10 +107,9 @@ sub load {
     # commentpaths by selecting the commentpaths that start with the 
     # commentpath of the present comment
     my $tmp = $dbh->selectcol_arrayref("SELECT commentpath FROM comments WHERE commentpath ~ ? AND sectionid=? AND storyname=?", {}, $commentpath . '/[a-z]+$', $section, $storyname); # '
-    @{$data}{'replies'} = $tmp; # these are now in an array
+    @{$data}{'REPLIES'} = $tmp; # these are now in an array
     foreach my $key (keys(%{$data})) {
-	(my $up = $key) =~ tr/[a-z]/[A-Z]/;
-	${$self}{$up} = ${$data}{$key}; 
+	${$self}{$key} = ${$data}{$key}; 
     }
     $sth->finish;
     $dbh->disconnect;
@@ -120,12 +125,12 @@ Like C<load()>, C<tree($what)> takes an argument, a comma-separated list of fiel
 =cut
 
 sub tree {
-    my $self = attr shift;
+    my $self = shift;
     my $what = shift;
     my $i = 0;
     foreach my $commentpath (@{${$self}{'REPLIES'}}) {
 	my $comment = AxKit::App::TABOO::Data::Comment->new();
-	$comment->load($what, $commentpath, $SECTIONID, $STORYNAME);
+	$comment->load($what, $commentpath, ${$self}{'sectionid'}, ${$self}{'storyname'});
 	$comment->adduserinfo();
 	$comment->tree($what);
 	${$self}{'REPLIES'}[$i] = \$comment;
@@ -136,15 +141,21 @@ sub tree {
 
 =item C<root($section, $storyname)>
 
-The C</> commentpath does not refer to a comment. The root is simply not a comment, so you can't C<load( ... , '/', ... , ...)>. To address this problem, the root method returns a reference to an array containing all the commentpaths of comments attached directly to a story. You may then run through the array and call C<load> on each element in the array. It takes two arguments, an identifier for the section and for the story, see C<load()>. 
+The C</> commentpath does not refer to a comment. The root is simply not a comment, so you can't C<load( ... , '/', ... , ...)>. To address this problem, the root method returns a reference to an array containing all the commentpaths of comments attached directly to a story. You may then run through the array and call C<load> on each element in the array. It takes two arguments, an identifier for the section and for the story, see C<load()>. This is slightly inelegant, since it does not deal with a single object of this class like the others do, but it was the best solution I found now. 
 
 =cut
 
 
 sub root {
-  my $self = attr shift;
+  my $self = shift;
   my ($section, $storyname) = @_;
-  my $dbh = DBI->connect($self->dbstring(), $self->dbuser(), $self->dbpasswd());
+  my $dbh = DBI->connect($self->dbstring(), 
+			 $self->dbuser(), 
+			 $self->dbpasswd(),  
+			 { PrintError => 0,
+			   RaiseError => 0,
+			   HandleError => Exception::Class::DBI->handler
+			 });
   return $dbh->selectcol_arrayref("SELECT commentpath FROM comments WHERE commentpath ~ ? AND sectionid=? AND storyname=?", {}, '^/[a-z]+$', $section, $storyname); # '
 }
 
@@ -163,7 +174,7 @@ sub adduserinfo {
     $user->dbstring($self->dbstring());
     $user->dbuser($self->dbuser());
     $user->dbpasswd($self->dbpasswd());
-    $self->_addinfo($user,'USERNAME','USER');
+    $self->_addinfo($user,'username','USER');
     return $self;
 }
 
@@ -179,12 +190,12 @@ The timestamp method will return a Time::Piece object with the requested time in
 =cut
 
 sub timestamp {
-  my $self = attr shift;
-  if (! $TIMESTAMP) {
+  my $self = shift;
+  if (! ${$self}{'timestamp'}) {
     my ($section, $storyname) = @_;
     $self->load('timestamp', $section, $storyname);
   }
-  (my $tmp = $TIMESTAMP) =~ s/\+\d{2}$//;
+  (my $tmp = ${$self}{'timestamp'}) =~ s/\+\d{2}$//;
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
 

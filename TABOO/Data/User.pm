@@ -27,8 +27,9 @@ This Data class contains basic user information, such as name, e-mail address, a
 
 =cut
 
-AxKit::App::TABOO::Data::User->dbquery("SELECT * FROM users WHERE username=?");
-AxKit::App::TABOO::Data::User->elementorder("USERNAME, NAME, EMAIL, URI, PASSWD");
+AxKit::App::TABOO::Data::User->selectquery("SELECT * FROM users WHERE username=?");
+AxKit::App::TABOO::Data::User->dbtable("users");
+AxKit::App::TABOO::Data::User->elementorder("username, name, email, uri, passwd");
 
 =head1 METHODS
 
@@ -46,19 +47,19 @@ sub new {
     my $that  = shift;
     my $class = ref($that) || $that;
     my $self = {
-	USERNAME => undef,
-	NAME => undef,
-	EMAIL => undef,
-	URI => undef,
-	PASSWD => undef,
+	username => undef,
+	name => undef,
+	email => undef,
+	uri => undef,
+	passwd => undef,
 	XMLELEMENT => 'user',
     };
     bless($self, $class);
     return $self;
 }
 
-use Alias qw(attr);
-our ($USERNAME, $NAME, $EMAIL, $URI, $PASSWD);
+#use Alias qw(attr);
+#our ($username, $name, $email, $uri, $passwd);
 
 =item C<load_name($username)>
 
@@ -67,15 +68,45 @@ This is an ad hoc method to retrieve the full name of a user, and it takes a C<$
 =cut
 
 sub load_name {
-    my $self = attr shift;
+    my $self = shift;
     my $username = shift;
-    my $dbh = DBI->connect($self->dbstring(), $self->dbuser(), $self->dbpasswd());
+    my $dbh = DBI->connect($self->dbstring(), 
+			   $self->dbuser(), 
+			   $self->dbpasswd(),  
+			   { PrintError => 0,
+			     RaiseError => 0,
+			     HandleError => Exception::Class::DBI->handler
+			     });
     my $sth = $dbh->prepare("SELECT name FROM users WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;
-    $NAME = join('', @data);
-    $USERNAME = $username;
-    return $NAME;
+    ${$self}{'name'} = join('', @data);
+    ${$self}{'username'} = $username;
+    return ${$self}{'name'};
+}
+
+=item C<load_passwd($username)>
+
+This is an ad hoc method to retrieve the encrypted password of a user, and it takes a C<$username> key to identify the user to retrieve. It will return a string with the encrypted password, but it will also populate the corresponding data fields of the object. You may therefore call C<write_xml> on the object afterwards and have markup for the username and passwd. 
+
+=cut
+
+sub load_passwd {
+    my $self = shift;
+    my $username = shift;
+    my $dbh = DBI->connect($self->dbstring(), 
+			   $self->dbuser(), 
+			   $self->dbpasswd(),  
+			   { PrintError => 0,
+			     RaiseError => 0,
+			     HandleError => Exception::Class::DBI->handler
+			     });
+    my $sth = $dbh->prepare("SELECT passwd FROM users WHERE username=?");
+    $sth->execute($username);
+    my @data = $sth->fetchrow_array;
+    ${$self}{'passwd'} = join('', @data);
+    ${$self}{'username'} = $username;
+    return ${$self}{'passwd'};
 }
 
 =back
@@ -84,7 +115,7 @@ sub load_name {
 
 The data is stored in named fields, and for certain uses, it is good to know them. If you want to subclass this class, you might want to use the same names, see the documentation of L<AxKit::APP::TABOO::Data> for more about this.
 
-This class is quite certain to be subclassed at some point as TABOO grows: One may record more information about contributors to the site, or customers for a webshop. 
+It is natural to subclass this as TABOO grows: One may record more information about contributors to the site, or customers for a webshop. For an example, see L<AxKit::APP::TABOO::Data::User:Contributor>
 
 These are the names of the stored data of this class:
 
@@ -108,7 +139,7 @@ In the Semantic Web you'd like to identify things and their relationships with U
 
 =item * passwd
 
-The user's encrypted password. Allthough it C<is> encrypted, you may not want to throw it around too much. Perhaps it should have been stored somewhere else entirely. YMMV.
+The user's encrypted password. Allthough it I<is> encrypted, you may not want to throw it around too much. Perhaps it should have been stored somewhere else entirely. YMMV.
 
 =back
 

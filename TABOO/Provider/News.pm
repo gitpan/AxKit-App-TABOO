@@ -26,8 +26,7 @@ In accordance with the TABOO philosophy, it interacts with Data objects, that ar
 =cut
 
 use Data::Dumper;
-use XML::Writer;
-use IO::Scalar;
+use XML::LibXML;
 
 use vars qw/@ISA/;
 @ISA = ('Apache::AxKit::Provider');
@@ -183,13 +182,9 @@ sub get_strref {
     # simply check if we've been run before. 
     AxKit::Debug(5, "[News] Output allready created in earlier run, reusing");
   } else {
-    my $out;
-    my $output = new IO::Scalar \$out;
-    # Since I'm using a IO::Handle, would get_fh be better, if so how?
-    my $writer = new XML::Writer(OUTPUT => $output,
-				 DATA_MODE => 1,
-				 DATA_INDENT => 2);
-    $writer->startTag('taboo');
+    my $doc = XML::LibXML::Document->new();
+    my $rootel = $doc->createElement('taboo');
+    $doc->setDocumentElement($rootel);
     # ===============================================
     # Main logic of what to display goes here
     if($self->{getcomments}) {
@@ -199,43 +194,43 @@ sub get_strref {
       if($self->{showthread}) {
 	# We shall show a thread, not the story OK
 	AxKit::Debug(7, "[News] We shall show a thread, not the story");
-	$self->{story}->write_xml($writer);
+	$self->{story}->write_xml($doc, $rootel);
 	if($self->{commentpath} eq '/') {
-	  $self->_expand_root('*', $roots, $writer);
+	  $self->_expand_root('*', $roots, $doc, $rootel);
 	} else {
 	  $self->{rootcomment}->adduserinfo();
 	  $self->{rootcomment}->tree('*');
-	  $self->{rootcomment}->write_xml($writer);
+	  $self->{rootcomment}->write_xml($doc, $rootel);
 	}
       } elsif($self->{commentpath} ne '/' && (! $self->{showthread})) {
 	# We shall show a single comment OK
 	AxKit::Debug(7, "[News] We shall show a single comment");
 	# The comment itself is in rootcomment allready.
-	$self->{story}->write_xml($writer);
+	$self->{story}->write_xml($doc, $rootel);
 	$self->{rootcomment}->adduserinfo();
-	$self->{rootcomment}->write_xml($writer);
+	$self->{rootcomment}->write_xml($doc, $rootel);
 	# But we want a list of headers too. 
-	$writer->startTag('commentlist');
-	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $writer);
-	$writer->endTag('commentlist');
+	my $commentlistel = $doc->createElement('commentlist');
+	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $doc, $rootel);
+	$rootel->appendChild($commentlistel);
       } elsif($self->{showall}) {
 	# We shall show the full story and all the expanded comments OK
 	AxKit::Debug(7, "[News] We shall show the full story and all the expanded comments");
 	$self->{story}->load('*', $self->{section}, $self->{storyname});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
-	$self->{story}->write_xml($writer);
-	$self->_expand_root('*', $roots, $writer);
+	$self->{story}->write_xml($doc, $rootel);
+	$self->_expand_root('*', $roots, $doc, $rootel);
       } else {
 	# We shall show the full story, but only headings of comments OK
 	AxKit::Debug(7, "[News] We shall show the full story, but only headings of comments");
 	$self->{story}->load('*', $self->{section}, $self->{storyname});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
-	$self->{story}->write_xml($writer);
-	$writer->startTag('commentlist');
-	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $writer);
-	$writer->endTag('commentlist');
+	$self->{story}->write_xml($doc, $rootel);
+	my $commentlistel = $doc->createElement('commentlist');
+	$self->_expand_root('commentpath,sectionid,storyname,title,username,timestamp', $roots, $doc, $rootel);
+	$rootel->appendChild($commentlistel);
       }
     } else {
       # We shall only display the story, no comments OK
@@ -243,18 +238,16 @@ sub get_strref {
       $self->{story}->load('*', $self->{section}, $self->{storyname});
       $self->{story}->adduserinfo();
       $self->{story}->addcatinfo();
-      $self->{story}->write_xml($writer); 
+      $self->{story}->write_xml($doc, $rootel); 
     }
     
     
     # =========================
     # Wrapping up and returning
-    $writer->endTag('taboo');
-    $writer->end();
-    $self->{out} = \$out;
-    AxKit::Debug(10, Dumper($self->{out}));
+    $self->{out} = $doc;
+    AxKit::Debug(10, Dumper($self->{out}->toString(1)));
   }
-  return $self->{out};
+  return \$self->{out}->toString(1);
 }
 
 =head1 URI USAGE
@@ -320,13 +313,14 @@ sub _expand_root {
   my $self = shift;
   my $what = shift;
   my $roots = shift;
-  my $writer = shift;
+  my $doc = shift;
+  my $parent = shift;
   foreach my $commentpath (@{$roots}) {
     my $comment = AxKit::App::TABOO::Data::Comment->new();
     $comment->load($what, $commentpath, $self->{section}, $self->{storyname});
     $comment->adduserinfo();
     $comment->tree($what);
-    $comment->write_xml($writer);
+    $comment->write_xml($doc, $parent);
   }
 }
 

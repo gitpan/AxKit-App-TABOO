@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.01
+AxKit/App/TABOO version 0.02
 ============================
 
 INTRODUCTION
@@ -42,18 +42,20 @@ in the code, that's also rather important to make it maintainable.
 For the stuff that goes into the database, OTOH, XSP is used, and
 several taglibs are used. 
 
-Uhm, well, that's not really true yet. This is a very early release,
-kind of pre-alpha. It consists mainly of a News provider that
-constructs objects, instruct them to load their data based on the URI,
-get them to write their own XML, and pass this raw to the browser. 
-XSL Transformations have yet to be written, and there is yet no way to
-get the data into the system... 
+Uhm, well, that's not really true yet. This is a early release, but
+nearing alpha in that it does some useful things. It consists mainly
+of a News provider that constructs objects, instruct them to load
+their data based on the URI, get them to write their own XML, and pass
+this raw to the browser. There are also several XSP taglibs, and I
+have written some XSP pages and XSL Transformations that's not
+included in the system, but that can be found at the project home
+page: http://www.kjetil.kjernsmo.net/software/TABOO/
 
-But then, the mantra is "release early", isn't it? And besides, by the
-end of the year, this should have evolved into something I can put on
-a website and have random people come by and use, a beta of some
+But then, the mantra is "release early", isn't it? And besides, Real
+Soon Now this should have evolved into something I can put on a
+website and have random people come by and use, a beta of some
 sort... I'll be thrilled if other hackers are willing to poke at TABOO
-allready at this point! 
+allready at this point!
 
 INSTALLATION
 
@@ -67,16 +69,19 @@ To install this module use CPAN or CPANPLUS tools or type the following:
 DEPENDENCIES
 
 This module requires these other modules and libraries:
-- XML::Writer 
 - DBI
 - DBD::Pg. Version 1.31 has known problems due to that 
   SQL3 Arrays are being used.
 - Time::Piece
 - Class::Data::Inheritable
-- Alias
+- Apache::AxKit::Plugin::BasicSession
 - Data::Dumper lists out debugging information, but can be removed. 
+- and to use the XSP pages, you should have AxKit::XSP::QueryParam,
+AxKit::XSP::BasicAuth and AxKit::XSP::BasicSession.
 
 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003 Kjetil Kjernsmo. Some rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself. 
+Copyright (c) 2003-2004 Kjetil Kjernsmo. Some rights reserved. This
+program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
 

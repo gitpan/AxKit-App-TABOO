@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.011';
+our $VERSION = '0.02';
 
 
 # Preloaded methods go here.
@@ -62,7 +62,7 @@ the Data objects. That means, if you don't want to store things in the
 PostgreSQL database my Data objects use, you could always subclass it,
 rewrite the classes or whatever. You would mostly just have to rewrite
 the load method. It is also the Data object's job to create XML of its
-own data.
+own data, save itself, etc.
 
 The intention is to write Data objects for every kind of thing you
 might want to do. From the start, there will be Slashdot-type stories
@@ -83,7 +83,7 @@ in the code, that's also rather important to make it maintainable.
 This is what TABOO allready contains:
 
 The base data object, L<AxKit::App::TABOO::Data> and four subclasses
-of it, L<User|AxKit::App::TABOO::Data::User>,
+of it, L<User|AxKit::App::TABOO::Data::User>, which is again subclassed to L<Contributor|AxKit::App::TABOO::Data::User::Contributor>,
 L<Category|AxKit::App::TABOO::Data::Category>,
 L<Story|AxKit::App::TABOO::Data::Story> and
 L<Comment|AxKit::App::TABOO::Data::Comment>. They provide an
@@ -98,17 +98,16 @@ user-submitted comments. By simply manipulating the URI in
 easy-to-understand ways, you can load just the story, view the
 comments, separately, in a list or as a thread. 
 
+Currently, it supplies three Taglibs, L<User|AxKit::App::TABOO::XSP::User>,
+L<Story|AxKit::App::TABOO::XSP::Story> and L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide several tags that you may use interface with the Data objects. Currently, they are mainly used to write data to the storage. Some XSP and XSLT is written as a prototype to do that.
+
+
 =head1 TODO
 
 A lot. Because this is a POD, I'm stopping with my lofty visions here
-(there's more of that in the README). This software is sort of a
-pre-alpha, but by the end of the year, it should be a beta useful
+(there's more of that in the README). It is still in sort of a near-alpha state, but Real Soon Now it should be a beta useful
 enough to put on a test website and have random folks playing with.
 
-The first thing that needs doing is to get data into the storage, not
-just out of it, like the Provider does. I'll use XSP mostly for
-that. Also, XSLT to transform the XML output to XHTML Strict is
-needed. 
 
 Allthough it is not included in the present distro, I have also mostly
 finished an Article Provider, which is intended to be used for more
@@ -132,7 +131,7 @@ L<AxKit>, L<AxKit::App::TABOO::Data>, L<AxKit::App::TABOO::Provider::News>.
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003 Kjetil Kjernsmo. Some rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself. 
+Copyright (c) 2003-2004 Kjetil Kjernsmo. Some rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself. 
 
 
 =cut

@@ -6,3 +6,37 @@ Revision history for Perl extension AxKit::App::TABOO.
 0.01_02  2003-12-11 09:57
 	- Struggling to get the packaging right...
 
+0.01_03  2003-12-11 09:57
+	- A missing ; after the final 1 made make test complain in Comment.pm
+
+0.011  	 2003-12-11 15:23
+	- Hm, huh...? PAUSE won't extract the README and it is not being 
+	  indexed.... There must be something very wrong with the package. 
+          The version number...?
+	- Added ; after the 1's in User and Category just to be sure. 
+
+0.02  	 2004-02-01 00:10
+	- Added 
+		* AxKit::App::TABOO::Data::User::Contributor
+		* AxKit::App::TABOO::XSP::Story
+		* AxKit::App::TABOO::XSP::User
+		* AxKit::App::TABOO::XSP::Category
+	- Made internal class variables lower case for those pulled from DB
+	- Removed the use of Alias (how did we do that in SIMULA...?) 
+	- Remove XML::Writer to use XML::LibXML for everything
+	- Added methods:
+		* In AxKit::App::TABOO::Data
+			+ apache_request_data
+			+ save
+			+ stored
+		* In AxKit::App::TABOO::Data::Category
+			+ all_of_type
+	- Made most internal DBI queries throw Exception::Class::DBI
+	exceptions in case of failures. I have been unsuccessful in
+	catching them, so it is not quite like I want it yet, and
+	changes in this must be expected.  
+	- Quite a lot of minor changes in the internals.
+	
+
+
+
