@@ -10,10 +10,14 @@
 
 
   <text id="submit-story"> Submit Story </text>
+  <text id="submit-comment"> Submit comment </text>
   <text id="story-stored"> Story Stored </text>
+  <text id="comment-stored"> Comment stored and attached </text>
   <text id="submit-story-menu"> Submit Story </text>
   <text id="article-descr"> The title of the article </text>
   <text id="article-title"> Title </text>
+  <text id="comment-descr"> A title for the comment </text>
+  <text id="comment-title"> Title </text>
 
   <text id="comments"> Comments </text>
   <text id="comments-verb"> comments </text>

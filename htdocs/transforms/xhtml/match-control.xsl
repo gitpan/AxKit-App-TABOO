@@ -15,7 +15,7 @@
   exclude-result-prefixes="user story cat ct i18n texts">
 
 
-  <xsl:import href="/transforms/insert-i18n.xsl"/>
+  <xsl:import href="../../transforms/insert-i18n.xsl"/>
 
   <xsl:template match="ct:control">
     <div class="control">

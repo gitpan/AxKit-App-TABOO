@@ -15,7 +15,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.092';
+our $VERSION = '0.093';
 
 
 
@@ -55,7 +55,7 @@ The constructor. Nothing special.
 
 AxKit::App::TABOO::Data::Comment->dbtable("comments");
 AxKit::App::TABOO::Data::Comment->dbfrom("comments");
-AxKit::App::TABOO::Data::Comment->dbprimkey("storyname");
+AxKit::App::TABOO::Data::Comment->dbprimkey("commentpath");
 AxKit::App::TABOO::Data::Comment->elementneedsparse("content");
 AxKit::App::TABOO::Data::Comment->elementorder("commentpath, title, content, timestamp, USER, REPLIES");
 
@@ -83,7 +83,7 @@ sub new {
     return $self;
 }
 
-=item C<load(what => fields, limit => {key => value, [...]}>
+=item C<load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]}>
 
 The load method is not reimplemented but needs elaboration. It follows
 the convention of the load methods of the parent class, but to
@@ -100,7 +100,9 @@ by a C</>. In computer science terms, I think this is known as a
 I<trie>. Thus, commentpaths will grow as people respond to each
 other's comments. For example, if user bar replies to user foo, the
 commentpath to bar's comment will be C</foo/bar>. The commenpath will
-typically be in the URI of a comment.
+typically be in the URI of a comment. If the same user post more
+replies to a comment, they will be suffixed with e.g. C<_2> for the
+second comment.
 
 The C<commentpath>, C<sectionid> and C<storyname> together identifies
 a comment.
@@ -174,14 +176,14 @@ sub tree {
 }
 
 
-=item C<timestamp([($section, $storyname)])>
+=item C<timestamp([($section, $storyname, $commentpath)])>
 
 The timestamp method will retrieve the timestamp of the comment. If
 the timestamp has been loaded earlier from the data storage (for
 example by the load method), you need not supply any arguments. If the
-timestamp is not available, you must supply the section and storyname
-identifiers, the method will then load it into the data structure
-first.
+timestamp is not available, you must supply the section, storyname and
+commenpath identifiers, the method will then load it into the data
+structure first.
 
 The timestamp method will return a Time::Piece object with the
 requested time information.
@@ -194,8 +196,11 @@ requested time information.
 sub timestamp {
   my $self = shift;
   if (! ${$self}{'timestamp'}) {
-    my ($section, $storyname) = @_;
-    $self->load(what => 'timestamp', limit => {sectionid => $section, storyname => $storyname});
+    my ($section, $storyname, $commentpath) = @_;
+    $self->load(what => 'timestamp', limit => {sectionid   => $section,
+					       storyname   => $storyname,
+					       commentpath => $commentpath 
+					      });
   }
   unless (${$self}{'timestamp'}) { return undef; }
   (my $tmp = ${$self}{'timestamp'}) =~ s/\+\d{2}$//;

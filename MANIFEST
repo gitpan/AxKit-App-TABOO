@@ -6,11 +6,13 @@ htdocs/i18n.nb.xml
 htdocs/index.xsp
 htdocs/login.xsp
 htdocs/menu.xsp
+htdocs/news/comment.xsp
 htdocs/news/submit.xsp
 htdocs/site/main.rdf
 htdocs/transforms/index-aggregate.xsl
 htdocs/transforms/insert-i18n.xsl
 htdocs/transforms/news/insert-values-edit.xsl
+htdocs/transforms/news/xhtml/comment.xsl
 htdocs/transforms/news/xhtml/match-comment.xsl
 htdocs/transforms/news/xhtml/match-story.xsl
 htdocs/transforms/news/xhtml/match-user.xsl
@@ -43,6 +45,7 @@ lib/AxKit/App/TABOO/Data/User/Contributor.pm
 lib/AxKit/App/TABOO/Provider/News.pm
 lib/AxKit/App/TABOO/Provider/NewsList.pm
 lib/AxKit/App/TABOO/XSP/Category.pm
+lib/AxKit/App/TABOO/XSP/Comment.pm
 lib/AxKit/App/TABOO/XSP/Story.pm
 lib/AxKit/App/TABOO/XSP/User.pm
 Makefile.PL

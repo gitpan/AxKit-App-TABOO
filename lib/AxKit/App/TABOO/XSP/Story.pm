@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
-use Exception::Class::DBI;
-use Exception::Class;
 use AxKit;
 use AxKit::App::TABOO::Data::Story;
 use Apache::AxKit::Plugin::BasicSession;
@@ -16,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.09';
+our $VERSION = '0.093';
 
 =head1 NAME
 
@@ -39,16 +37,18 @@ Add this taglib to AxKit (via httpd.conf or .htaccess):
 
 =head1 DESCRIPTION
 
-This XSP taglib provides a single (for now) tag to store information related to news stories, as it communicates with TABOO Data objects, particulary L<AxKit::App::TABOO::Data::Story>.
+This XSP taglib provides tags to store information related to news
+stories and to fetch and return XML representations of that data, as
+it communicates with TABOO Data objects, particulary
+L<AxKit::App::TABOO::Data::Story>.
 
-L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write this taglib.
+L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write
+this taglib.
 
 =cut
 
 
 $NS = 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story';
-
-push @Exception::Class::Base::ISA, 'Error';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -70,11 +70,21 @@ package AxKit::App::TABOO::XSP::Story::Handlers;
 
 =head2 C<E<lt>store/E<gt>>
 
-It will take whatever data it finds in the L<Apache::Request> object held by AxKit, and hand it to a new L<AxKit::App::TABOO::Data::Story> object, which will use whatever data it finds useful. It will not store anything unless the user is logged in and authenticated with an authorization level. If an authlevel is not found in the user's session object, it will throw an exceptions with an C<AUTH_REQUIRED> code. If asked to store certain priviliged fields, it will check the authorization level and throw an exception with a C<FORBIDDEN> code if not satisfied. If timestamps do not exist, they will be created based on the system clock. 
+It will take whatever data it finds in the L<Apache::Request> object
+held by AxKit, and hand it to a new L<AxKit::App::TABOO::Data::Story>
+object, which will use whatever data it finds useful. It will not
+store anything unless the user is logged in and authenticated with an
+authorization level. If an authlevel is not found in the user's
+session object, it will throw an exceptions with an C<AUTH_REQUIRED>
+code. If asked to store certain priviliged fields, it will check the
+authorization level and throw an exception with a C<FORBIDDEN> code if
+not satisfied. If timestamps do not exist, they will be created based
+on the system clock.
 
 Finally, the Data object is instructed to save itself. 
 
-If successful, it will return a C<store> element in the output namespace with the number 1. 
+If successful, it will return a C<store> element in the output
+namespace with the number 1.
 
 =cut
 
@@ -129,16 +139,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
     }
 
     $story->populate(\%args);
-#    try {
-	$story->save($oldstorykey);
-#      }
-#      catch Exception::Class::DBI with {
-#  	my $ex = shift;
-#      AxKit::Debug(1, "DBI Error " . $ex->error);
-#  	throw Apache::AxKit::Exception::IO(
-#  					   -text => $ex->error
-#  					   );
-#    };
+    $story->save($oldstorykey);
     1;
 EOC
 }
@@ -146,7 +147,9 @@ EOC
 
 =head2 C<E<lt>this-story/E<gt>>
 
-Will return an XML representation of the data submitted in the last request, enclosed in a C<story-submission> element. Particularly useful for previewing a submission. 
+Will return an XML representation of the data submitted in the last
+request, enclosed in a C<story-submission> element. Particularly
+useful for previewing a submission.
 
 =cut
 
@@ -228,7 +231,16 @@ EOC
 
 =head1 Quirks 
 
-There are a few things that I'm not sure how to handle that I've included in this release in an inelegant way. For example, if you want to update an old record with a new storyname (which is not unusual, if for example you don't like the storyname used by the submitter), then you need to include this somehow. For the time being, you must supply the storyname as a query parameter C<auto-storyname>, and the supplied C<submit.xsp> does this. It is then understood by the C<E<lt>storeE<gt>> tag, which does the right thing, but I feel that such a tag shouldn't really need to be aware of such things, from an aestetical POW, suggestion on how to do it differently are welcome. 
+There are a few things that I'm not sure how to handle that I've
+included in this release in an inelegant way. For example, if you want
+to update an old record with a new storyname (which is not unusual, if
+for example you don't like the storyname used by the submitter), then
+you need to include this somehow. For the time being, you must supply
+the storyname as a query parameter C<auto-storyname>, and the supplied
+C<submit.xsp> does this. It is then understood by the
+C<E<lt>storeE<gt>> tag, which does the right thing, but I feel that
+such a tag shouldn't really need to be aware of such things, from an
+aestetical POW, suggestion on how to do it differently are welcome.
 
 
 =head1 FORMALITIES

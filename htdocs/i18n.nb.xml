@@ -10,10 +10,14 @@
 
 
   <text id="submit-story"> Send inn nyhetssak </text>
+  <text id="submit-comment"> Legg inn kommentar </text>
   <text id="story-stored"> Nyhetssak lagret </text>
+  <text id="comment-stored"> Kommentar lagret og lagt til </text>
   <text id="submit-story-menu"> Send inn sak </text>
   <text id="article-descr"> Tittelen til artikkelen </text>
   <text id="article-title"> Tittel </text>
+  <text id="comment-descr"> Tittelen til kommentaren </text>
+  <text id="comment-title"> Tittel </text>
 
   <text id="comments"> Kommentarer </text>
   <text id="comments-verb"> kommenterer </text>

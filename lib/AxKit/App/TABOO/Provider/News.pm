@@ -398,7 +398,7 @@ L<AxKit::App::TABOO::Data::Comment>. What elements are used is most
 interesting for an XSLT developer, who might want to look at the
 output the Provider gives.
 
-There are a few things worth noting: 
+There are a few things worth noting:
 
 =over
 

@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.091';
+our $VERSION = '0.093';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -55,7 +55,7 @@ sub new {
 }
 
 
-=item C<load(what => fields, limit => {key => value, [...]}, orderby => fields, entries = number)>
+=item C<load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]}, orderby =E<gt> fields, entries =E<gt> number)>
 
 This load method can be used to retrieve a number of entries from a
 data store.  It uses named parameters, the first C<what> is used to

@@ -18,7 +18,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.092';
+our $VERSION = '0.093';
 
 
 =head1 NAME
@@ -91,7 +91,7 @@ sub new {
 }
 
 
-=item C<load(what => fields, limit => {sectionid => value, storyname => value, [...]})>
+=item C<load(what =E<gt> fields, limit =E<gt> {sectionid =E<gt> value, storyname =E<gt> value, [...]})>
 
 This class reimplements the load method, to support the fact that some
 data may be stored as arrays in the datastore. It shares the API of

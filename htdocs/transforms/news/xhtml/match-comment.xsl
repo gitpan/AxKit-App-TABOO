@@ -8,11 +8,9 @@
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
-  xmlns:regexp="http://exslt.org/regular-expressions"
-  extension-element-prefixes="regexp"  
   exclude-result-prefixes="cust user story comm cat i18n texts"> 
 
-  <xsl:import href="/transforms/insert-i18n.xsl"/>
+  <xsl:import href="../../../transforms/insert-i18n.xsl"/>
   <xsl:import href="match-user.xsl"/>
 
   <xsl:template match="comm:reply">
@@ -64,5 +62,13 @@
       <xsl:apply-templates select="comm:reply"/>
     </ul>
   </xsl:template>
+
+  <xsl:template match="*" mode="strip-ns">
+    <xsl:element name="{local-name()}">
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates mode="strip-ns"/>
+    </xsl:element>
+  </xsl:template>
+
 
 </xsl:stylesheet>

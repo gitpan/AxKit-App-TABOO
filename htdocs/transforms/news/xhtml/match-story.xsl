@@ -92,7 +92,7 @@
 	  <xsl:attribute name="href">
 	    <xsl:text>/news/</xsl:text><xsl:value-of
 	      select="story:sectionid"/><xsl:text>/</xsl:text><xsl:value-of
-	      select="story:storyname"/><xsl:text>/</xsl:text>
+	      select="story:storyname"/><xsl:text>/comment/</xsl:text>
 	  </xsl:attribute>
 	  <xsl:value-of select="story:linktext"/>
 	</a>

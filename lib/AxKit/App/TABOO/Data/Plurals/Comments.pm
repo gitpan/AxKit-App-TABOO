@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.092';
+our $VERSION = '0.093';
 
 AxKit::App::TABOO::Data::Plurals::Comments->dbtable("comments");
 AxKit::App::TABOO::Data::Plurals::Comments->dbfrom("comments");
@@ -61,7 +61,7 @@ sub new {
 
 
 
-=item C<load(what => fields, limit => {key => value, [...]}, orderby => fields)>
+=item C<load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]}, orderby =E<gt> fields)>
 
 This load method can be used to retrieve a number of entries from a
 data store.  It uses named parameters, the first C<what> is used to
@@ -103,7 +103,7 @@ sub load {
     # If it ends with a / we will only retrieve the records on the
     # next level, and they will be a single, non-threaded array
     $array = 1;
-    $args{'limit'}{'commentpath'} = '^' . $basepath . '[a-z]+?/?$';
+    $args{'limit'}{'commentpath'} = '^' . $basepath . '[a-z]+?_?[0-9]*/?$';
   }
   my $data = $self->_load(%args, regex => ['commentpath']);
   return undef unless (@{$data});
@@ -121,7 +121,7 @@ sub load {
     }
     my $comment = AxKit::App::TABOO::Data::Comment->new($self->dbconnectargs());
     if (length($basepath) == 0) {
-      my @build = grep(m|^/[a-z]+?$|, keys(%data));
+      my @build = grep(m|^/[a-z]+?_?[0-9]*$|, keys(%data));
       return undef if ($#build < 0);
       foreach (@build) {
 	# Apparently, I can't just modify $self straightforwardly. Quirky
@@ -151,7 +151,7 @@ sub _threadhelper {
   my $self = shift;
   my $path = shift;
   my %data = @_;
-  my @build = grep(m|^$path/[a-z]+?$|, keys(%data));
+  my @build = grep(m|^$path/[a-z]+?_?[0-9]*$|, keys(%data));
   return undef if ($#build < 0);
   my $comments = AxKit::App::TABOO::Data::Plurals::Comments->new($self->dbconnectargs());
   foreach (@build) {
@@ -185,6 +185,23 @@ sub adduserinfo {
     }
   }
   return $self;
+}
+
+
+=item C<exist(commentpath =E<gt> '/foo', storyname =E<gt> 'story', sectionid =E<gt> 'section')>
+
+This method can be used to check if there are one or more comments
+starting with the commentpath given. It takes a hash to identify the
+comment. It will return a scalar with the number of found comments.
+
+=cut
+
+sub exist {
+  my $self = shift;
+  my %args = @_;
+  $args{'commentpath'} = '^' . $args{'commentpath'} . '_?[0-9]*[^/]?$';
+  my $data = $self->_load(what => 'commentpath', regex => ['commentpath'], limit => \%args);
+  return scalar(@{$data});
 }
 
 

@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.092';
+our $VERSION = '0.093';
 
 
 1;
@@ -102,9 +102,10 @@ lists of stories. By simply manipulating the URI in easy-to-understand
 ways, you can load just the story, view the comments, separately, in a
 list or as a thread, or get simple lists or good overviews of stories.
 
-Currently, it supplies three Taglibs,
+Currently, it supplies four Taglibs,
 L<User|AxKit::App::TABOO::XSP::User>,
-L<Story|AxKit::App::TABOO::XSP::Story> and
+L<Story|AxKit::App::TABOO::XSP::Story>,
+L<Comment|AxKit::App::TABOO::XSP::Comment> and
 L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide
 several tags that you may use interface with the Data objects.
 
@@ -114,6 +115,10 @@ stories and TABOO is nearly useable as a news-site management framework.
 Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
 editing the information of existing users.
+
+It allows attaching comments to the news stories, and allthough
+comments can be both read and written, this code needs more work, a
+TODO for the next release.
 
 It can also format user-entered text with L<Formatter::HTML::Textile>.
 
@@ -153,6 +158,8 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
   RewriteRule ^/user/submit/$ /user/submit/user.xsp 
   RewriteRule ^/user/submit/new$ /user/submit/new.xsp
+
+  RewriteRule ^/news/([^/]+)/([^/]+)/comment(/?.*)/respond$ /news/comment.xsp?sectionid=$1&storyname=$2&parentcpath=$3
 
   RewriteRule ^/$ /index.xsp
 
@@ -198,6 +205,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   AxAddXSPTaglib AxKit::App::TABOO::XSP::User
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Story
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Category
+  AxAddXSPTaglib AxKit::App::TABOO::XSP::Comment
 
   # Other XSPs
   AxAddXSPTaglib AxKit::XSP::BasicAuth
@@ -293,9 +301,8 @@ A lot. Because this is a POD, I'm stopping with my lofty visions here
 state, but Real Soon Now it should be a beta useful enough to put on a
 test website and have random folks playing with.
 
-Retrieving comments from the data store now works again, but
-stylesheets are needed to transform it, and code to enter comments
-have yet to be written.
+Retrieving comments from the data store now works again, and you can
+now enter comments, but this needs more work, and is upcoming.
 
 Allthough it is not included in the present distro, I have also mostly
 finished an Article Provider, which is intended to be used for more
@@ -307,7 +314,7 @@ Finally note that things that are there are B<not stable>! Names may
 change, parameters may be different, and I may decide to do things
 differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
-feedback hackers provide. 
+feedback hackers provide.
 
 TABOO also has had some code for a webshop, but since it has fallen
 behind the rest of the development, it has been removed from the

@@ -1,5 +1,24 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.093   2004-11-13 04:45
+	- The "Entering comments" initial release.
+	  * New Comment XSP Taglib.
+	  * New /news/comments.xsp
+	  * New comments.xsl
+	  * Some small additions in the match-comment.xsl.
+	  * Support for several replies from a single user.
+	  * New exist method in Plurals::Comments
+	  * Some more testing and elaboration of the Comment Data
+	    class. 
+	  * Link to /news/*/*/comment/ in the NewsLists.
+	  * Some config example stuff.
+	- All internal calls should bring along session information 
+	  (I may not still have caught everywhere this happens). 
+	- Relative paths to imported stylesheets is a good thing
+	  sometimes... 
+	- Obligatory minor cleanups in docs.
+	  
+
 0.092   2004-10-31 23:30
 	- Simple XSLT support for comments:
 	  * Many changes in news-provider.xsl
