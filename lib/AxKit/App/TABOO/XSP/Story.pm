@@ -18,7 +18,7 @@ our $VERSION = '0.021';
 
 =head1 NAME
 
-AxKit::App::TABOO::XSP::Story - News story managament tag library for TABOO
+AxKit::App::TABOO::XSP::Story - News story management tag library for TABOO
 
 
 =head1 SYNOPSIS

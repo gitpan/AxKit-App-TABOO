@@ -20,7 +20,7 @@ our $VERSION = '0.021';
 
 =head1 NAME
 
-AxKit::App::TABOO::XSP::Category - Category managament tag library for TABOO
+AxKit::App::TABOO::XSP::Category - Category management tag library for TABOO
 
 
 =head1 SYNOPSIS

@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.03';
+our $VERSION = '0.031';
 
 
 # Preloaded methods go here.
@@ -118,7 +118,7 @@ static content. However, most attention will be given to the News
 part, because that is the first thing that will give people something
 to play with.
 
-Finally note that things that are there are B<not stable>! Names my
+Finally note that things that are there are B<not stable>! Names may
 change, parameters may be different, and I may decide to do things
 differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of

@@ -15,7 +15,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 
 
 =head1 NAME
@@ -282,7 +282,7 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 
 =head1 BUGS/TODO
 
-Besides that it is a pre-alpha, there is a quirk in the load method. I use SQL3 arrays in the underlying database, but the database driver doesn't support this. So, there is a very hackish ad hoc implementation to parse the arrays in that method. It works for me, but not with all versions of L<DBD::Pg>, notably 1.31, it'll segfault. 1.32 will fix the segfault, but probbably not add the needed support.
+Besides that it is a pre-alpha, there is a quirk in the load method. I use SQL3 arrays in the underlying database, but the database driver doesn't support this. So, there is a very hackish ad hoc implementation to parse the arrays in that method. It works partly for reading, but just with  L<DBD::Pg> greater than 1.32.
 
 =head1 FORMALITIES
 

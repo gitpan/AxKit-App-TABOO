@@ -6,7 +6,7 @@ WriteMakefile(
     'VERSION_FROM'	=> 'lib/AxKit/App/TABOO.pm', # finds $VERSION
     'PREREQ_PM'		=> { Data::Dumper => 0,
 			     DBI => 0,
-			     DBD::Pg => 0,
+			     DBD::Pg => 1.32,
 			     Exception::Class::DBI => 0,
 			     Time::Piece => 0,
 			     Class::Data::Inheritable => 0,

@@ -12,8 +12,9 @@
       </html:head>
       <html:body>      
 	<html:h1><xsl:value-of select="./title"/></html:h1>
-	
-	<xsl:apply-templates select="control"/>
+	<html:form action="user.xsp">
+	  <xsl:apply-templates select="control"/>
+	</html:form>
       </html:body>
     </html:html>
   </xsl:template>

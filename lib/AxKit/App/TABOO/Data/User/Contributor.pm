@@ -72,10 +72,11 @@ sub load_authlevel {
     my $dbh = DBI->connect($self->dbstring(), 
 			   $self->dbuser(), 
 			   $self->dbpasswd(),  
-			   { PrintError => 0,
-			     RaiseError => 0,
-			     HandleError => Exception::Class::DBI->handler
-			     });
+#			   { PrintError => 0,
+# 			     RaiseError => 0,
+#			     HandleError => Exception::Class::DBI->handler
+#			     }
+);
     my $sth = $dbh->prepare("SELECT authlevel FROM contributors WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;

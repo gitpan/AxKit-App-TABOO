@@ -13,7 +13,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.022';
+our $VERSION = '0.023';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -72,6 +72,19 @@ sub makeSalt {
 }
 
 
+# This little sub takes the user name of the user we want to change 
+# the authlevel of, and returns a hash with the smallest and highest 
+# level we are allowed to give that user. 
+sub authlevel_extremes {
+    my $username = shift;
+    my $authlevel = $Apache::AxKit::Plugin::BasicSession::session{authlevel};
+    my $maxlevel = ($username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0}) ? $authlevel : ($authlevel - 2);
+    my $user = AxKit::App::TABOO::Data::User::Contributor->new();
+    my $oldlevel = $user->load_authlevel($username);
+    my $minlevel = ($authlevel < AxKit::App::TABOO::XSP::User::ADMIN) ? $oldlevel : 0;
+    return {'minlevel' => $minlevel, 'maxlevel' => $maxlevel};
+}
+
 package AxKit::App::TABOO::XSP::User::Handlers;
 
 
@@ -120,11 +133,15 @@ sub store {
 	my @changing = $user->apache_request_changed(\%args); # These are the fields sought to be changed
 	AxKit::Debug(10, "Changing fields: " . join(", ", @changing));
 	if ((scalar @changing == 1) && grep(/authlevel/, @changing)) {
-	    # Then, it is only the authlevel that is to be changed, which is ok with less privileges
-	    if ($args{'authlevel'} > ($authlevel - 2)) {
-		throw Apache::AxKit::Exception::Retval(
+	    # Then, it is only the authlevel that is to be changed, and OK levels are given by authlevel_extremes.
+	    my $extremes = AxKit::App::TABOO::XSP::User::authlevel_extremes($args{'username'});
+	    if ((${$extremes}{'minlevel'} > ${$extremes}{'maxlevel'}) 
+	    || ($args{'authlevel'} > ${$extremes}{'maxlevel'})
+	    || ($args{'authlevel'} < ${$extremes}{'minlevel'}))
+                {
+		    throw Apache::AxKit::Exception::Retval(
 						       return_code => FORBIDDEN,
-						       -text => "You may only set an authlevel two levels lower than your own. Your level: " . $authlevel);
+						       -text => "You may only set an authlevel between " . ${$extremes}{'minlevel'} . " and " . ${$extremes}{'maxlevel'} . ". Your level: " . $authlevel);
 	    }
 	} else {
 	    # Any other fields require ADMIN privs
@@ -261,7 +278,7 @@ sub is_authorized___true__open {
 					       return_code => AUTH_REQUIRED,
 					       -text => "Not authenticated and authorized with an authlevel");
     }
-    if (($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0}) || ($attr_authlevel <= $Apache::AxKit::Plugin::BasicSession::session{authlevel})) # Grant access
+    if (($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0}) || (($attr_authlevel) && ($attr_authlevel <= $Apache::AxKit::Plugin::BasicSession::session{authlevel}))) # Grant access
 {
 EOC
 }
@@ -286,7 +303,7 @@ sub is_authorized___false {
 
 =head2 C<<valid-authlevels/>>
 
-This returns simply a list of the authorization levels that the present user can legitimitely set. This is an ugly and temporary solution, I think it should be worked out elsewhere than the taglib, but I couldn't find a way to do it....
+This returns a list of the authorization levels that the present user can legitimitely set. This is an ugly and temporary solution, I think it should be worked out elsewhere than the taglib, but I couldn't find a way to do it....
 
 =cut
 
@@ -295,9 +312,10 @@ This returns simply a list of the authorization levels that the present user can
 sub valid_authlevels : nodelist({http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output}level) attribOrChild(username) {
     return << 'EOC';
 # my @levels = ("Guest", "New member", "Member", "Oldtimer", "Assistant", "Editor", "Administrator", "Director", "Guru", "God"); 
-my $authlevel = $Apache::AxKit::Plugin::BasicSession::session{authlevel};
-my $maxlevel = ($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0}) ? $authlevel : ($authlevel - 2);
-(0 .. $maxlevel);    
+my $extremes = AxKit::App::TABOO::XSP::User::authlevel_extremes($attr_username);
+(${$extremes}{'minlevel'} > ${$extremes}{'maxlevel'}) 
+    ? () 
+    : (${$extremes}{'minlevel'} .. ${$extremes}{'maxlevel'});    
 EOC
 }
 
@@ -311,3 +329,4 @@ EOC
 See L<AxKit::App::TABOO>.
 
 =cut
+

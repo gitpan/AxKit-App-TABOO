@@ -13,21 +13,34 @@
       <xsl:apply-templates select="//user:user"/ -->
       <xsl:apply-templates select="control"/>
       <xsl:apply-templates select="//html:*"/>
-      
+      <xsl:copy-of select="//user:authlevel"/>
     </user>
   </xsl:template>
   
   <xsl:template match="control">
-    <control>
-      <xsl:copy-of select="title|descr|@*"/>
-      <value>
-	<xsl:apply-templates select="value/userinc:*"/>
-	<xsl:copy-of select="value/user:level"/>
-	  <!-- xsl:apply-templates select="."/>
-	</xsl:for-each -->
-	<xsl:value-of select="value"/>
-      </value>
-    </control>
+    <xsl:choose>
+      <xsl:when test="@name='authlevel'">
+	<xsl:if test="boolean(value/user:level)">
+	  <!-- If the user can't set the authlevel, we shouldn't
+	  display the control -->
+	  <control>
+	    <xsl:copy-of select="title|descr|@*"/>
+	    <value>
+	      <xsl:copy-of select="value/user:level"/>
+	    </value>
+	  </control>
+	</xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+	<control>
+	  <xsl:copy-of select="title|descr|@*"/>
+	  <value>
+	    <xsl:apply-templates select="value/userinc:*"/>
+	    <xsl:value-of select="value"/>
+	  </value>
+	</control>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 

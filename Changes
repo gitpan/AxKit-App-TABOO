@@ -78,3 +78,11 @@ Revision history for Perl extension AxKit::App::TABOO.
 	- With the inclusion of XSP, we require AxKit::XSP::QueryParam.
 	- A new and ugly tag valid-authlevels in
 	AxKit::App::TABOO::XSP::User. 
+
+0.031	  2004-02-19 23:00
+	- Now that DBD::Pg 1.32 is out, we depend on it. 
+	- Cleaned up and fixed a few things in the authlevel code, 
+	affecting mainly AxKit::App::TABOO::XSP::User.
+	- Actually tested that authentication works OK. 
+	- Quite a lot of changes in the XSP and XSLT.
+	- Fixed a few typos. 

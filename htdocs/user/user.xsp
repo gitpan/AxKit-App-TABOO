@@ -23,8 +23,7 @@
 
     
     <user:is-authorized authlevel="6">
-      <user:username><xsp:expr><session:get-attribute
-      name="credential_0"/></xsp:expr></user:username>
+      <user:username><xsp:expr><param:get name="username"/></xsp:expr></user:username>
       <user:true>
 	
 	<html:h2>Edit user info</html:h2>
@@ -51,8 +50,7 @@
     </user:is-authorized>
     
     <user:is-authorized>
-      <user:username><xsp:expr><session:get-attribute
-	    name="credential_0"/></xsp:expr></user:username>
+      <user:username><xsp:expr><param:get name="username"/></xsp:expr></user:username>
       <user:true>
 	<html:h3>Change password</html:h3>	
 	<control element="input" type="password" name="newpasswd1">
@@ -73,16 +71,18 @@
       <title>Change authlevel</title>
       <value>
 	<user:valid-authlevels>      
-	  <user:username><xsp:expr><session:get-attribute
-		name="username"/></xsp:expr></user:username>
+	  <user:username><xsp:expr><param:get name="username"/></xsp:expr></user:username>
 	</user:valid-authlevels>
       </value>
     </control>
 
+    <control element="input" type="hidden" name="username">
+      <value><param:get name="username"/></value>
+    </control>
+
 
     <user:is-authorized authlevel="4">
-      <user:username><xsp:expr><session:get-attribute
-	  name="credential_0"/></xsp:expr></user:username>
+      <user:username><xsp:expr><param:get name="username"/></xsp:expr></user:username>
       <user:true>
 	<control element="input" type="submit" name="submitted"> 
 	  <value>Update</value>
@@ -94,3 +94,5 @@
 
   </user>
 </xsp:page>
+
+
