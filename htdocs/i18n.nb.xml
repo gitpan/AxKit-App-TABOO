@@ -35,10 +35,10 @@
   <text id="everything-linktext"> Hele saken og alle kommentarer </text>
 
 
-  <text id="minicontent"> Første avsnitt </text>
-  <text id="minicontent-descr"> Skriv inn det første avsnittet til
-  saken her. Denne vil opptre på lister over artikler, på forsiden
-  osv, med linker til resten. </text>
+  <text id="minicontent"> Ingress </text>
+  <text id="minicontent-descr"> Skriv inn det første avsnittet eller
+  ingressen til saken her. Denne vil opptre på lister over artikler,
+  på forsiden osv, med linker til resten. </text>
 
   <text id="content"> Innholdet </text>
   <text id="content-descr"> Skriv inn resten av innholdet her. </text>
@@ -127,6 +127,7 @@
   <text id="sections-menu"> Seksjoner </text>
   <text id="category-menu"> Klassifiseringskategorier </text>
   <text id="frees-menu"> Frie emneord </text>
+  <text id="angles-menu"> Synsvinkler </text>
   <text id="users-title-menu"> Bruker </text>
   <text id="cats-title-menu"> Kategorier </text>
   <text id="subqueue-story-menu"> Se innsendte </text>

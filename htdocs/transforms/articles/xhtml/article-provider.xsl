@@ -11,7 +11,7 @@
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
   xmlns:office="http://openoffice.org/2000/office" 
-  exclude-result-prefixes="office user art rdf wn dc i18n texts html"> 
+  exclude-result-prefixes="office cat user art rdf wn dc i18n texts html"> 
 
 
   <xsl:import href="/transforms/xhtml/header.xsl"/>

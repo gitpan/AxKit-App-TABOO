@@ -21,7 +21,7 @@ use MIME::Types;
 use DBI;
 
 
-our $VERSION = '0.18_08';
+our $VERSION = '0.18_12';
 
 
 =head1 NAME
@@ -190,33 +190,31 @@ as argument.
 =cut
 
 sub addcatinfo {
-    my $self = shift;
-    my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
-   # There is only one primary category allowed.
-    $cat->xmlelement("primcat");
-    $cat->load(limit => {catname => ${$self}{'primcat'}});
-
-    ${$self}{'primcat'} = $cat;
-
-    # We allow several secondary categories, so we may get an array to run through. 
-    my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new($self->dbconnectargs());
-    $cats->xmlelement("seccat");
-    foreach my $catname (@{${$self}{'seccat'}}) {
+  my $self = shift;
+  my @cattypes = qw(primcat seccat freesubject angles);
+  foreach my $cattype (@cattypes) {
+#    warn $cattype . ": ". ref(${$self}{$cattype});
+    if (ref(${$self}{$cattype}) eq 'ARRAY') {
+      my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new($self->dbconnectargs());
+      $cats->xmlelement($cattype);
+      foreach my $catname (@{${$self}{$cattype}}) {
+	my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
+	$cat->load(limit => {catname => $catname});
+	$cats->Push($cat);
+      }
+      ${$self}{$cattype} = $cats;
+    } elsif (defined(${$self}{$cattype})) {
       my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
-      $cat->load(limit => {catname => $catname});
-      $cats->Push($cat);
+      $cat->xmlelement($cattype);
+      $cat->load(limit => {catname => ${$self}{$cattype}});
+      ${$self}{$cattype} = $cat;
+    } else {
+      # Actually, this is where we have an empty list
+      ${$self}{$cattype} = [];
     }
-    ${$self}{'seccat'} = $cats;
-    my $frees = AxKit::App::TABOO::Data::Plurals::Categories->new($self->dbconnectargs());
-    $frees->xmlelement("freesubject");
-    foreach my $catname (@{${$self}{'freesubject'}}) {
-      my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
-      $cat->load(limit => {catname => $catname});
-      $frees->Push($cat);
-    }
-    ${$self}{'freesubject'} = $frees;
-    
-    return $self;
+  }
+  
+  return $self;
 }
 
 

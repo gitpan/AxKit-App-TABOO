@@ -46,7 +46,8 @@
 	</user:is-authorized>
 	<user:is-authorized authlevel="4">
 	  <user:true>
-	    <option value="categ"><i18n:insert>category-menu</i18n:insert></option>	  
+	    <option value="categ"><i18n:insert>category-menu</i18n:insert></option>	   
+	    <option value="angle"><i18n:insert>angles-menu</i18n:insert></option>	  
 	  </user:true>
 
 	</user:is-authorized>

@@ -15,7 +15,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.181';
+our $VERSION = '0.182';
 
 
 =head1 NAME
@@ -151,7 +151,7 @@ sub store {
 					       return_code => FORBIDDEN,
 					       -text => "Authlevel 6 is needed to make new sections. Your level: " . $authlevel);
     }
-    if (($args{'type'} eq 'categ') && ($authlevel < 4)) {
+    if ((($args{'type'} eq 'categ') || ($args{'type'} eq 'angle')) && ($authlevel < 4)) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => FORBIDDEN,
 					       -text => "Authlevel 4 is needed to make new categories. Your level: " . $authlevel);
