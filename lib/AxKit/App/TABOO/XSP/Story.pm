@@ -12,9 +12,11 @@ use Apache::AxKit::Plugin::BasicSession;
 use Time::Piece ':override';
 use XML::LibXML;
 
+
+
 use vars qw/$NS/;
 
-our $VERSION = '0.084';
+our $VERSION = '0.09';
 
 =head1 NAME
 
@@ -79,7 +81,7 @@ If successful, it will return a C<store> element in the output namespace with th
 
 sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}store) {
     return << 'EOC'
-	my %args = $r->args;
+    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
     $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
@@ -150,8 +152,11 @@ Will return an XML representation of the data submitted in the last request, enc
 
 sub this_story : struct {
     return << 'EOC'
-	my %args = $r->args;
+	my %args = map { $_ => $cgi->param($_) } $cgi->param;
+ 
+
     $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+
     
     unless ($args{'submitterid'}) {
       # If the submitterid is not set, we set it to the current username
@@ -191,11 +196,11 @@ elements.
 
 sub get_story : struct attribOrChild(storyname,sectionid) {
     return << 'EOC'
-    my %args = $r->args;
-
+    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
     unless ($args{'username'}) {
       $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
     }
+
 
     my $story = AxKit::App::TABOO::Data::Story->new();
     unless ($story->load(what => '*', limit => {sectionid => $attr_sectionid, storyname=> $attr_storyname})) {

@@ -47,6 +47,10 @@
     <xsl:value-of select="//user:uri"/>
   </xsl:template>
 
+  <xsl:template match="userinc:bio">
+    <xsl:value-of select="//user:bio"/>
+  </xsl:template>
+
 
   <xsl:template match="@*|node()">
     <xsl:copy>

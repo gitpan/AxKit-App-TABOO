@@ -39,6 +39,10 @@ div.main-header h1 a:active, div.main-header a:hover
   text-decoration : underline;
 }
 
+div.footer 
+{  
+  clear: both;
+}
 
 
 div.menu 
@@ -62,7 +66,7 @@ div.menu UL
   font-size: smaller;
 }
 
-div.menu fieldset 
+div.menu div.login 
 { 
   margin-top: 0.3em;
   padding: 0.1em;

@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.084';
+our $VERSION = '0.09';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -98,7 +98,7 @@ It will take whatever data it finds in the L<Apache::Request> object held by AxK
 
 sub store {
     return << 'EOC';
-    my %args = $r->args;
+    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
     my $editinguser = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
     AxKit::Debug(9, $editinguser . " logged in at level " . $authlevel);
@@ -167,7 +167,7 @@ This tag will store the contents of an Apache::Request object in the data store,
 sub new_user
 {
     return << 'EOC';
-    my %args = $r->args;
+    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     if($user->load_name($args{'username'})) {
 	throw Apache::AxKit::Exception::Retval(

@@ -10,7 +10,7 @@
   xmlns:wn="http://xmlns.com/wordnet/1.6/"      
   xmlns:dc="http://purl.org/dc/elements/1.1/">
   
-  <rdf:Description rdf:about="http://localhost/">
+  <rdf:Description rdf:about="http://demo.kjernsmo.net/">
     <dc:title>
       <rdf:Alt>
 	<rdf:_1>TABOO Test system</rdf:_1>

@@ -9,14 +9,19 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
-  xmlns="http://www.w3.org/1999/xhtml">
+  exclude-result-prefixes="user ct cust i18n texts rdf wn dc"> 
+
   <xsl:import href="match-user.xsl"/>
   <xsl:import href="/transforms/xhtml/match-control.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
-  <xsl:output version="1.0" encoding="utf-8" method="html"
-    media-type="text/html" indent="yes"/>  
+
+  <xsl:output version="1.0" encoding="utf-8" indent="yes"
+    method="html" media-type="text/html" 
+    doctype-public="-//W3C//DTD HTML 4.01//EN" 
+    doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>  
+
   <xsl:param name="request.headers.host"/>
   <xsl:param name="session.id"/>
   <xsl:param name="neg.lang">en</xsl:param>
@@ -46,10 +51,10 @@
 	  <div class="main">
 	    <xsl:apply-templates select="//user:user"/>
 	    
-	    <form method="GET" action="/user/submit/">
-	      <fieldset>
+	    <form method="post" action="/user/submit/">
+	      <div class="fields">
 		<xsl:apply-templates select="./ct:control"/>
-	      </fieldset>
+	      </div>
 	    </form>
 	  </div>
 	</div>

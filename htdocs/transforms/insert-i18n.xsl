@@ -4,7 +4,6 @@
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:func="http://exslt.org/functions"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
-  xmlns="http://www.w3.org/1999/xhtml"
   extension-element-prefixes="func i18n"
   exclude-result-prefixes="func i18n texts">
 

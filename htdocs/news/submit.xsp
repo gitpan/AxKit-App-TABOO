@@ -29,31 +29,31 @@
       </story:get-story>
     </param:if-exists>    
     <param:unless-exists name="submitted">
-      <ct:control name="title" type="text" element="input">
+      <ct:control name="title" type="text" element="input" size="40" maxlength="40">
 	<ct:title><i18n:insert>article-title</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>article-descr</i18n:insert></ct:descr>
 	<ct:value><val:insert name="title"/></ct:value>
       </ct:control>
-      <ct:control name="minicontent" element="textarea">
+      <ct:control name="minicontent" element="textarea" rows="5" cols="60">
 	<ct:title><i18n:insert>minicontent</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>minicontent-descr</i18n:insert></ct:descr>
 	<ct:value><val:insert name="minicontent"/></ct:value>
       </ct:control>
-      <ct:control name="content" element="textarea">
+      <ct:control name="content" element="textarea" rows="12" cols="60">
 	<ct:title><i18n:insert>content</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>content-descr</i18n:insert></ct:descr>
 	<ct:value><val:insert name="content"/></ct:value>
       </ct:control>
       <!-- user:is-authorized authlevel="3">
 	<user:true>
-	  <ct:control element="input" type="text" name="image">
+	  <ct:control element="input" type="text" name="image" size="40" maxlength="100">
 	    <ct:title><i18n:insert>descriptive-image</i18n:insert></ct:title>
 	    <ct:descr><i18n:insert>descriptive-image-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="image"/></ct:value>
 	  </ct:control>
 	</user:true>
       </user:is-authorized -->
-      <ct:control name="linktext" type="text" element="input">
+      <ct:control name="linktext" type="text" element="input" size="15" maxlength="15">
 	<ct:title><i18n:insert>linktext</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>linktext-descr</i18n:insert></ct:descr>
 	<ct:value><val:insert name="linktext"/></ct:value>
@@ -94,12 +94,12 @@
 	    <ct:descr><i18n:insert>editorok-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="editorok"/></ct:value>
 	  </ct:control>
-	  <ct:control element="input" type="text" name="storyname">
+	  <ct:control element="input" type="text" name="storyname" size="10" maxlength="10">
 	    <ct:title><i18n:insert>storyname</i18n:insert></ct:title>
 	    <ct:descr><i18n:insert>storyname-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="storyname"/></ct:value>
 	  </ct:control>
-	  <ct:control element="input" type="text" name="submitterid">
+	  <ct:control element="input" type="text" name="submitterid" size="8" maxlength="8">
 	    <ct:title><i18n:insert>submitterid</i18n:insert></ct:title>
 	    <ct:descr><i18n:insert>submitterid-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="submitterid"/></ct:value>

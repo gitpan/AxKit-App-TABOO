@@ -6,7 +6,7 @@
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   extension-element-prefixes="i18n"
-  xmlns="http://www.w3.org/1999/xhtml">
+  exclude-result-prefixes="menu ct i18n user"> 
 
   
   <xsl:import href="/transforms/xhtml/match-control.xsl"/>
@@ -35,10 +35,10 @@
 		  </xsl:when>
 		  <xsl:when test="@id='login'">
 		    <xsl:attribute name="class">form</xsl:attribute>
-		    <form method="GET" action="/login">
-		      <fieldset class="login">
+		    <form method="post" action="/login">
+		      <div class="login">
 			<xsl:apply-templates select="./ct:control"/>
-		      </fieldset>
+		      </div>
 		    </form>
 		  </xsl:when>
 		</xsl:choose>

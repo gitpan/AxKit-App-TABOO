@@ -43,7 +43,8 @@
 	    <menu:url>/user/submit/new</menu:url>
 	  </menu:li>
 	  <menu:li id="login">
-	    <ct:control element="input" type="text" name="credential_0">
+	    <ct:control element="input" type="text"
+	    name="credential_0" maxlength="8">
 	      <ct:title>
 		<i18n:insert>username</i18n:insert>:
 	      </ct:title>

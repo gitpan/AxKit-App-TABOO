@@ -5,7 +5,7 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:wn="http://xmlns.com/wordnet/1.6/"      
   xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns="http://www.w3.org/1999/xhtml">
+  exclude-result-prefixes="rdf wn i18n dc"> 
 
   <xsl:template name="CreateHeader">
     <div id="top" class="main-header">

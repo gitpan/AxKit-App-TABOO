@@ -9,14 +9,13 @@ use AxKit::App::TABOO::Data::Category;
 use AxKit::App::TABOO::Data::Plurals::Categories;
 use Apache::AxKit::Plugin::BasicSession;
 use Time::Piece ':override';
-use Data::Dumper;
 use XML::LibXML;
 
 
 use vars qw/$NS/;
 
 
-our $VERSION = '0.084';
+our $VERSION = '0.09';
 
 
 =head1 NAME
@@ -85,7 +84,7 @@ EOC
 
 #  sub store {
 #      return << 'EOC'
-#  	my %args = $r->args;
+#  	my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
 #      $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 
 #      my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};

@@ -7,14 +7,12 @@
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
-  xmlns="http://www.w3.org/1999/xhtml">  
+  exclude-result-prefixes="cust user story cat i18n texts"> 
+
   <xsl:import href="/transforms/insert-i18n.xsl"/>
 
-  <xsl:output method="xml" version="1.0" encoding="utf-8"
-    media-type="text/xml" indent="yes"/>
 
-
-  <xsl:template match="//taboo[@type='story']/story:story|/cust:submit//story:story">
+  <xsl:template match="taboo[@type='story']/story:story|/cust:submit//story:story">
     <h2><xsl:value-of select="story:title"/></h2>
     <div id="byline">
       <xsl:value-of select="i18n:include('submit-by')"/>
@@ -33,15 +31,15 @@
       <xsl:apply-templates select="story:lasttimestamp"/>
     </div>
     <div class="minicontent">
-      <xsl:copy-of select="story:minicontent[not(@raw)]"/>
+      <xsl:apply-templates select="story:minicontent[not(@raw)]/*" mode="strip-ns"/>
     </div>
     <div class="content">
-      <xsl:copy-of select="story:content[not(@raw)]"/>
+      <xsl:apply-templates select="story:content[not(@raw)]/*" mode="strip-ns"/>
     </div>
       
   </xsl:template>
 
-  <xsl:template match="//taboo[@type='stories']/story:story">
+  <xsl:template match="taboo[@type='stories']/story:story">
     <div>
       <xsl:attribute name="class">
 	<xsl:choose>
@@ -80,7 +78,7 @@
 	<xsl:apply-templates select="story:lasttimestamp"/>
       </div>
       <div class="minicontent">
-	<xsl:copy-of select="story:minicontent[not(@raw)]"/>
+	<xsl:apply-templates select="story:minicontent[not(@raw)]/*" mode="strip-ns"/>
       </div>
       <div class="readmorelink">
 	<a>
@@ -108,7 +106,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="//taboo[@type='list']/story:story">
+  <xsl:template match="taboo[@type='list']/story:story">
     <tr>
       <xsl:attribute name="class">
 	<xsl:choose>
@@ -171,6 +169,13 @@
     <span class="time">
       <xsl:value-of select="."/>
     </span>
+  </xsl:template>
+
+  <xsl:template match="*" mode="strip-ns">
+    <xsl:element name="{local-name()}">
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates mode="strip-ns"/>
+    </xsl:element>
   </xsl:template>
 
 </xsl:stylesheet>

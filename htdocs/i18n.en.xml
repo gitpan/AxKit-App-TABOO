@@ -89,6 +89,7 @@
   <text id="new-fullname-descr"> Give your full name </text>
   <text id="new-email-descr"> A valid e-mail address </text>
   <text id="new-uri-descr"> The address of a web page that describes you </text>
+  <text id="new-bio-descr"> A short text that describes you </text>
 
   <text id="to-change-passwd-descr"> To change password, enter new
   password twice </text>

@@ -11,7 +11,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.085';
+our $VERSION = '0.09';
 
 
 use DBI;
@@ -133,7 +133,7 @@ sub _load {
     if ($nothing) {
       # Then, none of the fields were actually sent with a value, so
       # load won't return anything sensible...
-      carp "No fields were sent with value, so no unique record can be found.";
+      carp "No fields were sent with value, so no unique record can be found";
       return undef;
     }
     my $sth = $dbh->prepare($query);
@@ -183,8 +183,7 @@ sub write_xml {
 	    $formatter->charset('utf-8');
 	    my $html = $formatter->format($content);
 	    my $parser = XML::LibXML->new();
-	    my $parsed = XML::LibXML::Text->new($content);
-	    $parsed = $parser->parse_balanced_chunk($html);
+	    my $parsed = $parser->parse_balanced_chunk($html);
 	    my $fragment = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);	    
 	    $fragment->appendChild($parsed);
 	    $topel->appendChild($fragment);

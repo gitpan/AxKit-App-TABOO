@@ -3,11 +3,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
-  xmlns="http://www.w3.org/1999/xhtml">  
-  <xsl:output method="xml" version="1.0" encoding="utf-8"
-    media-type="text/xml" indent="yes"/>
-
-
+  exclude-result-prefixes="user i18n">
+ 
   <xsl:template match="user:user">
     <h2><xsl:value-of select="./user:name"/></h2>
     <dl>

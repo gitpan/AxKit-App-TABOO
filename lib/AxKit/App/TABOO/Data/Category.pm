@@ -13,7 +13,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.085';
+our $VERSION = '0.09';
 
 
 =head1 NAME
@@ -147,7 +147,7 @@ sub new {
 	      description => undef,
 	      DBCONNECTARGS => \@_,
 	      XMLELEMENT => 'category',
-	      XMLPREFIX => 'category',
+	      XMLPREFIX => 'cat',
 	      XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output',
 	      ONFILE => undef,
 	     };

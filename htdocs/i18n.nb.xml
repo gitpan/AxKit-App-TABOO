@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <translations
-  xmlns="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts" xml:lang="en">
+  xmlns="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts" xml:lang="nb">
 
   <text id="submit-by"> Innsendt av </text>
   <text id="posted-by"> Postet av </text>
@@ -27,7 +27,7 @@
   <text id="descriptive-image-descr"> Adressen til et beskrivende bilde. </text>
 
   <text id="linktext"> Linketekst </text>
-  <text id="linktext-descr"> En god, beskrivende tekst som skal brukes
+  <text id="linktext-descr"> Skriv inn en god, beskrivende tekst som skal brukes
   til linken for resten av saken "Les mer" er et vanlig, men svært
   dårlig valg. </text>
 
@@ -45,7 +45,7 @@
   godkjent for publisering. </text>
 
   <text id="storyname"> Saksnavn </text>
-  <text id="storyname-descr"> Et kort ett-ords navn for saken </text>
+  <text id="storyname-descr"> Skriv inn et kort ett-ords navn for saken </text>
 
   <text id="submitterid"> Innsenders ID </text>
   <text id="submitterid-descr"> Brukernavnet til den som sendte inn
@@ -61,7 +61,7 @@
   <text id="homepage"> Hjemmeside </text>
   <text id="login"> Login </text>
   <text id="password"> Passord </text>
-  <text id="authlevel"> authorisasjonsnivå </text>
+  <text id="authlevel"> autorisasjonsnivå </text>
   <text id="new-password"> Nytt passord </text>
   <text id="register"> Registrer </text>
 
@@ -72,7 +72,7 @@
   <text id="edit"> Rediger </text>
   <text id="send"> Send </text>
   <text id="search"> Søk </text>
-  <text id="preview"> Forvisning </text>
+  <text id="preview"> Forhåndsvisning </text>
   <text id="update"> Oppdater </text>
   <text id="change"> Endre </text>
   <text id="repeat"> Gjenta </text>
@@ -88,9 +88,10 @@
   <text id="user-info"> Brukerinformasjon </text>
 
   <text id="new-username-descr"> Velg et ett-ords brukernavn </text>
-  <text id="new-fullname-descr"> Gi ditt fulle navn </text>
-  <text id="new-email-descr"> En gyldig e-post adresse </text>
-  <text id="new-uri-descr"> Adressen til en webside som beskriver deg </text>
+  <text id="new-fullname-descr"> Oppgi ditt fulle navn </text>
+  <text id="new-email-descr"> Oppgi en gyldig e-post adresse </text>
+  <text id="new-uri-descr"> Oppgi adressen til en webside som beskriver deg </text>
+  <text id="new-bio-descr"> Skriv inn en kort tekst som beskriver deg </text>
 
   <text id="to-change-passwd-descr"> For å forandre passord, gi det
   nye passorder to ganger. </text>

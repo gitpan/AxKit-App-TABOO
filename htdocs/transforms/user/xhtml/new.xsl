@@ -8,14 +8,16 @@
   xmlns:wn="http://xmlns.com/wordnet/1.6/"      
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns="http://www.w3.org/1999/xhtml">
+  exclude-result-prefixes="user ct cust rdf wn i18n dc"> 
   <xsl:import href="match-user.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/xhtml/match-control.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
-  <xsl:output version="1.0" encoding="utf-8" method="html"
-    media-type="text/html" indent="yes"/>  
+  <xsl:output version="1.0" encoding="utf-8" indent="yes"
+    method="html" media-type="text/html" 
+    doctype-public="-//W3C//DTD HTML 4.01//EN" 
+    doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>  
   
   <xsl:param name="request.headers.host"/>
   <xsl:param name="session.id"/>
@@ -44,10 +46,10 @@
 	  <div class="main">
 	    <xsl:apply-templates select="//user:user"/>
 	    
-	    <form method="GET" action="/user/submit/new">
-	      <fieldset>
+	    <form method="post" action="/user/submit/new">
+	      <div class="fields">
 		<xsl:apply-templates select="./ct:control"/>
-	      </fieldset>
+	      </div>
 	    </form>
 	  </div>
 	</div>

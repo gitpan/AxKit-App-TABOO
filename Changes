@@ -1,5 +1,35 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.09    2004-10-15 05:40
+	- Changed the DOCTYPE of HTML output. We should have valid
+	  HTML 4.01 Strict now. 
+	- maxlength and size attributes only show up if actually set.
+	- Removed all fieldset elements. They require legends, and I 
+	  weren't using them correctly anyway.
+	- A few tiny clean-ups.
+
+0.086_4	2004-10-15 01:00
+	- The Apache->request didn't get posts, so the code has been
+	re-written to use Apache::Request, somewhat ad-hoc.
+	- Use chiefly post HTTP methods rather than get.
+	- Decided to really go for HTML (not XHTML) output. 
+	  * Expanded on the XSLT output accordingly. 
+	  * Namespace attributes were passed on, included a lot of
+	    exclude-result-prefixes.
+	  * Removed the xhtml namespace.
+	- Standardized on cat as prefix for category. 
+	- localhost as default mailhost.
+	- Small simplification of Formatter parse code.
+ 
+0.086_2	2004-10-13 14:15
+	- Adding support for some HTML form formatting, size,
+	maxlength, etc.
+	- Added documentation for setting cookie expiry.
+	- Login will first invalidate older sessions.
+	- Were actually missing a bio field.
+	- Some small corrections in the language strings.
+
+
 0.086_1	2004-10-09 20:27
 	- Some more code to allow easily setting the language for the
 	  interface. 

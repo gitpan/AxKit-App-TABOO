@@ -1,9 +1,5 @@
-AxKit/App/TABOO version 0.086_1
-===============================
-
-Note: This developer release uses the yet unreleased
-Apache::AxKit::Plugin::XSLTParam by Joerg Walter. 0.09 will be
-released when this module makes it to CPAN. 
+AxKit/App/TABOO version 0.09
+============================
 
 INTRODUCTION
 
@@ -74,18 +70,18 @@ TABOO can now also list News stories with the NewsList Provider, and
 there is a rudimentary front page, which is an aggregate of a
 newslist. 
 
-From 0.081, TABOO can run on different virtual hosts and operate on
-different databases.
+TABOO can run on different virtual hosts and operate on different
+databases. 
 
 It can also take user-entered text that has been marked up with some
 simple syntax like Textile http://www.textism.com/tools/textile/ and
 convert that to HTML.
 
-But then, the mantra is "release early", isn't it? And besides, Real
-Soon Now this should have evolved into something I can put on a
-website and have random people come by and use, a beta of some
-sort... I'll be thrilled if other hackers are willing to poke at TABOO
-allready at this point!
+I'm following the mantra "release early", and have made everything
+I've done available from the start? From 0.09, it has evolved into
+something I can put on a website and have random people come by and
+use, and soon, I'll call it a beta of some sort... I'll be thrilled if
+other hackers are willing to poke at TABOO allready at this point!
 
 INSTALLATION
 
@@ -124,6 +120,8 @@ This module requires these other modules and libraries:
 - AxKit will bring along XML::LibXML, and while you could use any
   LibXSLT module supported by AxKit, I recommend XML::LibXSLT, and to
   ease installation, I made it a prerequisite.
+- Apache::AxKit::Plugin::Param::Expr is needed only to use different
+  languages, but I made that a prerequisite too for now.
 
 You will also need some XML libraries, for example libxml2 and
 libxslt. You will probably have gotten these along with AxKit. TABOO
