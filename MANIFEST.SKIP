@@ -1,0 +1,9 @@
+#defaults
+^Makefile$
+^blib/
+^blibdirs$
+^pm_to_blib$
+~$
+tar.gz$
+lib/AxKit/App/TABOO/Data/OrderedItem.pm
+lib/AxKit/App/TABOO/Provider.pm

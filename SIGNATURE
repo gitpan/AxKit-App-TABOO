@@ -1,0 +1,71 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.38.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It would check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 7765013aa3134470ecbe6046fbb2dfa240434fce Changes
+SHA1 d5e004209f79988b686c55330665871fd0295d44 MANIFEST
+SHA1 557203db21ece8592ab6adf430235689728304a7 MANIFEST.SKIP
+SHA1 737908cea5ce53bab9884a157cad150b2332a235 META.yml
+SHA1 7d37dca70c9f04ade44a79b566ecc615f0b7ecfb Makefile.PL
+SHA1 a49ec4520f1551fa8d647f2a826ca760828b4cb1 README
+SHA1 8b6b99d82af969d3b2de6471d88020c041df3969 htdocs/i18n.en.xml
+SHA1 d94282ab08765e24d62a88d498b18c500411f6a9 htdocs/links.xsp
+SHA1 bab4324c47f53497eda340deb76ea197d778ea6d htdocs/login.xsp
+SHA1 87dc4f0398c0da187be759b7fecdd67eca0b321a htdocs/news/submit.xsp
+SHA1 2ca4f19433acf270711922bb59801b1acb4f48af htdocs/transforms/insert-i18n.xsl
+SHA1 649f16c7ed2a0e0df60aa6e8f945555bcd409ca8 htdocs/transforms/news/insert-values-edit.xsl
+SHA1 9fefab90cec6566e0921dd9f1b9b8f5b3a82b430 htdocs/transforms/news/xhtml/match-story.xsl
+SHA1 c98f8df8659ca537720d8d6a6a7de07c8d8ac6f9 htdocs/transforms/news/xhtml/news-provider.xsl
+SHA1 c46891dcf5764f5dc668210ea529a2041f4e020e htdocs/transforms/news/xhtml/newslist-provider.xsl
+SHA1 eceb3add4086d83855a7b5690fda9509ca817606 htdocs/transforms/news/xhtml/submit.xsl
+SHA1 946101be58fe6ad85db92c9830ddc5987985e4fd htdocs/transforms/user/make-control.xsl
+SHA1 78d5f0a76f3e172e8a45866bb307ad1e32ece41c htdocs/transforms/user/xhtml/match-user.xsl
+SHA1 15294585722ae55ed3b232d34f17a91677cfb735 htdocs/transforms/user/xhtml/new.xsl
+SHA1 0c543f68784c6a260ac3bc1404b571656989b6d4 htdocs/transforms/user/xhtml/user.xsl
+SHA1 be613ee2ab288725f4618cbd5eb4273df0299354 htdocs/transforms/xhtml/match-control.xsl
+SHA1 8c4bf658d6b49e31f40aa2006ab7931b1ddea88c htdocs/user/submit/new.xsp
+SHA1 aeed722c3cfbc902ce7db87bbdf3f2afac0f5534 htdocs/user/submit/user.xsp
+SHA1 b4447800087beef3f765be4a3fd09766609fd9fb lib/AxKit/App/TABOO.pm
+SHA1 06ba6c57c5a3d18f99c43b3d1dc8a002f6c5b33f lib/AxKit/App/TABOO/Data.pm
+SHA1 c487361cbc4ed904629f5f3e55d1dff9095ab91f lib/AxKit/App/TABOO/Data/Category.pm
+SHA1 90a93b832441475d14a0b55c595166555e21d035 lib/AxKit/App/TABOO/Data/Comment.pm
+SHA1 3b7345e8d0aeb4c58fa69618e0ee6c27ec11c8cc lib/AxKit/App/TABOO/Data/Order.pm
+SHA1 2adab2848fa2b1a353b1444f117a7fcb8f05b546 lib/AxKit/App/TABOO/Data/Plurals.pm
+SHA1 da138e37e38266004841b131f61463ed4a06cf89 lib/AxKit/App/TABOO/Data/Plurals/Categories.pm
+SHA1 2aefe0de0ef0e1ccc340d2e8a0f373ccf6bf3c3f lib/AxKit/App/TABOO/Data/Plurals/Productsubtypes.pm
+SHA1 e0ab6589feeaa00f36d3fd9c0296dae7eb7dd554 lib/AxKit/App/TABOO/Data/Plurals/Stories.pm
+SHA1 a14154ee579c677b871e7041e2d068eb99ebfa9c lib/AxKit/App/TABOO/Data/Product.pm
+SHA1 4c4fc0e7f44f1242c5714fc32e249ff4342a4dfd lib/AxKit/App/TABOO/Data/Productprices.pm
+SHA1 72bb00a4985ef03d08cf6ec453c0f528def69f4c lib/AxKit/App/TABOO/Data/Productsubtype.pm
+SHA1 822a4d38a6e4d0a4d8b1a7bf8cd5bb347fb47559 lib/AxKit/App/TABOO/Data/Story.pm
+SHA1 53b6990de30cbc0f47a88525ddb38134eddbfae9 lib/AxKit/App/TABOO/Data/User.pm
+SHA1 ff6c81e96674e5126bef6130a579500110f95366 lib/AxKit/App/TABOO/Data/User/Contributor.pm
+SHA1 d31cd9c511397bc22cc482da2f8d73eb779bf1bc lib/AxKit/App/TABOO/Data/User/Customer.pm
+SHA1 20a4cc4e67300c83026d2e80d85c4b923442c320 lib/AxKit/App/TABOO/Provider/News.pm
+SHA1 dc82a6765976a4a0a586057066c46067e28d339a lib/AxKit/App/TABOO/Provider/NewsList.pm
+SHA1 9b386c26b6309dc59f0ce39190943b0126099e7b lib/AxKit/App/TABOO/XSP/Category.pm
+SHA1 d41e33bcd7622d45ea78cb66fdf6305c4ce69d7a lib/AxKit/App/TABOO/XSP/Story.pm
+SHA1 4c2f1c9ba86a137e782cd7861262164b830e113a lib/AxKit/App/TABOO/XSP/User.pm
+SHA1 46b9ea8ec3e817b33b758e1d9def1d7415b4cb9c sql/testdata.sql
+SHA1 45270ea965b886991c372a1b18c656b562af1203 sql/webshop-create.sql
+SHA1 7e6285b33321df84de7243acabb0b89fb222cbb5 sql/webshop-test.sql
+SHA1 ac7c7caf70464548714893c8a12aa40919fe6523 test.pl
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iD8DBQFBEueFlE/Gp2pqC7wRAkbIAJoDqSaQHnl8c6uW9vnZGe39eGOBuQCeL/dh
+byxB/Q0V9afaPjqz/mOsB3U=
+=CI/d
+-----END PGP SIGNATURE-----

@@ -249,3 +249,10 @@ Revision history for Perl extension AxKit::App::TABOO.
 	Providers. 
 	- Commented out the code to deal with secondary categories. 
 	- A few small changes.
+
+0.075	 2004-08-06 04:05
+	- Moved the user/*.xsp's down to ease the config job a bit.
+	- Added SIGNATURE (please verify!) and MANIFEST.SKIP
+	- Updated the configuration example.
+	- I can't decide whether URLs to transforms should be relative
+	or absolute. They are absolute in this release.

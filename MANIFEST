@@ -1,7 +1,7 @@
 Changes
 htdocs/news/submit.xsp
-htdocs/user/user.xsp
-htdocs/user/new.xsp
+htdocs/user/submit/user.xsp
+htdocs/user/submit/new.xsp
 htdocs/login.xsp
 htdocs/i18n.en.xml
 htdocs/links.xsp
@@ -39,6 +39,8 @@ lib/AxKit/App/TABOO/XSP/Story.pm
 lib/AxKit/App/TABOO/XSP/User.pm
 Makefile.PL
 MANIFEST			This list of files
+MANIFEST.SKIP
+SIGNATURE
 META.yml			Module meta-data (added by MakeMaker)
 README
 sql/testdata.sql
