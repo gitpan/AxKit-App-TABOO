@@ -11,7 +11,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.092';
+our $VERSION = '0.095';
 
 
 use DBI;
@@ -88,7 +88,7 @@ sub new {
 }
 
 
-=item C<load(what => fields, limit => {key => value, [...]})>
+=item C<load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]})>
 
 Will load and populate the data structure of an object with the data
 from a data store. It uses named parameters, the first C<what> is used
@@ -120,7 +120,7 @@ sub load {
 }
 
 
-=item C<_load(what => fields, limit => {key => value, [...]})>
+=item C<_load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]})>
 
 As the underscore implies this is B<for internal use only>! It is
 intended to do the hard work for this class and its subclasses. It
@@ -379,6 +379,21 @@ sub save {
 }
 
 
+=item C<exist(%limitargs)>
+
+This method can be used to check if a record allready exists. The
+argument is the hash you would give to C<limit> in the load method.
+
+=cut
+
+sub exist {
+  my $self = shift;
+  my %args = @_;
+  my $data = $self->_load(what => 1, limit => \%args);
+  return scalar($data);
+}
+
+
 =item C<stored()>
 
 Checks if a record with the present object's identifier is allready
@@ -386,7 +401,7 @@ present in the datastore. Returns 1 if this is so.
 
 =cut
 
-
+# TODO, this needs to be more generic, should probably use _load.
 sub stored {
   my $self = shift;
   return 1 if ${$self}{'ONFILE'};
@@ -395,6 +410,7 @@ sub stored {
   ${$self}{'ONFILE'} = $check;
   return $check;
 }
+
 
 
 =item C<onfile>

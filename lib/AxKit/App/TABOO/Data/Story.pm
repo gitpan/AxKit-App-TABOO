@@ -18,7 +18,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.093';
+our $VERSION = '0.095';
 
 
 =head1 NAME
@@ -34,7 +34,7 @@ AxKit::App::TABOO::Data::Story - Story Data object for TABOO
   $story->addcatinfo();
   $timestamp = $story->timestamp();
   $lasttimestamp = $story->lasttimestamp();
-
+  $story->timestamp($lasttimestamp);
 
 =head1 DESCRIPTION
 
@@ -205,32 +205,41 @@ sub addcatinfo {
     return $self;
 }
 
-=item C<timestamp([($section, $storyname)])>
+=item C<timestamp([($sectionid, $storyname)|Time::Piece])>
 
-The timestamp method will retrieve the timestamp of the story. If the
-timestamp has been loaded earlier from the data storage (for example
-by the load method), you need not supply any arguments. If the
-timestamp is not available, you must supply the section and storyname
-identifiers, the method will then load it into the data structure
-first.
+The timestamp method will retrieve or set the timestamp of the
+story. If the timestamp has been loaded earlier from the data storage
+(for example by the load method), you need not supply any
+arguments. If the timestamp is not available, you must supply the
+sectionid and storyname identifiers, the method will then load it into
+the data structure first.
 
-The timestamp method will return a Time::Piece object with the
+The timestamp method will return a L<Time::Piece> object with the
 requested time information.
+
+To set the timestamp, you must supply a L<Time::Piece> object, the
+timestamp is set to the time given by that object.
 
 =cut
 
 sub timestamp {
   my $self = shift;
+  my $arg = shift;
+  if (ref($arg) eq 'Time::Piece') {
+    ${$self}{'timestamp'} = $arg->datetime;
+    return $self;
+  }
   if (! ${$self}{'timestamp'}) {
-    my ($section, $storyname) = @_;
-    $self->load(what => 'timestamp', limit => {sectionid => $section, storyname => $storyname});
+    my $storyname = shift;
+    $self->load(what => 'timestamp', limit => {sectionid => $arg, storyname => $storyname});
   }
   unless (${$self}{'timestamp'}) { return undef; }
   (my $tmp = ${$self}{'timestamp'}) =~ s/\+\d{2}$//;
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
 
-=item C<lasttimestamp([($section, $storyname)])>
+
+=item C<lasttimestamp([($sectionid, $storyname)|Time::Piece])>
 
 This does exactly the same as the timestamp method, but instead
 returns the lasttimestamp, which is intended to show when anything
@@ -244,24 +253,30 @@ return a Time::Piece object.
 
 sub lasttimestamp {
   my $self = shift;
-  if (! ${$self}{'lasttimestamp'}) {
-    my ($section, $storyname) = @_;
-    $self->load(what => 'lasttimestamp', limit => {sectionid => $section, storyname => $storyname});
+  my $arg = shift;
+  if (ref($arg) eq 'Time::Piece') {
+    ${$self}{'lasttimestamp'} = $arg->datetime;
+    return $self;
   }
-  unless (${$self}{'timestamp'}) { return undef; }
+  if (! ${$self}{'lasttimestamp'}) {
+    my $storyname = shift;
+    $self->load(what => 'lasttimestamp', limit => {sectionid => $arg, storyname => $storyname});
+  }
+  unless (${$self}{'lasttimestamp'}) { return undef; }
   (my $tmp = ${$self}{'lasttimestamp'}) =~ s/\+\d{2}$//;
   return Time::Piece->strptime($tmp, "%Y-%m-%d %H:%M:%S");
 }
 
 
-=item C<editorok([($section, $storyname)])>
+=item C<editorok([($sectionid, $storyname)])>
 
-This is similar to the timestamp method, but instead returns the
-editorok, which is a boolean variable that says can be used to see if
-an editor has approved a story.
+This is similar to the timestamp method in interface, but can't be
+used to set the value, only retrieves it. It returns the C<editorok>,
+which is a boolean variable that says can be used to see if an editor
+has approved a story.
 
-It may require arguments like the timestamp method does, and it will
-return 1 if the story has been approved, 0 if not.
+It takes arguments like the timestamp method does, and it will return
+1 if the story has been approved, 0 if not.
 
 =back
 

@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.094';
+our $VERSION = '0.095';
 
 
 1;
@@ -158,6 +158,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   RewriteRule ^/user/submit/new$ /user/submit/new.xsp
 
   RewriteRule ^/news/([^/]+)/([^/]+)/comment(/?.*)/respond$ /news/comment.xsp?sectionid=$1&storyname=$2&parentcpath=$3
+  RewriteRule ^/news/([^/]+)/([^/]+)/edit$ /news/submit.xsp?sectionid=$1&storyname=$2&edit=true
 
   RewriteRule ^/$ /index.xsp
 
@@ -234,7 +235,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   </LocationMatch>
 
 
-  <LocationMatch ^/news/.+/respond$>
+  <LocationMatch ^/news/.+/(respond|edit)$>
    	PerlHandler AxKit
   	AxContentProvider Apache::AxKit::Provider::File
   </LocationMatch>

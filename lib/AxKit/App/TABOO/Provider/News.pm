@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.092';
+our $VERSION = '0.095';
 
 =head1 NAME
 
@@ -87,15 +87,12 @@ sub init {
     
     
   # Parse the URI to find if we thread, have comments, name of post, etc
-  $r->uri =~ m|^/news/(.*?)/(.*?)/|i;
-  $self->{section} = $1;
-  $self->{storyname} = $2;
+  ($self->{sectionid}, $self->{storyname}) = $r->uri =~ m|^/news/(.*?)/(.*?)/|i;
   $self->{showthread} = ($r->uri =~ m|/thread$|i) ?1:0;
   $self->{showall} = ($r->uri =~ m|/all$|i) ?1:0;
   $self->{getcomments} = ($r->uri =~ m|/comment/|i) ?1:0;
   if($self->{getcomments}) {
-    $r->uri =~ m|/comment(/.*?)$|i;
-    $self->{commentpath} = $1;
+    ($self->{commentpath}) = $r->uri =~ m|/comment(/.*?)$|i;
     if($self->{showthread}) {
       $self->{commentpath} =~ s|/thread$||i;
     }
@@ -109,7 +106,7 @@ sub init {
 
   # We're just loading the part of the story we are sure to be using. 
   $self->{story} = AxKit::App::TABOO::Data::Story->new();
-  $self->{story}->load(what => 'storyname,sectionid,editorok,title,timestamp,lasttimestamp', limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
+  $self->{story}->load(what => 'storyname,sectionid,editorok,title,timestamp,lasttimestamp', limit => {sectionid => $self->{sectionid}, storyname => $self->{storyname}});
 
   # Get the timestamps of the story
   $self->{storytimestamp} =  $self->{story}->timestamp();
@@ -120,7 +117,7 @@ sub init {
       # Might as well load the entire identified comment, since we
       # will at least use some of it.
       $self->{rootcomment}->load(limit => {commentpath => $self->{commentpath},
-					   sectionid => $self->{section}, 
+					   sectionid => $self->{sectionid}, 
 					   storyname => $self->{storyname}});
       $self->{commenttimestamp} = $self->{rootcomment}->timestamp();
     } else { 
@@ -237,7 +234,7 @@ sub get_strref {
 	$rootel->setAttribute('commentstatus', 'threadonly');
 	$self->{story}->write_xml($doc, $rootel);
 	if($self->{commentpath} eq '/') {
-	  $self->{commenttree}->load(limit => {sectionid => $self->{section},
+	  $self->{commenttree}->load(limit => {sectionid => $self->{sectionid},
 					       storyname => $self->{storyname}},
 				     orderby => 'timestamp DESC');
 	  $self->{commenttree}->adduserinfo();
@@ -257,7 +254,7 @@ sub get_strref {
 	$self->{rootcomment}->write_xml($doc, $rootel);
 	# But we want a list of headers too. 
 	$self->{commentlist}->load(what => 'commentpath,sectionid,storyname,title,username,timestamp', 
-				   limit => {sectionid => $self->{section},
+				   limit => {sectionid => $self->{sectionid},
 					     storyname => $self->{storyname}},
 				   orderby => 'timestamp DESC');
 	my $commentlistel = $doc->createElementNS($self->{commentlist}->xmlns(), 
@@ -268,11 +265,11 @@ sub get_strref {
 	# We shall show the full story and all the expanded comments
 	AxKit::Debug(7, "[News] We shall show the full story and all the expanded comments");
 	$rootel->setAttribute('commentstatus', 'everything');
-	$self->{story}->load(limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
+	$self->{story}->load(limit => {sectionid => $self->{sectionid}, storyname => $self->{storyname}});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
 	$self->{story}->write_xml($doc, $rootel);
-	$self->{commenttree}->load(limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
+	$self->{commenttree}->load(limit => {sectionid => $self->{sectionid}, storyname => $self->{storyname}});
 	$self->{commenttree}->adduserinfo();
 	#$self->{commenttree}->addcatinfo();
 	$self->{commenttree}->write_xml($doc, $rootel);
@@ -281,12 +278,12 @@ sub get_strref {
 	# We shall show the full story, but only headings of comments
 	AxKit::Debug(7, "[News] We shall show the full story, but only headings of comments");
 	$rootel->setAttribute('commentstatus', 'headings');
-	$self->{story}->load(limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
+	$self->{story}->load(limit => {sectionid => $self->{sectionid}, storyname => $self->{storyname}});
 	$self->{story}->adduserinfo();
 	$self->{story}->addcatinfo();
 	$self->{story}->write_xml($doc, $rootel);
 	$self->{commentlist}->load(what => 'commentpath,sectionid,storyname,title,username,timestamp', 
-				   limit => {sectionid => $self->{section},
+				   limit => {sectionid => $self->{sectionid},
 					     storyname => $self->{storyname}},
 				   orderby => 'timestamp DESC');
 	my $commentlistel = $doc->createElementNS($self->{commentlist}->xmlns(), 
@@ -298,7 +295,7 @@ sub get_strref {
       # We shall only display the story, no comments
       AxKit::Debug(7, "[News] We shall only display the story, no comments");
       $rootel->setAttribute('commentstatus', 'nocomments');
-      $self->{story}->load(limit => {sectionid => $self->{section}, storyname => $self->{storyname}});
+      $self->{story}->load(limit => {sectionid => $self->{sectionid}, storyname => $self->{storyname}});
       $self->{story}->adduserinfo();
       $self->{story}->addcatinfo();
       $self->{story}->write_xml($doc, $rootel); 

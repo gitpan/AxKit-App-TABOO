@@ -21,7 +21,23 @@
 	<xsl:value-of select="comm:commentpath"/>
       </xsl:attribute>
       <div class="comm-head">
-	<h3><xsl:value-of select="comm:title"/></h3>
+	<h3>
+	  <xsl:choose>
+	    <xsl:when test="/taboo[@commentstatus='threadonly'] or /taboo[@commentstatus='everything']">
+	      <a>
+		<xsl:attribute name="href">
+		  <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+		  <xsl:text>comment</xsl:text>
+		  <xsl:value-of select="comm:commentpath"/>
+		</xsl:attribute>
+		<xsl:value-of select="comm:title"/>
+	      </a>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:value-of select="comm:title"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</h3>
 	<div class="comm-byline">
 	  <xsl:value-of select="i18n:include('posted-by')"/>
 	  <xsl:apply-templates select="user:user"/>
@@ -64,9 +80,6 @@
 		<xsl:value-of select="substring-before($request.uri, 'comment/')"/>
 		<xsl:text>comment</xsl:text>
 		<xsl:value-of select="comm:commentpath"/>
-		<xsl:if test="substring-after($request.uri, '/') = 'thread'">
-		  <xsl:text>/thread</xsl:text>
-		</xsl:if>
 	      </xsl:attribute>
 	      <xsl:value-of select="comm:title"/>
 	    </a>
@@ -75,6 +88,18 @@
 	      <xsl:value-of select="comm:title"/>
 	  </xsl:otherwise>
 	</xsl:choose>
+	<xsl:text> ( </xsl:text>
+	<a>
+	  <xsl:attribute name="href">
+	    <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+	    <xsl:text>comment</xsl:text>
+	    <xsl:value-of select="comm:commentpath"/>
+	    <xsl:text>/thread</xsl:text>
+	  </xsl:attribute>
+	  <xsl:value-of select="i18n:include('thread-below')"/>
+	</a>
+	<xsl:text> ) </xsl:text>
+	
       </li>
       <xsl:apply-templates select="comm:reply"/>
     </ul>

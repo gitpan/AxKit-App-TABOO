@@ -14,7 +14,23 @@
 
 
   <xsl:template match="taboo[@type='story']/story:story|/cust:submit//story:story">
-    <h2><xsl:value-of select="story:title"/></h2>
+    <h2>
+      <xsl:choose>
+	<xsl:when test="/taboo[@commentstatus='singlecomment'] or /taboo[@commentstatus='threadonly']">
+	  <a>
+	    <xsl:attribute name="href">
+	      <xsl:text>/news/</xsl:text><xsl:value-of
+		select="story:sectionid"/><xsl:text>/</xsl:text><xsl:value-of
+		select="story:storyname"/><xsl:text>/comment/</xsl:text>
+	    </xsl:attribute>
+	    <xsl:value-of select="story:title"/>
+	  </a>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:value-of select="story:title"/>
+	</xsl:otherwise>
+      </xsl:choose>
+    </h2>
     <div id="byline">
       <xsl:if test="user:submitter">
 	<xsl:value-of select="i18n:include('submit-by')"/>
@@ -99,13 +115,7 @@
       </div>
       <xsl:if test="/taboo[@can-edit]">
 	<div class="editlink">
-	  <a>
-	    <xsl:attribute name="href">
-	      <xsl:text>/news/submit?edit=true&amp;sectionid=</xsl:text>
-	      <xsl:value-of select="story:sectionid"/>
-	      <xsl:text>&amp;storyname=</xsl:text>
-	      <xsl:value-of select="story:storyname"/>
-	    </xsl:attribute>
+	  <a href="/news/{story:sectionid}/{story:storyname}/edit">
 	    <xsl:value-of select="i18n:include('edit')"/>
 	  </a>
 	</div>
@@ -141,13 +151,7 @@
       <td><xsl:apply-templates select="story:lasttimestamp"/></td>
       <xsl:if test="/taboo[@can-edit]">
 	<td>
-	  <a>
-	    <xsl:attribute name="href">
-	      <xsl:text>/news/submit?edit=true&amp;sectionid=</xsl:text>
-	      <xsl:value-of select="story:sectionid"/>
-	      <xsl:text>&amp;storyname=</xsl:text>
-	      <xsl:value-of select="story:storyname"/>
-	    </xsl:attribute>
+	  <a href="/news/{story:sectionid}/{story:storyname}/edit">
 	    <xsl:value-of select="i18n:include('edit')"/>
 	  </a>
 	</td>

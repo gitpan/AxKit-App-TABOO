@@ -5,7 +5,7 @@
   <text id="submit-by"> Innsendt av </text>
   <text id="posted-by"> Postet av </text>
   <text id="to-cat"> Til kategori </text>
-  <text id="on-time"> Den </text>
+  <text id="on-time"> Dato </text>
   <text id="last-changed"> Sist endret </text>
 
 
@@ -24,7 +24,8 @@
   <text id="comments-verb"> kommenterer </text>
   <text id="you-respond-to"> Du svarer på denne kommentaren: </text>
   <text id="reply-to-this"> Svar på denne </text>
-  
+  <text id="thread-below"> alle under denne </text>
+
 
   <text id="minicontent"> Første avsnitt </text>
   <text id="minicontent-descr"> Skriv inn det første avsnittet til

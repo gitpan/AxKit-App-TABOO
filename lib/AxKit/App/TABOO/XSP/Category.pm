@@ -15,7 +15,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.09';
+our $VERSION = '0.095';
 
 
 =head1 NAME
@@ -73,7 +73,7 @@ sub get_categories : struct attribOrChild(type) {
     my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
     $cats->load(what => '*', limit => {type => $attr_type});
     my $doc = XML::LibXML::Document->new();
-    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'categories');
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'cat:categories');
     $root->setAttribute('type', $attr_type);
     $doc->setDocumentElement($root);
     $cats->xmlelement('primcat');

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
-<?xml-stylesheet href="../transforms/news/insert-values-edit.xsl" type="text/xsl"?>
-<?xml-stylesheet href="../transforms/news/xhtml/submit.xsl" type="text/xsl"?>
+<?xml-stylesheet href="/transforms/news/insert-values-edit.xsl" type="text/xsl"?>
+<?xml-stylesheet href="/transforms/news/xhtml/submit.xsl" type="text/xsl"?>
 <xsp:page
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
   xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"

@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.093';
+our $VERSION = '0.095';
 
 =head1 NAME
 
@@ -91,7 +91,11 @@ namespace with the number 1.
 
 sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}store) {
     return << 'EOC'
-    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
+        my %args;
+    foreach my $name ($cgi->param) {
+      $args{$name} = $cgi->param($name);
+    }
+
     $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
@@ -180,7 +184,7 @@ sub this_story : struct {
     $story->addcatinfo();
     
     my $doc = XML::LibXML::Document->new();
-    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story-submission');
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story:story-submission');
     $doc->setDocumentElement($root);
     $story->write_xml($doc, $root); # Return an XML representation
 EOC
@@ -199,7 +203,11 @@ elements.
 
 sub get_story : struct attribOrChild(storyname,sectionid) {
     return << 'EOC'
-    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
+        my %args;
+    foreach my $name ($cgi->param) {
+      $args{$name} = $cgi->param($name);
+    }
+
     unless ($args{'username'}) {
       $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
     }
@@ -220,7 +228,7 @@ sub get_story : struct attribOrChild(storyname,sectionid) {
       }
     }
     my $doc = XML::LibXML::Document->new();
-    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story-loaded');
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story:story-loaded');
     $doc->setDocumentElement($root);
     $story->write_xml($doc, $root); # Return an XML representation
 EOC

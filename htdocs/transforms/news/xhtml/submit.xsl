@@ -64,7 +64,7 @@
 	      </p>
 	    </xsl:if>
 	    
-	    <form method="post" action="submit">
+	    <form method="post" action="/news/submit">
 	      <div class="fields">
 		<xsl:apply-templates select="./ct:control"/>
 	      </div>

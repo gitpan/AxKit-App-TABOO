@@ -6,6 +6,8 @@ use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
 use AxKit;
 use AxKit::App::TABOO::Data::Comment;
+use AxKit::App::TABOO::Data::Plurals::Comments;
+use AxKit::App::TABOO::Data::Story;
 use Apache::AxKit::Plugin::BasicSession;
 use Time::Piece ':override';
 use XML::LibXML;
@@ -98,20 +100,20 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Outpu
 					       return_code => AUTH_REQUIRED,
 					       -text => "Not authenticated and authorized with an authlevel");
     }
-    
-#    if ($authlevel < 0) {
-#      throw Apache::AxKit::Exception::Retval(
-#					     return_code => FORBIDDEN,
-#					     -text => ". Your level: " . $authlevel);
-#    }
-
-    my $comment = AxKit::App::TABOO::Data::Comment->new();
-
+    my $check = AxKit::App::TABOO::Data::Comment->new();
+    if (($args{'parentcpath'})
+	 && (!$check->exist(storyname => $args{'storyname'}, 
+			    sectionid => $args{'sectionid'},
+			    commentpath => $args{'parentcpath'}))) {
+      # This is actually bad, it shouldn't ever happen
+      throw Apache::AxKit::Exception::Retval(
+					     return_code => FORBIDDEN,
+					     -text => "The parent post of the submitter doesn't exist.");
+    }
     my $timestamp = localtime;
     unless ($args{'timestamp'}) {
 	$args{'timestamp'} = $timestamp->datetime;
     }
-    
     $args{'commentpath'} = $args{'parentcpath'} . '/' . $args{'username'};
     my $check = AxKit::App::TABOO::Data::Plurals::Comments->new();
     my $exists = $check->exist(storyname => $args{'storyname'}, 
@@ -122,8 +124,16 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Outpu
     }
     delete $args{'parentcpath'};
 
+    my $comment = AxKit::App::TABOO::Data::Comment->new();
     $comment->populate(\%args);
     $comment->save();
+    # Modify the last timestamp of the parent story
+    my $story = AxKit::App::TABOO::Data::Story->new();
+    $story->load(what => 'storyname,sectionid',
+		 limit => {storyname => $args{'storyname'},
+			   sectionid => $args{'sectionid'}});
+    $story->lasttimestamp($timestamp);
+    $story->save;
     1;
 EOC
 }

@@ -71,7 +71,7 @@
 	      </div>
 	    </form>
 
-	    <xsl:if test="not(//comm:store=1)">
+	    <xsl:if test="./comm:comment-loaded/comm:reply">
 	      <div class="reply-to">
 		<h2><xsl:value-of select="i18n:include('you-respond-to')"/></h2>
 		<xsl:apply-templates select="./comm:comment-loaded/comm:reply"/>

@@ -1,5 +1,26 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.095   2004-11-22 23:15
+	- Fix a XSLT bug that ruined editing of stories.
+	- Resty editing URIs, append 'edit' to story to edit.
+	- More sanity checks when storing comments, to add some
+	  security.
+	- Check that a new user's name isn't a reserved word.
+	- Make some more links to aid navigation, in comment and story
+	  XSLT. 
+	- Timestamp code changed to allow setting it, both Comment and
+	  Story. 
+	  * Use this to set the lasttimestamp of a story when posting
+	    a comment.
+	- A new exists method in Data.pm
+	- Changed the test to add previous story when posting
+	  comment. 
+	- Another map to foreach transition.
+	- More element prefixes.
+	- Some small cleanups.
+	- More testing.
+
+
 0.094   2004-11-14 05:08
 	- The polishing comments release.
 	  * It can now use a real, RESTy URI, just attach /respond to

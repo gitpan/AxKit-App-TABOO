@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.09';
+our $VERSION = '0.095';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -169,6 +169,11 @@ sub new_user
     return << 'EOC';
     my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
+    if($args{'username'} =~ m/comment|thread|all|respond|edit/) {
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => FORBIDDEN,
+					       -text => "Username matching a administratively prohibited name")
+	}
     if($user->load_name($args{'username'})) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => FORBIDDEN,
@@ -231,7 +236,7 @@ sub get_user : struct attribOrChild(username)
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     $user->load(what => '*', limit => {'username' => $attr_username}); 
     my $doc = XML::LibXML::Document->new();
-    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output', 'get-user');
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output', 'user:get-user');
     $doc->setDocumentElement($root);
     $user->write_xml($doc, $root); # Return an XML representation
 EOC
@@ -299,7 +304,7 @@ sub exists : attribOrChild(username) {
 sub exists___true__open {
 return << 'EOC';
     my $user = AxKit::App::TABOO::Data::User->new();
-    if ($user->load_name($attr_username)) {
+    if (($attr_username =~ m/comment|thread|all|respond|edit/) || ($user->load_name($attr_username))) {
 EOC
 }
 
@@ -311,7 +316,7 @@ sub exists___true {
 sub exists___false__open {
 return << 'EOC';
     my $user = AxKit::App::TABOO::Data::User->new();
-    unless ($user->load_name($attr_username)) {
+    unless (($attr_username =~ m/comment|thread|all|respond|edit/) || ($user->load_name($attr_username))) {
 EOC
 }
 
