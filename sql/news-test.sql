@@ -118,6 +118,172 @@ VALUES (
 );
 
 
+
+INSERT INTO users (
+       username, 
+       name,
+       email,
+       uri,
+       passwd
+) 
+VALUES (
+       'kjetil',
+       'Kjetil Kjernsmo',
+       'kjetil@kjernsmo.net',
+       'http://www.kjetil.kjernsmo.net/',
+       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
+);
+
+INSERT INTO users (
+       username, 
+       name,
+       email,
+       uri,
+       passwd
+) 
+VALUES (
+       'foo',
+       'Foo',
+       'foo@example.com',
+       'http://www.example.com/foo/',
+       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
+);
+
+
+INSERT INTO users (
+       username, 
+       name,
+       uri,
+       passwd
+) 
+VALUES (
+       'bar',
+       'Bar',
+       'http://www.example.com/bar',
+       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
+);
+
+INSERT INTO users (
+       username, 
+       name,
+       email,
+       uri,
+       passwd
+) 
+VALUES (
+       'foobar',
+       'Foo Bar',
+       'foobar@foobar.org',
+       'http://www.foobar.org/',
+       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
+);
+
+
+
+INSERT INTO contributors (
+       username, 
+       authlevel,
+       bio
+) 
+VALUES (
+       'kjetil',
+       9,
+       'TABOO developer'
+);
+
+INSERT INTO contributors (
+       username, 
+       authlevel,
+       bio
+) 
+VALUES (
+       'foo',
+       1,
+       'We all know Foo'
+);
+
+
+INSERT INTO contributors (
+       username, 
+       authlevel,
+       bio
+) 
+VALUES (
+       'bar',
+       5,
+       'Bar is an well known editor'
+);
+
+INSERT INTO contributors (
+       username, 
+       authlevel
+) 
+VALUES (
+       'foobar',
+       1
+);
+
+
+
+
+
+  
+INSERT INTO stories (
+       storyname,
+       sectionid,
+       primcat,
+       title,
+       content,
+       username,
+       submitterid,
+       timestamp,
+       lasttimestamp
+) 
+VALUES (
+       'coolhack',
+       'features',
+       'cats',
+       'Article about Cool Hacks',
+       'Once upon a time, there was this really cool hack',
+       'kjetil',
+       'kjetil',
+       '20030209',
+       '20030227'
+);
+
+
+
+INSERT INTO stories (
+       storyname,
+       sectionid,
+       primcat,
+       seccat,
+       freesubject,
+       title,
+       content,
+       username,
+       submitterid,
+       timestamp,
+       lasttimestamp
+) 
+VALUES (
+       'smallcats',
+       'features',
+       'felines',
+       '{"kittens","cats"}',
+       '{"test1","test2"}',
+       'Interesting post about smaller cats.',
+       'There are a bunch of small cats running around out there.',
+       'kjetil',
+       'foobar',
+       '20031205',
+       '20031211'
+);
+
+
+
+
+
 INSERT INTO comments (
        commentpath,
        storyname,
@@ -250,170 +416,11 @@ INSERT INTO comments (
 ) 
 VALUES (
        '/foo',
-       'coolhack',
        'smallcats',
+       'features',
        'The point is:',
        'Check out the expanded category info',
        '20031211',
        'foo'
 );
-
-  
-INSERT INTO stories (
-       storyname,
-       sectionid,
-       primcat,
-       title,
-       content,
-       username,
-       submitterid,
-       timestamp,
-       lasttimestamp
-) 
-VALUES (
-       'coolhack',
-       'features',
-       'cats',
-       'Article about Cool Hacks',
-       'Once upon a time, there was this really cool hack',
-       'kjetil',
-       'kjetil',
-       '20030209',
-       '20030227'
-);
-
-
-
-INSERT INTO stories (
-       storyname,
-       sectionid,
-       primcat,
-       seccat,
-       freesubject,
-       title,
-       content,
-       username,
-       submitterid,
-       timestamp,
-       lasttimestamp
-) 
-VALUES (
-       'smallcats',
-       'features',
-       'felines',
-       '{"kittens","cats"}',
-       '{"test1","test2"}',
-       'Interesting post about smaller cats.',
-       'There are a bunch of small cats running around out there.',
-       'kjetil',
-       'foobar',
-       '20031205',
-       '20031211'
-);
-
-
-INSERT INTO users (
-       username, 
-       name,
-       email,
-       uri,
-       passwd
-) 
-VALUES (
-       'kjetil',
-       'Kjetil Kjernsmo',
-       'kjetil@kjernsmo.net',
-       'http://www.kjetil.kjernsmo.net/',
-       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
-);
-
-INSERT INTO users (
-       username, 
-       name,
-       email,
-       uri,
-       passwd
-) 
-VALUES (
-       'foo',
-       'Foo',
-       'foo@example.com',
-       'http://www.example.com/foo/',
-       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
-);
-
-
-INSERT INTO users (
-       username, 
-       name,
-       uri,
-       passwd
-) 
-VALUES (
-       'bar',
-       'Bar',
-       'http://www.example.com/bar',
-       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
-);
-
-INSERT INTO users (
-       username, 
-       name,
-       email,
-       uri,
-       passwd
-) 
-VALUES (
-       'foobar',
-       'Foo Bar',
-       'foobar@foobar.org',
-       'http://www.foobar.org/',
-       '$1$1ee9HLjU$7/gwrsXwt0UDEjyIDhiz8.'
-);
-
-
-
-INSERT INTO contributors (
-       username, 
-       authlevel,
-       bio
-) 
-VALUES (
-       'kjetil',
-       9,
-       'TABOO developer'
-);
-
-INSERT INTO contributors (
-       username, 
-       authlevel,
-       bio
-) 
-VALUES (
-       'foo',
-       1,
-       'We all know Foo'
-);
-
-
-INSERT INTO contributors (
-       username, 
-       authlevel,
-       bio
-) 
-VALUES (
-       'bar',
-       5,
-       'Bar is an well known editor'
-);
-
-INSERT INTO contributors (
-       username, 
-       authlevel
-) 
-VALUES (
-       'foobar',
-       1
-);
-
 

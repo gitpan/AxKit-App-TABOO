@@ -9,12 +9,15 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
-  exclude-result-prefixes="user story cat rdf wn dc i18n texts"> 
+  xmlns:str="http://mozref.com/2004/String"
+  exclude-result-prefixes="user story cat rdf wn dc i18n texts str"> 
 
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/news/xhtml/match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
-  <xsl:import href="/transforms/xhtml/footer.xsl"/>
+  <xsl:import href="/transforms/xhtml/footer.xsl"/> 
+  <xsl:import href="match-breadcrumbs.xsl"/>
+  
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
     method="html" media-type="text/html" 
@@ -22,8 +25,10 @@
     doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>  
 
   <xsl:param name="request.headers.host"/>
+  <xsl:param name="request.uri"/>
   <xsl:param name="session.id"/>
   <xsl:param name="neg.lang">en</xsl:param>
+
 
   <xsl:template match="/">
     <html lang="{$neg.lang}">
@@ -46,6 +51,14 @@
       </head>
       <body> 
 	<xsl:call-template name="CreateHeader"/>
+	<div id="breadcrumb">
+	  <xsl:call-template name="BreadcrumbTop"/>
+	  <xsl:call-template name="BreadcrumbParseUri">
+	    <xsl:with-param name="path" select="concat(substring-after($request.uri, '/news/'), '/')"/>
+	  </xsl:call-template>
+	  <xsl:text> &gt; </xsl:text>
+	</div>
+
 	<div id="container">
 	  <h2 id="sectionhead">
 	    <xsl:choose>
@@ -77,4 +90,43 @@
       </body>
     </html>
   </xsl:template>
+
+
+  <xsl:template name="BreadcrumbParseUri">
+    <xsl:param name="path"/>
+    <xsl:param name="current"/>
+    <xsl:choose>
+      <xsl:when test="substring-before($path, '/') = /taboo/cat:category/cat:catname">  
+	<xsl:call-template name="BreadcrumbNews"/>
+	<xsl:call-template name="BreadcrumbParseUri">
+	  <xsl:with-param name="path" select="substring-after($path, '/')"/>
+	  <xsl:with-param name="current" select="'sectionid'"/>
+	</xsl:call-template>
+
+      </xsl:when>
+      <xsl:when test="substring-before($path, '/') = 'editor' or substring-before($path, '/') = 'unpriv'">
+	<xsl:choose> 
+	  <xsl:when test="$current ='sectionid'">
+	    <xsl:call-template name="BreadcrumbSection"/>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <xsl:call-template name="BreadcrumbNews"/>
+	  </xsl:otherwise>
+	</xsl:choose>
+	<xsl:call-template name="BreadcrumbParseUri">
+	  <xsl:with-param name="path" select="substring-after($path, '/')"/>
+	  <xsl:with-param name="current" select="substring-before($path, '/')"/>
+	</xsl:call-template>
+
+      </xsl:when>
+      <xsl:when test="substring-before($path, '/') = 'list'">
+	<xsl:text> &gt; </xsl:text>
+	<a rel="up" href="{substring-before($request.uri, '/list')}">
+	  <xsl:value-of select="i18n:include('overview')"/>
+	</a>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+    
+
 </xsl:stylesheet>

@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.095';
+our $VERSION = '0.096';
 
 =head1 NAME
 
@@ -67,6 +67,7 @@ use AxKit;
 use AxKit::App::TABOO::Data::Story;
 use AxKit::App::TABOO::Data::Comment;
 use AxKit::App::TABOO::Data::Plurals::Comments;
+use AxKit::App::TABOO::Data::Category;
 
 use Apache::AxKit::Plugin::BasicSession;
 
@@ -291,6 +292,24 @@ sub get_strref {
 	$self->{commentlist}->write_xml($doc, $commentlistel);
 	$rootel->appendChild($commentlistel);
       }
+      # For breadcrumbs, we would like the names of the names of the
+      # users who have posted comments higher in the thread.
+      my $thcomusersel = $doc->createElementNS($self->{commentlist}->xmlns(), 
+					       $self->{commentlist}->xmlprefix() .':'. 'commentators');
+      my $anyusers = 0;
+      my @usernames = split('/', $self->{commentpath});
+      foreach my $username (@usernames[1..($#usernames-1)]) {
+	warn $username;
+	my $user = AxKit::App::TABOO::Data::User->new();
+	if($user->load(what => 'username,name', 
+		       limit => {username => $username})) {
+	  $anyusers = 1;
+	}
+	$user->write_xml($doc, $thcomusersel); 
+      }
+      if ($anyusers) { 
+	$rootel->appendChild($thcomusersel);
+      }
     } else {
       # We shall only display the story, no comments
       AxKit::Debug(7, "[News] We shall only display the story, no comments");
@@ -300,8 +319,12 @@ sub get_strref {
       $self->{story}->addcatinfo();
       $self->{story}->write_xml($doc, $rootel); 
     }
+    # We should have the section information too  
+    $self->{section} = AxKit::App::TABOO::Data::Category->new();
+    $self->{section}->load(limit => {catname => $self->{sectionid}});
+    $self->{section}->write_xml($doc, $rootel); 
     
-    
+
     # =========================
     # Wrapping up and returning
     $self->{out} = $doc;

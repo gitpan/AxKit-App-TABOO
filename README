@@ -1,5 +1,9 @@
-AxKit/App/TABOO version 0.095
+AxKit/App/TABOO version 0.096
 =============================
+
+This release has not been signed with my GPG key. This is due to that
+I had to move development to another system where my secret key is
+unavailable. 
 
 INTRODUCTION
 
@@ -127,6 +131,10 @@ libxslt. You will probably have gotten these along with AxKit. TABOO
 should be able to use any AxKit uses, with the exception that it makes
 use of some self-defined EXSLT, so you'll need a library that supports
 that.
+
+Additionally, you may experience that the installation hangs on
+wanting DB_File. I believe this is a bug in some other package, but I
+haven't nailed it down yet. Just install DB_File and you'll be fine.
 
 SUPPORT
 

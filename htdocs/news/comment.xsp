@@ -22,6 +22,10 @@
       <comm:this-comment/>
     </param:if-exists>    
     <param:unless-exists name="submitted">
+      <cat:get-category>
+	<cat:catname><param:get name="sectionid"/></cat:catname>
+      </cat:get-category>
+
       <ct:control name="title" type="text" element="input" size="40" maxlength="40">
 	<ct:title><i18n:insert>comment-title</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>comment-descr</i18n:insert></ct:descr>

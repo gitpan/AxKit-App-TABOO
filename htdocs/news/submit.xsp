@@ -27,6 +27,9 @@
 	<story:sectionid><param:get name="sectionid"/></story:sectionid>
 	<story:storyname><param:get name="storyname"/></story:storyname>
       </story:get-story>
+      <cat:get-category>
+	<cat:catname><param:get name="sectionid"/></cat:catname>
+      </cat:get-category>
     </param:if-exists>    
     <param:unless-exists name="submitted">
       <ct:control name="title" type="text" element="input" size="40" maxlength="40">

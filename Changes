@@ -1,5 +1,23 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.096   2004-12-07 03:20
+	- This release is not signed.
+	- The "Breadcrumbs" release.
+	  * The News Provider dumps more user and category XML.
+	  * All HTML-generating XSLT has seen quite a lot of logic
+	    because of this.
+	  * Section-cats added to submit and comments XSPs.
+	- A major reorganisation of the SQL makes it simple to run.
+	- New get-category tag for retrieving one category based on
+	  catname.
+	- The element name is actually what the docs say...  
+	- Added an ends-with EXSLT, thanks to Mike Nachbaur for this,
+	  we're all eagerly awaiting XPath2.
+	- XML written from Data objects get a key attribute if
+	  dbprimkey is set.
+	- Fixed small XSLT bug in login.xsl.
+	- Minor documentation changes.
+
 0.095   2004-11-22 23:15
 	- Fix a XSLT bug that ruined editing of stories.
 	- Resty editing URIs, append 'edit' to story to edit.

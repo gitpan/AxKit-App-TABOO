@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.095';
+our $VERSION = '0.096';
 
 
 1;
@@ -166,8 +166,8 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   DirectoryIndex index.xsp index.xml
 
 
-  # Stuff in the /css/ directory should not be seen by AxKit.
-  <Location /css/>
+  # Some stuff should not be seen by AxKit.
+  <Location ~ "/css/|favicon.ico">
     SetHandler default-handler 
   </Location>
 

@@ -190,7 +190,13 @@ sub write_xml {
     my $self = shift;
     my $doc = shift;
     my $parent = shift;
-    my $topel = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $self->xmlelement());
+    my $topel = $doc->createElementNS($self->xmlns(), 
+				      $self->xmlprefix() .':'. $self->xmlelement());
+    if (defined(${$self}{$self->dbprimkey()})) {
+      $topel->setAttributeNS($self->xmlns(), 
+			     $self->xmlprefix() .':key', 
+			     ${$self}{$self->dbprimkey()});
+    }
     $parent->appendChild($topel);
     foreach my $key (split(/,\s*/, $self->elementorder())) {
       if (defined(${$self}{$key})) {

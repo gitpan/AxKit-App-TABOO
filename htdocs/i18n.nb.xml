@@ -4,6 +4,7 @@
 
   <text id="submit-by"> Innsendt av </text>
   <text id="posted-by"> Postet av </text>
+  <text id="by"> Av </text>
   <text id="to-cat"> Til kategori </text>
   <text id="on-time"> Dato </text>
   <text id="last-changed"> Sist endret </text>
@@ -81,6 +82,9 @@
   <text id="suggested-user-stored"> Brukerinformasjonen ble lagret! </text>
 
   <text id="listing-everything"> Lister opp alle saker </text>
+  <text id="list-noun"> liste </text>
+  <text id="overview"> Oversikt </text>
+  <text id="article-no-comments"> Artikkel uten kommentarer </text>
   <text id="edit"> Rediger </text>
   <text id="send"> Send </text>
   <text id="search"> Søk </text>
@@ -90,10 +94,12 @@
   <text id="repeat"> Gjenta </text>
   <text id="not-found"> ikke funnet </text>
 
+  <text id="top"> Topp </text>
   <text id="me"> Meg </text>
   <text id="for"> for </text>
   <text id="to"> til </text>
   <text id="with"> med </text>
+  <text id="just"> bare </text>
 
   <text id="stories-title-menu"> Nyheter </text>
   <text id="users-title-menu"> Bruker </text>

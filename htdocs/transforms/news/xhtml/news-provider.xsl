@@ -3,6 +3,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output"
+  xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
   xmlns:comm="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Output"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:wn="http://xmlns.com/wordnet/1.6/"      
@@ -14,6 +15,7 @@
   <xsl:import href="match-story.xsl"/>
   <xsl:import href="match-comment.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="match-breadcrumbs.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -57,6 +59,73 @@
       </head>
       <body>
 	<xsl:call-template name="CreateHeader"/>
+	<div id="breadcrumb">
+	  <xsl:call-template name="BreadcrumbTop"/>
+	  <xsl:call-template name="BreadcrumbNews"/>
+	  <xsl:call-template name="BreadcrumbSection"/>
+
+	  <!-- up to here, it is just the crumbs that needs to be there regardless of uri -->
+	  <xsl:variable name="url-rest">
+	    <xsl:value-of select="substring-after($request.uri, concat('/news/', story:story/story:sectionid, '/'))"/>
+	  </xsl:variable>
+	  <xsl:if test="starts-with(substring-after($url-rest, '/'), 'comment')">
+	    <xsl:text> &gt; </xsl:text>
+	    <!-- link to article without any comments -->
+	    <a href="{substring-before($request.uri, 'comment/')}">
+	      <xsl:value-of select="i18n:include('article-no-comments')"/>
+	    </a>
+	    <xsl:choose>
+	      <xsl:when test="substring-after($url-rest, '/comment') = '/'">
+	      </xsl:when>
+	      <xsl:when test="substring-after($url-rest, '/comment') = '/all' or substring-after($url-rest, '/comment') = '/thread'">
+		<xsl:text> &gt; </xsl:text>
+		<a>
+		  <xsl:attribute name="href">
+		    <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+		    <xsl:text>comment/</xsl:text>
+		  </xsl:attribute>
+		  <xsl:value-of select="i18n:include('just')"/>
+		  <xsl:value-of select="i18n:include('list-noun')"/>
+		</a>
+	      </xsl:when>
+	      <xsl:otherwise>	
+		<xsl:text> &gt; </xsl:text>
+		<xsl:variable name="after-comment">
+		  <xsl:value-of select="substring-after($request.uri, '/comment/')"/>
+		</xsl:variable>
+
+		<a>
+		  <xsl:attribute name="href">
+		    <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+		    <xsl:text>comment/</xsl:text>
+		    <xsl:if test="contains($after-comment, '/thread')">
+		      <xsl:text>thread</xsl:text>
+		    </xsl:if>
+		  </xsl:attribute>
+		  <xsl:value-of select="i18n:include('comments')"/>
+		</a>
+		<xsl:call-template name="BreadcrumbNav">
+		  <xsl:with-param name="commentpath">
+		    <xsl:choose>
+		      <xsl:when test="contains($after-comment, '/thread')">
+			<!-- TODO: what really should be done is to make links to /thread --> 
+			<xsl:value-of select="substring-before($after-comment, '/thread')"/>
+		      </xsl:when>
+		      <xsl:otherwise>
+			<xsl:value-of select="$after-comment"/>
+		      </xsl:otherwise>
+		    </xsl:choose>
+		  </xsl:with-param>
+		  <xsl:with-param name="uri-before">
+		    <xsl:value-of select="substring-before($request.uri, '/comment/')"/>
+		    <xsl:text>/comment</xsl:text>
+		  </xsl:with-param>
+		</xsl:call-template>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:if>
+	  <xsl:text> &gt; </xsl:text>
+	</div>
 	<div id="container">
 	  <xsl:variable name="uri" select="concat('http://',
 	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
@@ -84,4 +153,38 @@
       </body>
     </html>
   </xsl:template>
+
+
+  <!-- A template to process the usernames and add them as breadcrumbs -->
+  <xsl:template name="BreadcrumbNav">
+    <xsl:param name="commentpath"/>
+    <xsl:param name="uri-before"/>
+    <xsl:if test="contains($commentpath, '/')">
+      <xsl:variable name="username">
+	<xsl:value-of select="substring-before($commentpath, '/')"/>
+      </xsl:variable>
+
+      <xsl:text> &gt; </xsl:text>
+      <a>
+	<xsl:attribute name="href">
+	  <xsl:value-of select="$uri-before"/>
+	  <xsl:text>/</xsl:text>
+	  <xsl:value-of select="$username"/>
+	</xsl:attribute>
+	<xsl:value-of select="i18n:include('by')"/>
+	<xsl:value-of select="/taboo/comm:commentators/user:user[@user:key = $username]/user:name"/>
+      </a>
+      <xsl:call-template name="BreadcrumbNav">
+	<xsl:with-param name="commentpath">
+	  <xsl:value-of select="substring-after($commentpath, '/')"/>
+	</xsl:with-param>
+	<xsl:with-param name="uri-before">
+	  <xsl:value-of select="concat($uri-before, '/', $username)"/>
+	</xsl:with-param>
+      </xsl:call-template>
+
+
+    </xsl:if>
+  </xsl:template>
+
 </xsl:stylesheet>

@@ -15,7 +15,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.095';
+our $VERSION = '0.096';
 
 
 =head1 NAME
@@ -39,9 +39,12 @@ Add this taglib to AxKit (via httpd.conf or .htaccess):
 
 =head1 DESCRIPTION
 
-This XSP taglib provides a single (for now) tag to retrieve a structured XML fragment with all categories of a certain type. 
+This XSP taglib provides two tags to retrieve a structured XML
+fragment with all information of a single category or all categories
+of a certain type.
 
-L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write this taglib.
+L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write
+this taglib.
 
 =cut
 
@@ -56,6 +59,32 @@ package AxKit::App::TABOO::XSP::Category::Handlers;
 
 =head1 Tag Reference
 
+=head2 C<E<lt>get-category catname="foo"/E<gt>>
+
+This tag will replace itself with some structured XML containing all
+fields of categories of type C<foo>.  It relates to the TABOO Data
+object L<AxKit::App::TABOO::Data::Category>, and calls on that to do
+the hard work.
+
+The root element of the returned object is C<cat:categories> and each
+category is wrapped in an element C<cat:category> and contains C<catname>
+and C<name>.
+
+=cut
+
+sub get_category : struct attribOrChild(catname) {
+    return << 'EOC'
+    my $cat = AxKit::App::TABOO::Data::Category->new();
+    $cat->load(limit => {catname => $attr_catname});
+    my $doc = XML::LibXML::Document->new();
+    my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'cat:categories');
+    $doc->setDocumentElement($root);
+    $doc = $cat->write_xml($doc, $root);
+    $doc;
+EOC
+}
+
+
 =head2 C<E<lt>get-categories type="foo"/E<gt>>
 
 This tag will replace itself with some structured XML containing all
@@ -64,19 +93,20 @@ L<AxKit::App::TABOO::Data::Plurals::Categories>, and calls on that to do
 the hard work. See the documentation of that class to see the
 available types.
 
-The root element of the returned object is C<categories> and each category is wrapped in an element (surprise!) C<category> and contains C<catname> and C<name>. 
+The root element of the returned object is C<categories> and each
+category is wrapped in an element (surprise!) C<category>. The type
+will also be available in an attribute called C<type>.
 
 =cut
 
 sub get_categories : struct attribOrChild(type) {
     return << 'EOC'
     my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
-    $cats->load(what => '*', limit => {type => $attr_type});
+    $cats->load(limit => {type => $attr_type});
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'cat:categories');
     $root->setAttribute('type', $attr_type);
     $doc->setDocumentElement($root);
-    $cats->xmlelement('primcat');
     $doc = $cats->write_xml($doc, $root);
     $doc;
 EOC

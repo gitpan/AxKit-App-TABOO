@@ -19,6 +19,7 @@
   <xsl:import href="../../../transforms/xhtml/header.xsl"/>
   <xsl:import href="../../../transforms/xhtml/footer.xsl"/>
   <xsl:import href="../../../transforms/insert-i18n.xsl"/>
+  <xsl:import href="match-breadcrumbs.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
     method="html" media-type="text/html" 
@@ -43,6 +44,51 @@
       </head>
       <body>      
 	<xsl:call-template name="CreateHeader"/>
+	<div id="breadcrumb">
+	  <xsl:call-template name="BreadcrumbTop"/>
+	  <xsl:call-template name="BreadcrumbNews"/>
+	  <xsl:text> &gt; </xsl:text>
+	  <a>
+	    <xsl:attribute name="href">
+	      <xsl:text>/news/</xsl:text>
+	      <xsl:value-of select="/cust:submit/cat:categories/cat:category/cat:catname"/>
+	    </xsl:attribute>
+	    <xsl:value-of select="/cust:submit/cat:categories/cat:category/cat:name"/>
+	  </a>
+	  <!-- up to here, it is just the crumbs that needs to be there regardless of uri -->
+	  <xsl:variable name="url-rest">
+	    <xsl:value-of select="substring-after($request.uri, concat('/news/', /cust:submit/cat:categories/cat:category/cat:catname, '/'))"/>
+	  </xsl:variable>
+	  <xsl:text> &gt; </xsl:text>
+	  <!-- link to article without any comments -->
+	  <a href="{substring-before($request.uri, 'comment/')}">
+	    <xsl:value-of select="i18n:include('article-no-comments')"/>
+	  </a>
+	  <xsl:text> &gt; </xsl:text>
+	  <a>
+	    <xsl:attribute name="href">
+	      <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+	      <xsl:text>comment/</xsl:text>
+	    </xsl:attribute>
+	    <xsl:value-of select="i18n:include('just')"/>
+	    <xsl:value-of select="i18n:include('list-noun')"/>
+	  </a>
+
+	  <!-- TODO: breadcrumbs for commentators -->
+	  <!-- xsl:call-template name="BreadcrumbNav">
+	    <xsl:with-param name="commentpath">
+	      <xsl:value-of select="$after-comment"/>
+	    </xsl:with-param>
+	    <xsl:with-param name="uri-before">
+	      <xsl:value-of select="substring-before($request.uri, '/comment/')"/>
+	      <xsl:text>/comment</xsl:text>
+	    </xsl:with-param>
+	  </xsl:call-template -->
+	  
+	  <xsl:text> &gt; </xsl:text>
+	  
+
+	</div>
 	<div id="container">
 	  <h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>
 	  

@@ -13,6 +13,7 @@
 
   <xsl:import href="/transforms/xhtml/header.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
+  <xsl:import href="/transforms/news/xhtml/match-breadcrumbs.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
  
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -21,10 +22,10 @@
     doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>  
  
   <xsl:param name="session.id"/>
-  <xsl:param name="session.keys.credential_0" value="unknown"/>
+  <xsl:param name="session.keys.credential_0"/>
   <xsl:param name="request.headers.host"/>
   <xsl:param name="neg.lang">en</xsl:param>
-
+  
 
   <xsl:template match="/cust:loginpage">
     <html lang="{$neg.lang}">
@@ -40,6 +41,10 @@
       </head>
       <body>
 	<xsl:call-template name="CreateHeader"/>
+	<div id="breadcrumb">
+	  <xsl:call-template name="BreadcrumbTop"/>
+	  <xsl:text> &gt; </xsl:text>
+	</div>
 	<div id="container">
 	  <h2 class="pagetitle">
 	    <xsl:value-of select="i18n:include('login')"/>

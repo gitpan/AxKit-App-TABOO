@@ -16,7 +16,8 @@
   <xsl:import href="/transforms/xhtml/header.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
-
+  <xsl:import href="/transforms/news/xhtml/match-breadcrumbs.xsl"/>
+ 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
     method="html" media-type="text/html" 
     doctype-public="-//W3C//DTD HTML 4.01//EN" 
@@ -41,6 +42,10 @@
       </head>
       <body>      
 	<xsl:call-template name="CreateHeader"/>
+	<div id="breadcrumb">
+	  <xsl:call-template name="BreadcrumbTop"/>
+	  <xsl:text> &gt; </xsl:text>
+	</div>
 	<div id="container">
 	  <h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>
 

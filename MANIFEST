@@ -9,10 +9,12 @@ htdocs/menu.xsp
 htdocs/news/comment.xsp
 htdocs/news/submit.xsp
 htdocs/site/main.rdf
+htdocs/transforms/ends-with.xsl
 htdocs/transforms/index-aggregate.xsl
 htdocs/transforms/insert-i18n.xsl
 htdocs/transforms/news/insert-values-edit.xsl
 htdocs/transforms/news/xhtml/comment.xsl
+htdocs/transforms/news/xhtml/match-breadcrumbs.xsl
 htdocs/transforms/news/xhtml/match-comment.xsl
 htdocs/transforms/news/xhtml/match-story.xsl
 htdocs/transforms/news/xhtml/match-user.xsl
@@ -53,7 +55,6 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 README
-SIGNATURE
 sql/grant.sql
 sql/news-create.sql
 sql/news-minimal.sql
