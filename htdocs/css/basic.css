@@ -89,6 +89,12 @@ div.main
   clear: both;
 }
 
+div.menu-section ul li
+{ 
+  padding-left: 0;
+}
+
+
 h2#sectionhead, h2.pagetitle
 {
   padding: 0.6em 1em 0;

@@ -56,7 +56,7 @@
 	  </ct:control>
 	</user:true>
       </user:is-authorized -->
-      <ct:control name="linktext" type="text" element="input" size="15" maxlength="15">
+      <ct:control name="linktext" type="text" element="input" size="15" maxlength="30">
 	<ct:title><i18n:insert>linktext</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>linktext-descr</i18n:insert></ct:descr>
 	<ct:value><val:insert name="linktext"/></ct:value>
@@ -97,7 +97,7 @@
 	    <ct:descr><i18n:insert>editorok-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="editorok"/></ct:value>
 	  </ct:control>
-	  <ct:control element="input" type="text" name="storyname" size="10" maxlength="10">
+	  <ct:control element="input" type="text" name="storyname" size="12" maxlength="12">
 	    <ct:title><i18n:insert>storyname</i18n:insert></ct:title>
 	    <ct:descr><i18n:insert>storyname-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="storyname"/></ct:value>

@@ -4,7 +4,8 @@
 
   <text id="submit-by"> Submitted by </text>
   <text id="posted-by"> Posted by </text>
-  <text id="to-cat"> To Category </text>
+  <text id="by"> By </text>
+   <text id="to-cat"> To Category </text>
   <text id="on-time"> On </text>
   <text id="last-changed"> Last changed </text>
 
@@ -78,6 +79,9 @@
   <text id="suggested-user-stored"> User information was successfully stored! </text>
 
   <text id="listing-everything"> Listing all stories </text>
+  <text id="list-noun"> list </text>
+  <text id="overview"> Overview </text>
+  <text id="article-no-comments"> Article without comments </text>
   <text id="edit"> Edit </text>
   <text id="send"> Send </text>
   <text id="search"> Search </text>
@@ -87,10 +91,12 @@
   <text id="repeat"> Repeat </text>
   <text id="not-found"> not found </text>
 
+  <text id="top"> Topp </text>
   <text id="me"> Me </text>
   <text id="for"> for </text>
   <text id="to"> to </text>
   <text id="with"> with </text>
+  <text id="just"> just </text>
 
   <text id="stories-title-menu"> News </text>
   <text id="users-title-menu"> User </text>
@@ -100,7 +106,7 @@
 
   <text id="new-username-descr"> Choose a single-word username </text>
   <text id="new-fullname-descr"> Give your full name </text>
-  <text id="new-email-descr"> A valid e-mail address </text>
+  <text id="new-email-descr"> A valid e-mail address. Your password will be sent to this address. </text>
   <text id="new-uri-descr"> The address of a web page that describes you </text>
   <text id="new-bio-descr"> A short text that describes you </text>
 

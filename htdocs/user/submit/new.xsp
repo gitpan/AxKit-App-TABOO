@@ -45,7 +45,7 @@
 	<ct:title><i18n:insert>user-name</i18n:insert></ct:title>
 	<ct:descr><i18n:insert>new-fullname-descr</i18n:insert></ct:descr>
       </ct:control>
-      <ct:control element="input" type="text" name="email" size="30" maxlength="30">
+      <ct:control element="input" type="text" name="email" size="30" maxlength="129">
 	<ct:title><i18n:insert>user-email</i18n:insert></ct:title>
  	<ct:descr><i18n:insert>new-email-descr</i18n:insert></ct:descr>
      </ct:control>

@@ -1,5 +1,17 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.097   2004-12-10 03:13
+	- Small polishing release.
+	- Forgot to document in the previous release that I had done
+	  quite substantial changes in the database schema. Added some
+	  new constraints. The data from the previous schema should
+	  follow the new constraints pretty well, though.
+	- Extended some fields, they needed to be bigger, especially e-mail.
+	- Actually included English translations...
+	- Some more minor polishing.
+	- This release is not signed either.
+
+
 0.096   2004-12-07 03:20
 	- This release is not signed.
 	- The "Breadcrumbs" release.

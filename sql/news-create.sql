@@ -11,9 +11,9 @@ CREATE TABLE categories (
 CREATE TABLE users (
        username		VARCHAR(8) PRIMARY KEY,
        name	 	VARCHAR(30) NOT NULL,
-       email	 	VARCHAR(30), 
+       email	 	VARCHAR(129), 
        uri	 	VARCHAR(254),
-       passwd 		VARCHAR(40)
+       passwd 		CHAR(34)
 );
 
 
@@ -24,8 +24,8 @@ CREATE TABLE contributors (
 );
 
 CREATE TABLE stories (
-       storyname     VARCHAR(10),
-       sectionid     VARCHAR(10),
+       storyname     VARCHAR(12),
+       sectionid     VARCHAR(15),
        image	     VARCHAR(100),
        primcat	     VARCHAR(15) NOT NULL REFERENCES categories (catname) ON DELETE RESTRICT ON UPDATE CASCADE,
        seccat	     VARCHAR(15)[],
@@ -36,7 +36,7 @@ CREATE TABLE stories (
        content	     TEXT,
        username	     VARCHAR(8) NOT NULL REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
        submitterid   VARCHAR(8),
-       linktext      VARCHAR(15),
+       linktext      VARCHAR(30),
        timestamp     TIMESTAMP NOT NULL,
        lasttimestamp TIMESTAMP NOT NULL,
        PRIMARY KEY (storyname, sectionid)
@@ -45,8 +45,8 @@ CREATE TABLE stories (
  
 CREATE TABLE comments (
        commentpath   VARCHAR(254),
-       storyname     VARCHAR(10),
-       sectionid     VARCHAR(10),
+       storyname     VARCHAR(12),
+       sectionid     VARCHAR(15),
        title	     VARCHAR(40) NOT NULL,
        content	     TEXT,
        timestamp     TIMESTAMP NOT NULL,

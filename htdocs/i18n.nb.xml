@@ -109,7 +109,7 @@
 
   <text id="new-username-descr"> Velg et ett-ords brukernavn </text>
   <text id="new-fullname-descr"> Oppgi ditt fulle navn </text>
-  <text id="new-email-descr"> Oppgi en gyldig e-post adresse </text>
+  <text id="new-email-descr"> Oppgi en gyldig e-post adresse. Passordet ditt vil sendes til denne adressen. </text>
   <text id="new-uri-descr"> Oppgi adressen til en webside som beskriver deg </text>
   <text id="new-bio-descr"> Skriv inn en kort tekst som beskriver deg </text>
 
