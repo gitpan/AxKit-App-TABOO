@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
 
 =head1 NAME
@@ -22,7 +22,7 @@ AxKit::App::TABOO::Data::Category - Category Data objects for TABOO
 =head1 SYNOPSIS
 
   use AxKit::App::TABOO::Data::Category;
-  $cat = AxKit::App::TABOO::Data::Category->new();
+  $cat = AxKit::App::TABOO::Data::Category->new(@dbconnectargs);
   $cat->load(what => '*', limit => {catname => 'kitten'});
 
 
@@ -41,7 +41,7 @@ This class implements only one method, in addition to the constructor, the rest 
 
 =over
 
-=item C<new()>
+=item C<new(@dbconnectargs)>
 
 The constructor. Nothing special.
 
@@ -55,13 +55,7 @@ This is an ad hoc method to retrieve the full name of a category, and it takes a
 sub load_name {
     my $self = shift;
     my $catname = shift;
-    my $dbh = DBI->connect($self->dbstring(), 
-			   $self->dbuser(), 
-			   $self->dbpasswd(),  
-			   { PrintError => 0,
-			     RaiseError => 0,
-			     HandleError => Exception::Class::DBI->handler
-			   });
+    my $dbh = DBI->connect($self->dbconnectargs());
     my $sth = $dbh->prepare("SELECT name FROM categories WHERE catname=?");
     $sth->execute($catname);
     my @data = $sth->fetchrow_array;
@@ -142,21 +136,22 @@ However, the root element may change depending on what kind of category we have.
 =cut
 
 sub new {
-    my $that  = shift;
-    my $class = ref($that) || $that;
-    my $self = {
-		catname => undef,
-		name => undef,
-		type => undef,
-		uri => undef,
-		description => undef,
-		XMLELEMENT => 'category',	
-		XMLPREFIX => 'category',	
-		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output',
-		ONFILE => undef,
-    };
-    bless($self, $class);
-    return $self;
+  my $that  = shift;
+  my $class = ref($that) || $that;
+  my $self = {
+	      catname => undef,
+	      name => undef,
+	      type => undef,
+	      uri => undef,
+	      description => undef,
+	      DBCONNECTARGS => \@_,
+	      XMLELEMENT => 'category',
+	      XMLPREFIX => 'category',
+	      XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output',
+	      ONFILE => undef,
+	     };
+  bless($self, $class);
+  return $self;
 }
 
 #use Alias qw(attr);

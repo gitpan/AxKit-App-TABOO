@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.08
-============================
+AxKit/App/TABOO version 0.081
+=============================
 
 INTRODUCTION
 
@@ -29,8 +29,8 @@ that people can come in an add comments at any time. The other thing
 we start out with is more static and longer articles.
 
 It is the intention, however, that TABOO should be a framework where
-one can add a Wiki, a webshop (which is a work now in progress, and
-present in the distro but alas in an unusable form), etc. The
+one can add a Wiki, a webshop (which is a work now in progress, some
+code was in earlier distros but has been removed now), etc. The
 AxKit::App::TABOO::User class will then be reused and probably
 subclassed with e.g. a Customer class (now being done), but the
 datasource will be the same.
@@ -57,10 +57,6 @@ users. These are very much work-in-progress, and I don't feel I have
 quite gotten the hang of XSLT yet, but it is being worked on. Try them
 out if you understand what they're supposed to do.
 
-The webshop has a lot of Data objects, but had a fixed deadline that
-whooshed by so it has now been put on hold. But it is actually not
-very far from ready to manage a simple webshop.
-
 Plural objects is a conceptual step up which has recently been
 introduced to allow manipulation of more than one Data object. 
 The whole "Comments" code need a review to conform with the new
@@ -70,6 +66,9 @@ work that is somewhat flaky. And it is only second on the TODO list...
 TABOO can now also list News stories with the NewsList Provider, and
 there is a rudimentary front page, which is an aggregate of a
 newslist. 
+
+From 0.081, TABOO can run on different virtual hosts and operate on
+different databases.
 
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a
@@ -86,6 +85,10 @@ To install this module use CPAN or CPANPLUS tools or type the following:
    make test
    make install
 
+There are various things that should be done to the get the rest
+running, such as copying over the htdocs and creating the database,
+see inline docs for details.
+
 DEPENDENCIES
 
 This module requires these other modules and libraries:
@@ -99,6 +102,8 @@ This module requires these other modules and libraries:
 - AxKit::XSP::BasicSession, you should have 0.19 or later.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
+- Apache::AxKit::Plugin::AddXSLParams::Request for virtual hosts, but
+  it is easy to remove this dependency if one wishes.
 - Data::Dumper lists out debugging information, but can be removed. 
 
 

@@ -25,18 +25,12 @@ lib/AxKit/App/TABOO.pm
 lib/AxKit/App/TABOO/Data.pm
 lib/AxKit/App/TABOO/Data/Category.pm
 lib/AxKit/App/TABOO/Data/Comment.pm
-lib/AxKit/App/TABOO/Data/Order.pm
 lib/AxKit/App/TABOO/Data/Plurals.pm
 lib/AxKit/App/TABOO/Data/Plurals/Categories.pm
-lib/AxKit/App/TABOO/Data/Plurals/Productsubtypes.pm
 lib/AxKit/App/TABOO/Data/Plurals/Stories.pm
-lib/AxKit/App/TABOO/Data/Product.pm
-lib/AxKit/App/TABOO/Data/Productprices.pm
-lib/AxKit/App/TABOO/Data/Productsubtype.pm
 lib/AxKit/App/TABOO/Data/Story.pm
 lib/AxKit/App/TABOO/Data/User.pm
 lib/AxKit/App/TABOO/Data/User/Contributor.pm
-lib/AxKit/App/TABOO/Data/User/Customer.pm
 lib/AxKit/App/TABOO/Provider/News.pm
 lib/AxKit/App/TABOO/Provider/NewsList.pm
 lib/AxKit/App/TABOO/XSP/Category.pm
@@ -45,10 +39,11 @@ lib/AxKit/App/TABOO/XSP/User.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
-META.yml			Module meta-data (added by MakeMaker)
+META.yml
 README
 SIGNATURE
-sql/testdata.sql
-sql/webshop-create.sql
-sql/webshop-test.sql
+sql/grant.sql
+sql/news-create.sql
+sql/news-minimal.sql
+sql/news-test.sql
 test.pl

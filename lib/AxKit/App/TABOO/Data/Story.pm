@@ -16,7 +16,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
 
 =head1 NAME
@@ -26,7 +26,7 @@ AxKit::App::TABOO::Data::Story - Story Data object for TABOO
 =head1 SYNOPSIS
 
   use AxKit::App::TABOO::Data::Story;
-  $story = AxKit::App::TABOO::Data::Story->new();
+  $story = AxKit::App::TABOO::Data::Story->new(@dbconnectargs);
   $story->load(what => '*', limit => {sectionid => $sectionid, storyname => $storyname});
   $story->adduserinfo();
   $story->addcatinfo();
@@ -44,7 +44,7 @@ This class implements several methods, reimplements the load method, but inherit
 
 =over
 
-=item C<new()>
+=item C<new(@dbconnectargs)>
 
 The constructor. Nothing special.
 
@@ -77,6 +77,7 @@ sub new {
 	linktext => undef,
 	timestamp => undef,
 	lasttimestamp => undef,
+	DBCONNECTARGS => \@_,
 	XMLELEMENT => 'story',
 	XMLPREFIX => 'story',
 	XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output',
@@ -134,14 +135,11 @@ This method will replace those strings (for the user posting the article, and fo
 
 sub adduserinfo {
     my $self = shift;
-    my $user = AxKit::App::TABOO::Data::User->new();
-    $user->dbstring($self->dbstring());
-    $user->dbuser($self->dbuser());
-    $user->dbpasswd($self->dbpasswd());
+    my $user = AxKit::App::TABOO::Data::User->new($self->dbconnectargs());
     $user->xmlelement("user");
     $user->load(what => 'username,name', limit => {username => ${$self}{'username'}});
     ${$self}{'USER'} = \$user;
-    my $submitter = AxKit::App::TABOO::Data::User->new();
+    my $submitter = AxKit::App::TABOO::Data::User->new($self->dbconnectargs());
     $submitter->xmlelement("submitter");
     $submitter->load(what => 'username,name', limit => {username => ${$self}{'submitterid'}});
     ${$self}{'SUBMITTER'} = \$submitter;
@@ -156,29 +154,26 @@ Similarly to adding user info, this method will also add category information, f
 
 sub addcatinfo {
     my $self = shift;
-    my $cat = AxKit::App::TABOO::Data::Category->new();
-    $cat->dbstring($self->dbstring());
-    $cat->dbuser($self->dbuser());
-    $cat->dbpasswd($self->dbpasswd());
-    # There is only one primary category allowed.
+    my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
+   # There is only one primary category allowed.
     $cat->xmlelement("primcat");
     $cat->load(what => '*', limit => {catname => ${$self}{'primcat'}});
 
     ${$self}{'primcat'} = \$cat;
 
     # We allow several secondary categories, so we may get an array to run through. 
-#      my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
+#      my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new($self->dbconnectargs());
 #      $cats->xmlelement("seccat");
 #      foreach my $catname (@{${$self}{'seccat'}}) {
-#        my $cat = AxKit::App::TABOO::Data::Category->new();
+#        my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
 #        $cat->load(what => '*', limit => {catname => $catname});
 #        $cats->Push($cat);
 #      }
 #      ${$self}{'seccat'} = \$cats;
-#      my $frees = AxKit::App::TABOO::Data::Plurals::Categories->new();
+#      my $frees = AxKit::App::TABOO::Data::Plurals::Categories->new($self->dbconnectargs());
 #      $frees->xmlelement("freesubject");
 #      foreach my $catname (@{${$self}{'freesubject'}}) {
-#        my $cat = AxKit::App::TABOO::Data::Category->new();
+#        my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
 #        $cat->load(what => '*', limit => {catname => $catname});
 #        $frees->Push($cat);
 #      }

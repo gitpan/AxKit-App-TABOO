@@ -15,7 +15,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
 
 =head1 NAME
@@ -67,7 +67,7 @@ sub Grep {
   my $self = shift;
   my $pattern = shift;
   my $field = shift;
-  my $work = ref($self)->new();
+  my $work = ref($self)->new($self->dbconnectargs());
   my $one;
   foreach my $tmp (@{${$self}{ENTRIES}}) {
     if (${$tmp}{$field} =~ m/$pattern/) {
@@ -108,13 +108,7 @@ sub _load {
   my %arg =  %{$args{'limit'}};
   my $orderby = $args{'orderby'};
   my $entries = $args{'entries'};
-  my $dbh = DBI->connect($self->dbstring(), 
-			 $self->dbuser(), 
-			 $self->dbpasswd(),  
-			 { PrintError => 0,
-			   RaiseError => 0,
-			   HandleError => Exception::Class::DBI->handler
-			 });
+  my $dbh = DBI->connect($self->dbconnectargs());
   my $query = "SELECT " . $what . " FROM " . $self->dbfrom();
   if (%arg) {
     $query .= " WHERE ";

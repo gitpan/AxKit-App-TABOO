@@ -281,3 +281,37 @@ Revision history for Perl extension AxKit::App::TABOO.
 	- All XHTML pages get the header by a call-template.
 	- Now the front page actually works!
 	- Found that I do not actually need explicit file: in my i18n code.
+
+0.08_1	  2004-08-31 03:04
+	- Main thing is to make the database parameters configurable. 
+	 	* That should allow different configs for different
+		  virtual hosts.	    
+		* dbstring, dbuser and dbpasswd class data methods
+		  removed.
+		* dbconnectargs method added.
+		* Rewrote all connect calls.
+		* Preferred method for DB config is now DBI_DSN and
+		  related environment variables.
+		* ...but all new constructors to Data objects can take
+		  the DBI connect arguments.
+	- Another big thing is that I removed the webshop stuff. It
+	  now lags far behind the rest of TABOO, and allthough it is
+	  easy to update, I see no point in having it there.
+	- Reorganized the SQL files, separating the create stuff in a
+	  file by itself. 
+	- Some tests now make no sense, some new added.
+	- A few more fixups, mainly in documentation.
+
+0.08_2	  2004-09-02 15:50
+	- Apache::AxKit::Plugin::AddXSLParams::Request is now needed
+	  to allow for virtual hosts. Used in index-aggregate.xsl
+	- More files in the sql/ dir:
+	       * grant.sql explicitly sets passwords and permissions. 
+	       * news-minimal.sql gives the minimal stuff that should
+	       go into a new db.
+	       * Some more stsec stuff in test.
+	- Small edits in main.rdf example.
+
+0.081	  2004-09-02 16:25
+	- Some small changes in the documentation, and some more
+	testing on the server.

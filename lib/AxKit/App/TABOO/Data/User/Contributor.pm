@@ -21,7 +21,7 @@ AxKit::App::TABOO::Data::User::Contributor - Contributor Data objects for TABOO
 =head1 SYNOPSIS
 
   use AxKit::App::TABOO::Data::User::Contributor;
-  $user = AxKit::App::TABOO::Data::User::Contributor->new();
+  $user = AxKit::App::TABOO::Data::User::Contributor->new(@dbconnectargs);
   $user->load(what => '*', limit => {'username' => 'kjetil'});
   my $fullname = $user->load_authlevel('kjetil');
 
@@ -42,7 +42,7 @@ This class implements two methods, the rest is inherited from L<AxKit::App::TABO
 
 =over
 
-=item C<new()>
+=item C<new(@dbconnectargs)>
 
 The constructor. Makes sure that we inherit the data members from our superclass. Apart from that, nothing special.
 
@@ -51,7 +51,7 @@ The constructor. Makes sure that we inherit the data members from our superclass
 sub new {
     my $that  = shift;
     my $class = ref($that) || $that;
-    my $self = $class->SUPER::new();
+    my $self = $class->SUPER::new(@_);
     $self->{authlevel} = 0;
     $self->{bio} = undef;
     bless($self, $class);
@@ -95,14 +95,7 @@ This is an ad hoc method to retrieve the authorization level of a user, and it t
 sub load_authlevel {
     my $self = shift;
     my $username = shift;
-    my $dbh = DBI->connect($self->dbstring(), 
-			   $self->dbuser(), 
-			   $self->dbpasswd(),  
-#			   { PrintError => 0,
-# 			     RaiseError => 0,
-#			     HandleError => Exception::Class::DBI->handler
-#			     }
-);
+    my $dbh = DBI->connect($self->dbconnectargs());
     my $sth = $dbh->prepare("SELECT authlevel FROM contributors WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;
@@ -125,13 +118,7 @@ The C<save()> method has been reimplemented in this class. It is less generic th
 
 sub save {
   my $self = shift;
-  my $dbh = DBI->connect($self->dbstring(),
-			 $self->dbuser(),
-			 $self->dbpasswd(),
-			 { PrintError => 1,
-			   RaiseError => 0,
-			   HandleError => Exception::Class::DBI->handler,
-			   });
+  my $dbh = DBI->connect($self->dbconnectargs());
   my (@fields, @confields);
   my $i=0;
   my $j=0;

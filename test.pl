@@ -18,6 +18,9 @@ ok(1); # If we made it this far, we're ok.
 use AxKit::App::TABOO::Provider::News;
 ok(1); 
 
+use AxKit::App::TABOO::Provider::NewsList;
+ok(1); 
+
 use AxKit::App::TABOO::Data;
 ok(1); 
 
@@ -27,15 +30,18 @@ ok(1);
 use AxKit::App::TABOO::Data::User;
 ok(1); 
 
-use AxKit::App::TABOO::Data::Comment;
-ok(1); 
+#use AxKit::App::TABOO::Data::Comment;
+#ok(1); 
 
 
 use AxKit::App::TABOO::Data::Story;
 ok(1); 
 
-my $story = AxKit::App::TABOO::Data::Story->new();
-ok($story);
 
-my $comment = AxKit::App::TABOO::Data::Comment->new();
-ok($comment);
+use AxKit::App::TABOO::Data::Plurals::Stories;
+ok(1); 
+
+use AxKit::App::TABOO::Data::Plurals::Categories;
+ok(1); 
+
+

@@ -4,10 +4,8 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
-
-# Preloaded methods go here.
 
 1;
 __END__
@@ -117,10 +115,10 @@ Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
 editing the information of existing users.
 
-As of 0.04, I have tried to include a final step in the stylesheet
-chain, which can take all strings of text from a separate XML file and
-insert them in the final product. This will hopefully make it easy to
-provide many translations with TABOO.
+It also have some code for i18n, consisting of stylesheets that can
+take all strings of text from a separate XML file and insert them in
+the final product. This will make it easy to provide many
+translations with TABOO, but it needs elaboration.
 
 =head1 CONFIGURATION EXAMPLE
 
@@ -129,8 +127,12 @@ be sufficient to get the code that is currently in TABOO going. Apart
 from installing TABOO, you would also need to copy the stuff in
 C<htdocs/> directory in the distribution to C</var/www> or some other
 DocumentRoot (and adjust the below accordingly). You may also want to
-get some of the data in the C<sql/> directory into a database called
-C<skepsis> or at least create this database and tables.
+get some of the data in the C<sql/> directory into a database, which
+can be identified by the C<DBI_DSN> environment variable (see
+below). Furthermore, TABOO now allows you to set a separate username
+and password on a databse, and use different databases for different
+virtual hosts. A combination of C<DBI_DSN>, C<PGUSER> and
+C<PGPASSWORD> environment variables will achieve this.
 
 
   RewriteEngine on
@@ -149,9 +151,13 @@ C<skepsis> or at least create this database and tables.
 
   AxAddPlugin Apache::AxKit::Plugin::Passthru
 
+  AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::Request
+  PerlSetVar AxAddXSLParamGroups "HTTPHeaders"
+
   AxAddStyleMap application/x-xsp Apache::AxKit::Language::XSP
 
   AxAddStyleMap text/xsl Apache::AxKit::Language::LibXSLT
+
 
 
   <Location />
@@ -200,6 +206,11 @@ C<skepsis> or at least create this database and tables.
         AxContentProvider AxKit::App::TABOO::Provider::News
   </LocationMatch>
 
+  PerlSetEnv DBI_DSN dbi:Pg:dbname=taboodemo
+  PerlSetEnv PGUSER taboodemo
+  PerlSetEnv PGPASSWORD hk987JKBgui
+
+
 
 This should get you the authentication and authorization code you
 need, set up XSP and the taglibs you need. Note that the order of the
@@ -228,10 +239,11 @@ differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
 feedback hackers provide. 
 
-The new webshop code is very badly documented, and since the deadline
-for it whooshed by, it is now halted a bit... Some of the code is
-quite OK though, allthough it doesn't work yet. TABOO will make a
-great webshop platform...!
+TABOO also has had some code for a webshop, but since it has fallen
+behind the rest of the development, it has been removed from the
+distribution as of 0.08_1. It is however trivial to merge back in, and
+some of the code is quite OK, and not very hard to update to follow
+the rest of framework. TABOO will make a great webshop platform...!
 
 
 =head1 SUPPORT
@@ -240,6 +252,10 @@ There is now a taboo-dev mailing list that can be subscribed to at
 http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
 =head1 BUGS
+
+This release is the first to offer virtual host capacity. It has not
+been very extensively tested, but in the tests I have done, it works
+well.
 
 In this release L<AxKit::App::TABOO::Data::Comment> doesn't work. It
 needs to be reworked to support the new Plurals concept, but that's

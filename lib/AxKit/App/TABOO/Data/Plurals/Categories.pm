@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
 AxKit::App::TABOO::Data::Plurals::Categories->dbtable("categories");
 AxKit::App::TABOO::Data::Plurals::Categories->dbfrom("categories");
@@ -34,7 +34,7 @@ Often, you want to retrieve many different categories from the data store, for e
 
 =over
 
-=item C<new()>
+=item C<new(@dbconnectargs)>
 
 The constructor. Nothing special.
 
@@ -45,6 +45,7 @@ sub new {
     my $class = ref($that) || $that;
     my $self = {
 	ENTRIES => [], # Internally, some methods finds it useful that the entries are stored in a array of this name.
+	DBCONNECTARGS => \@_,
 	XMLPREFIX => undef,
 	XMLELEMENT => undef,
 	XMLNS => undef,
@@ -84,7 +85,7 @@ sub load {
   my $data = $self->_load(%args); # Does the hard work
   return undef unless (@{$data});
   foreach my $entry (@{$data}) {
-    my $cat = AxKit::App::TABOO::Data::Category->new();
+    my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
     $cat->populate($entry);
     $cat->onfile;
     push(@cats, $cat);

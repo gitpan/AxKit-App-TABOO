@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
 
 use DBI;
@@ -51,6 +51,8 @@ sub new {
     my $class = ref($that) || $that;
     my $self = {
 		ONFILE => undef,
+		DBCONNECTARGS => [],
+		XMLPREFIX => 'taboo',
 		XMLELEMENT => 'taboo',
 		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Output'
 	       };
@@ -105,13 +107,9 @@ sub _load {
     my ($self, %args) = @_;
     my $what = $args{'what'};
     my %arg =  %{$args{'limit'}};
-    my $dbh = DBI->connect($self->dbstring(), 
-			   $self->dbuser(), 
-			   $self->dbpasswd(),  
-			   { PrintError => 1,
-			     RaiseError => 0 # ,
-			    # HandleError => Exception::Class::DBI->handler
-			     });
+    warn Dumper($self->dbconnectargs());
+    #warn Dumper(%ENV);
+    my $dbh = DBI->connect($self->dbconnectargs());
     # The subclass should give the dbfrom.
     my $query = "SELECT " . $what . " FROM " . $self->dbfrom() . " WHERE ";
     my $i=0;
@@ -259,13 +257,7 @@ It is not yet a very rigorous implementation: It may well fail badly if it is gi
 sub save {
   my $self = shift;
   my $olddbkey = shift;
-  my $dbh = DBI->connect($self->dbstring(),
-			 $self->dbuser(),
-			 $self->dbpasswd());
-#			 { PrintError => 1,
-#			   RaiseError => 0,
-#			   HandleError => Exception::Class::DBI->handler
-#			   });
+  my $dbh = DBI->connect($self->dbconnectargs());
   my @fields;
   my $i=0;
   foreach my $key (keys(%{$self})) {
@@ -300,6 +292,7 @@ sub save {
 	      # The content is an array, save it as such, ad hoc SQL3 for now.
 	      $sth->bind_param($i, "{" . join(',', @{$content}) . "}");
 	  } else {
+	    # Actually, I should never get here, but anyway...:
 	      warn "Advanced forms of references aren't implemented meaningfully yet. Don't be surprised if I crash or corrupt something.";
 	      ${$content}->save(); # IOW: Panic!! Everybody save yourselves if you can! :-)
 	  }
@@ -324,13 +317,7 @@ Checks if a record with the present object's identifier is allready present in t
 sub stored {
   my $self = shift;
   return 1 if ${$self}{'ONFILE'};
-  my $dbh = DBI->connect($self->dbstring(),
-			 $self->dbuser(),
-			 $self->dbpasswd(),
-			 { PrintError => 0,
-			   RaiseError => 0,
-			   HandleError => Exception::Class::DBI->handler
-			 });
+  my $dbh = DBI->connect($self->dbconnectargs());
   my $check = scalar($dbh->selectrow_array("SELECT 1 FROM " . $self->dbtable() . " WHERE " . $self->dbprimkey() . "=?", {}, ${$self}{$self->dbprimkey()}));
   ${$self}{'ONFILE'} = $check;
   return $check;
@@ -350,9 +337,31 @@ sub onfile {
   return $self;
 }
 
+=item C<dbconnectargs(@args)>
+
+This method will set or retrieve the arguments that are passed to
+L<DBI>'s C<connect> method. Since this needs to be done for every
+object, you may also pass these arguments to the C<new> constructor of
+each subclass.
+
+=cut
+
+sub dbconnectargs {
+  my $self = shift;
+  if (@_) {
+    ${$self}{'DBCONNECTARGS'} = \@_;
+  }
+  return @{${$self}{'DBCONNECTARGS'}};
+} 
+
+
+
 =item C<xmlelement($string)>
 
-This method is I<intended> for internal use, but if you can use it without shooting somebody in the foot (including yourself), fine by me... It sets the root element that will enclose an object's data to C<$string>.
+This method is I<intended> for internal use, but if you can use it
+without shooting somebody in the foot (including yourself), fine by
+me... It sets the root element that will enclose an
+object's data to C<$string>, or return it if not given.
 
 =cut
 
@@ -368,7 +377,9 @@ sub xmlelement {
 
 =item C<xmlns($string)>
 
-Also like  C<xmlelement()>, this method is I<intended> for internal use. It sets the namespace URI of the XML representation of an object to C<$string>.
+Like C<xmlelement()>, this method is I<intended> for internal
+use. It sets the namespace URI of the XML representation of an object
+to C<$string>, or return it if not given.
 
 =cut
 
@@ -387,7 +398,10 @@ sub xmlns {
 
 Alse like C<xmlelement()>, this method is I<intended> for internal
 use. It sets the namespace prefix of the XML representation of an
-object to C<$string>, to allow using QNames.
+object to C<$string>, to allow using QNames, or return it if not given.
+
+
+=back
 
 =cut
 
@@ -403,50 +417,17 @@ sub xmlprefix {
 
 
 
-=back
-
-=head2 Class Data Methods
-
-
-=over
-
-=item C<dbstring($string)>
-
-A string to be passed to the DBI constructor. Currently defaults to C<"dbi:Pg:dbname=skepsis">. Yeah, it will change... 
-
-
-=item C<dbuser($string)>
-
-The user name to be passed to the DBI constructor. Currently defaults to C<'www-data'>. 
-
-=item C<dbpasswd($string)>
-
-The password to be passed to the DBI constructor. Currently defaults to an empty string. 
-
-
-
-=back
-
-=cut
-
-
 #=item C<elementorder($string)>
 
 #This string contains a comma-separated list of all fields of a class that will be included in the XML, and in the order specified.
 
 
 # Some inheritable methods and defaults
-AxKit::App::TABOO::Data->mk_classdata('dbstring');
-AxKit::App::TABOO::Data->mk_classdata('dbuser');
-AxKit::App::TABOO::Data->mk_classdata('dbpasswd');
 AxKit::App::TABOO::Data->mk_classdata('dbfrom');
 AxKit::App::TABOO::Data->mk_classdata('dbtable');
 AxKit::App::TABOO::Data->mk_classdata('dbprimkey');
 AxKit::App::TABOO::Data->mk_classdata('elementorder');
 
-AxKit::App::TABOO::Data->dbstring("dbi:Pg:dbname=skepsis");
-AxKit::App::TABOO::Data->dbuser("www-data");
-AxKit::App::TABOO::Data->dbpasswd("");
 
 
 =head1 STORED DATA
@@ -459,8 +440,6 @@ Consult the documentation for each individual Data class for the names of the st
 =head1 BUGS/TODO
 
 Except for still being in alpha, and should have a few bugs, there is the issue with the handling of references to other objects in the C<save()> method. It's possible it will cope, but it definately needs work.
-
-Every load-type method should throw an exception or do something similar if it finds that the record it tries to retrieve doesn't exist. 
 
 
 =head1 FORMALITIES

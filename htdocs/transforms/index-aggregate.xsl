@@ -11,7 +11,10 @@
     media-type="text/xml" indent="yes"/>
   
   <xsl:template match="/aggr:stories">
-    <xsl:variable name="uri" select="concat('http://localhost', aggr:story, '?passthru=1')"/>
+    <!-- constructing the URI using Apache::AxKit::Plugin::Passthru
+    and Apache::AxKit::Plugin::AddXSLParams::Request -->
+    <xsl:variable name="uri" select="concat('http://', $request.headers.host, aggr:story, '?passthru=1')"/>
+
     <xsl:copy-of select="document($uri)"/>
   </xsl:template>
 </xsl:stylesheet>

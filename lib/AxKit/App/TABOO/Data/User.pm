@@ -9,7 +9,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
 
 =head1 NAME
@@ -19,7 +19,7 @@ AxKit::App::TABOO::Data::User - User Data objects for TABOO
 =head1 SYNOPSIS
 
   use AxKit::App::TABOO::Data::User;
-  $user = AxKit::App::TABOO::Data::User->new();
+  $user = AxKit::App::TABOO::Data::User->new(@dbconnectargs);
   $user->load(what => '*', limit => {username => 'kjetil'});
   my $fullname = $user->load_name('kjetil');
 
@@ -40,7 +40,7 @@ This class implements two methods, the rest is inherited from L<AxKit::App::TABO
 
 =over
 
-=item C<new()>
+=item C<new(@dbconnectargs)>
 
 The constructor. Nothing special.
 
@@ -55,6 +55,7 @@ sub new {
 	email => undef,
 	uri => undef,
 	passwd => undef,
+	DBCONNECTARGS => \@_,
 	XMLELEMENT => 'user',
 	XMLPREFIX => 'user',
 	XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output',
@@ -76,13 +77,7 @@ This is an ad hoc method to retrieve the full name of a user, and it takes a C<$
 sub load_name {
     my $self = shift;
     my $username = shift;
-    my $dbh = DBI->connect($self->dbstring(), 
-			   $self->dbuser(), 
-			   $self->dbpasswd(),  
-			   { PrintError => 0,
-			     RaiseError => 0,
-			     HandleError => Exception::Class::DBI->handler
-			     });
+    my $dbh = DBI->connect($self->dbconnectargs());
     my $sth = $dbh->prepare("SELECT name FROM users WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;
@@ -103,13 +98,7 @@ This is an ad hoc method to retrieve the encrypted password of a user, and it ta
 sub load_passwd {
     my $self = shift;
     my $username = shift;
-    my $dbh = DBI->connect($self->dbstring(), 
-			   $self->dbuser(), 
-			   $self->dbpasswd(),  
-			   { PrintError => 0,
-			     RaiseError => 0,
-			     HandleError => Exception::Class::DBI->handler
-			     });
+    my $dbh = DBI->connect($self->dbconnectargs());
     my $sth = $dbh->prepare("SELECT passwd FROM users WHERE username=?");
     $sth->execute($username);
     my @data = $sth->fetchrow_array;

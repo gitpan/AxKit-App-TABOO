@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.08';
+our $VERSION = '0.081';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -34,7 +34,7 @@ Often, you want to retrieve many different stories from the data store, for exam
 
 =over
 
-=item C<new()>
+=item C<new(@dbconnectargs)>
 
 The constructor. Nothing special.
 
@@ -45,6 +45,7 @@ sub new {
     my $class = ref($that) || $that;
     my $self = {
 	ENTRIES => [], # Internally, some methods finds it useful that the entries are stored in a array of this name.
+	DBCONNECTARGS => \@_,
 	XMLELEMENT => undef,
 	XMLPREFIX => undef,
 	XMLNS => undef,
@@ -85,7 +86,7 @@ sub load {
   my $data = $self->_load(%args); # Does the hard work
   return undef unless (@{$data});
   foreach my $entry (@{$data}) {
-    my $story = AxKit::App::TABOO::Data::Story->new();
+    my $story = AxKit::App::TABOO::Data::Story->new($self->dbconnectargs());
     $story->populate($entry);
     $story->onfile;
     push(@stories, $story);

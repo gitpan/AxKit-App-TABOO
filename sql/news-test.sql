@@ -1,11 +1,3 @@
-CREATE TABLE categories (
-       catname	 	VARCHAR(15) PRIMARY KEY NOT NULL,
-       name	 	VARCHAR(30) NOT NULL, 
-       type 		CHAR(5) NOT NULL,
-       uri	 	VARCHAR(254),
-       description 	VARCHAR(254)
-);
-
 INSERT INTO categories (
        catname,
        type,
@@ -56,9 +48,7 @@ VALUES (
 INSERT INTO categories (
        catname,
        type,
-       name,
-       uri,
-       description
+       name
 )
 VALUES ( 
        'test1',
@@ -82,19 +72,50 @@ VALUES (
        'Test 2'
 );
 
-
-  
-CREATE TABLE comments (
-       commentpath   VARCHAR(254) NOT NULL,
-       storyname     VARCHAR(10) NOT NULL,
-       sectionid     VARCHAR(10) NOT NULL,
-       title	     VARCHAR(40) NOT NULL,
-       content	     TEXT,
-       timestamp     TIMESTAMP NOT NULL,
-       username	     VARCHAR(8) 
+INSERT INTO categories (
+       catname,
+       type,
+       name,
+       uri,
+       description
+)
+VALUES ( 
+       'testsec',
+       'stsec',
+       'Test Section',
+       'http://localhost/news/testsec',
+       'Just Tessting'
 );
 
+INSERT INTO categories (
+       catname,
+       name,
+       type,
+       uri,
+       description
+)
+VALUES ( 
+       'features',
+       'Features',
+       'stsec',
+       'http://localhost/news/features',
+       'The really nice feature articles'
+);
 
+INSERT INTO categories (
+       catname,
+       name,
+       type,
+       uri,
+       description
+)
+VALUES ( 
+       'subqueue',
+       'Submission Queue',
+       'stsec',
+       'http://localhost/news/subqueue',
+       'Where submissions go for approval'
+);
 
 
 INSERT INTO comments (
@@ -236,23 +257,7 @@ VALUES (
        '20031211',
        'foo'
 );
-CREATE TABLE stories (
-       storyname     VARCHAR(10) NOT NULL,
-       sectionid     VARCHAR(10) NOT NULL,
-       image	     VARCHAR(100),
-       primcat	     VARCHAR(15) NOT NULL,
-       seccat	     VARCHAR(15)[],
-       freesubject   VARCHAR(15)[],
-       editorok	     BOOLEAN DEFAULT false,
-       title	     VARCHAR(40) NOT NULL,
-       minicontent   TEXT,
-       content	     TEXT,
-       username	     VARCHAR(8) NOT NULL,
-       submitterid   VARCHAR(8),
-       linktext      VARCHAR(15),
-       timestamp     TIMESTAMP NOT NULL,
-       lasttimestamp TIMESTAMP NOT NULL
-);
+
   
 INSERT INTO stories (
        storyname,
@@ -306,15 +311,6 @@ VALUES (
        '20031211'
 );
 
-
-
-CREATE TABLE users (
-       username		VARCHAR(8) PRIMARY KEY NOT NULL,
-       name	 	VARCHAR(30) NOT NULL,
-       email	 	VARCHAR(30), 
-       uri	 	VARCHAR(254),
-       passwd		VARCHAR(40)
-);
 
 INSERT INTO users (
        username, 
@@ -376,11 +372,6 @@ VALUES (
 );
 
 
-CREATE TABLE contributors (
-       username 	VARCHAR(8) PRIMARY KEY NOT NULL,
-       authlevel 	SMALLINT,
-       bio	 	VARCHAR(254)
-);
 
 INSERT INTO contributors (
        username, 
@@ -418,8 +409,7 @@ VALUES (
 
 INSERT INTO contributors (
        username, 
-       authlevel,
-       bio
+       authlevel
 ) 
 VALUES (
        'foobar',
