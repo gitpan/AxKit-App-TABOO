@@ -109,5 +109,5 @@ sub new {
 See L<AxKit::App::TABOO>.
 
 =cut
-
-1
+    
+1;
