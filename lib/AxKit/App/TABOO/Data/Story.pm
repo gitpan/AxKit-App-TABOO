@@ -16,7 +16,7 @@ use Time::Piece;
 use DBI;
 
 
-our $VERSION = '0.06';
+our $VERSION = '0.08';
 
 
 =head1 NAME
@@ -78,6 +78,7 @@ sub new {
 	timestamp => undef,
 	lasttimestamp => undef,
 	XMLELEMENT => 'story',
+	XMLPREFIX => 'story',
 	XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output',
 	ONFILE => undef,
     };
@@ -294,7 +295,13 @@ These are the names of the stored data of this class:
 
 =head1 XML representation
 
-The C<write_xml()> method, implemented in the parent class, can be used to create an XML representation of the data in the object. The above names will be used as element names. The C<xmlelement()> and C<xmlns()> methods can be used to set the name of the root element and the namespace respectively. Usually, it doesn't make sense to change the defaults, which are 
+The C<write_xml()> method, implemented in the parent class, can be
+used to create an XML representation of the data in the object. The
+above names will be used as element names. The C<xmlelement()>,
+C<xmlns()> and C<xmlprefix()> methods can be used to set the name of
+the root element, the namespace URI and namespace prefix
+respectively. Usually, it doesn't make sense to change the defaults,
+that are
 
 
 =over
@@ -302,6 +309,8 @@ The C<write_xml()> method, implemented in the parent class, can be used to creat
 =item * C<story>
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output>
+
+=item * C<story>
 
 =back
 

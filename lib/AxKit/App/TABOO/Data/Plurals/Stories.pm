@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.074';
+our $VERSION = '0.08';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -46,6 +46,7 @@ sub new {
     my $self = {
 	ENTRIES => [], # Internally, some methods finds it useful that the entries are stored in a array of this name.
 	XMLELEMENT => undef,
+	XMLPREFIX => undef,
 	XMLNS => undef,
     };
     bless($self, $class);

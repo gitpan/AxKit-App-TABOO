@@ -10,7 +10,7 @@
   <xsl:template match="//i18n:insert">
     <xsl:variable name="Text" select="@name"/>
     <xsl:value-of
-    select="document('file:///var/www/i18n.en.xml')/texts:translations/texts:text[@id=$Text]"/>
+    select="document('/i18n.en.xml')/texts:translations/texts:text[@id=$Text]"/>
   </xsl:template>
 
 

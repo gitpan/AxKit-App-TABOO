@@ -15,7 +15,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 
 =head1 NAME
@@ -163,8 +163,8 @@ class. Has a completely identical interface as the parent class, and
 can be called like it without further ado.
 
 If an object of this class has had its element and/or namespace set
-with C<xmlelement()>/C<xmlns()> respectively, the individual entries
-will have the same element and/or namespace.
+with C<xmlelement()>/C<xmlns()>/C<xmlprefix()> respectively, the
+individual entries will have the same element and/or namespace.
 
 =cut
 
@@ -176,6 +176,9 @@ sub write_xml {
     # If the object has had its element and/or NS set to something, we pass it on.
     if (${$self}{XMLELEMENT}) {
       $entry->xmlelement($self->xmlelement());
+    }
+    if (${$self}{XMLPREFIX}) {
+      $entry->xmlprefix($self->xmlprefix());
     }
     if (${$self}{XMLNS}) {
       $entry->xmlns($self->xmlns());

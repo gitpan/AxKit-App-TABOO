@@ -3,6 +3,7 @@ htdocs/guest-login.xsp
 htdocs/i18n.en.xml
 htdocs/index.xsp
 htdocs/login.xsp
+htdocs/main.rdf
 htdocs/news/submit.xsp
 htdocs/transforms/index-aggregate.xsl
 htdocs/transforms/insert-i18n.xsl
@@ -15,6 +16,7 @@ htdocs/transforms/user/make-control.xsl
 htdocs/transforms/user/xhtml/match-user.xsl
 htdocs/transforms/user/xhtml/new.xsl
 htdocs/transforms/user/xhtml/user.xsl
+htdocs/transforms/xhtml/header.xsl
 htdocs/transforms/xhtml/index.xsl
 htdocs/transforms/xhtml/match-control.xsl
 htdocs/user/submit/new.xsp

@@ -12,7 +12,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 
 =head1 NAME
@@ -121,11 +121,19 @@ A longer description of a category, intended as an explanation to a human what k
 
 =head1 XML representation
 
-The C<write_xml()> method, implemented in the parent class, can be used to create an XML representation of the data in the object. The above names will be used as element names. The C<xmlelement()> and C<xmlns()> methods can be used to set the name of the root element and the namespace respectively. Usually, it doesn't make sense to change the default namespace, which is
+The C<write_xml()> method, implemented in the parent class, can be
+used to create an XML representation of the data in the object. The
+above names will be used as element names. The C<xmlelement()>,
+C<xmlns()> and C<xmlprefix()> methods can be used to set the name of
+the root element, the namespace URI and namespace prefix
+respectively. Usually, it doesn't make sense to change the default
+namespace or prefix, that are
 
 =over
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output>
+
+=item * C<category>
 
 =back
 
@@ -143,6 +151,7 @@ sub new {
 		uri => undef,
 		description => undef,
 		XMLELEMENT => 'category',	
+		XMLPREFIX => 'category',	
 		XMLNS => 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output',
 		ONFILE => undef,
     };

@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.076
-=============================
+AxKit/App/TABOO version 0.08
+============================
 
 INTRODUCTION
 
@@ -69,7 +69,7 @@ work that is somewhat flaky. And it is only second on the TODO list...
 
 TABOO can now also list News stories with the NewsList Provider, and
 there is a rudimentary front page, which is an aggregate of a
-newslist. It has some XSLT problems to do next.
+newslist. 
 
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:wn="http://xmlns.com/wordnet/1.6/"      
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  
+  <rdf:Description rdf:about="http://test.skepsis.no/">
+    <dc:title>
+      <rdf:Alt>
+	<rdf:_1>TABOO Test system</rdf:_1>
+	<rdf:_2>TABOO</rdf:_2>
+      </rdf:Alt>
+    </dc:title>
+    <dc:description>This is a test site for the TABOO framework.</dc:description>
+    <wn:slogan>TABOO, a great framework for, uhm, everything!</wn:slogan>
+  </rdf:Description>
+</rdf:RDF>

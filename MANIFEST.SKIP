@@ -10,5 +10,3 @@ tar.gz$
 lib/AxKit/App/TABOO/Data/OrderedItem.pm
 lib/AxKit/App/TABOO/Provider.pm
 htdocs/links.xsp
-htdocs/header.xsp
-htdocs/transforms/xhtml/header.xsl

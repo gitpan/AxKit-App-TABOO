@@ -8,7 +8,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 
 use DBI;
@@ -163,13 +163,13 @@ sub write_xml {
     my $self = shift;
     my $doc = shift;
     my $parent = shift;
-    my $topel = $doc->createElementNS($self->xmlns(), $self->xmlelement());
+    my $topel = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $self->xmlelement());
     $parent->appendChild($topel);
     foreach my $key (split(/,\s*/, $self->elementorder())) {
       if (defined(${$self}{$key})) {
 	my $content = ${$self}{$key};
 	if (ref($content) eq '') {
-	  my $element = $doc->createElementNS($self->xmlns(), $key);
+	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	  my $text = XML::LibXML::Text->new($content);
 	  $element->appendChild($text);
 	  $topel->appendChild($element);
@@ -177,7 +177,7 @@ sub write_xml {
 	  # The content is an array, we must go through it and add an element for each.
 	  foreach (@{$content}) {
 	    if (ref($_) eq '') {
-	      my $element = $doc->createElementNS($self->xmlns(), $key);
+	      my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	      my $text = XML::LibXML::Text->new($_);
 	      $element->appendChild($text);
 	      $topel->appendChild($element);
@@ -193,7 +193,7 @@ sub write_xml {
 	  # a reference to one of our subclasses, it must be written too. 
 	  ${$content}->write_xml($doc, $topel);
         } else {
-	  my $element = $doc->createElementNS($self->xmlns(), $key);
+	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	  my $text = XML::LibXML::Text->new($content);
 	  $element->appendChild($text);
 	  $topel->appendChild($element);
@@ -365,9 +365,10 @@ sub xmlelement {
   return ${$self}{'XMLELEMENT'};
 }
 
+
 =item C<xmlns($string)>
 
-Like  C<xmlelement()>, this method is I<intended> for internal use. It sets the namespace URI of the XML representation of an object to C<$string>.
+Also like  C<xmlelement()>, this method is I<intended> for internal use. It sets the namespace URI of the XML representation of an object to C<$string>.
 
 =cut
 
@@ -380,6 +381,26 @@ sub xmlns {
   }
   return ${$self}{'XMLNS'};
 }
+
+
+=item C<xmlprefix($string)>
+
+Alse like C<xmlelement()>, this method is I<intended> for internal
+use. It sets the namespace prefix of the XML representation of an
+object to C<$string>, to allow using QNames.
+
+=cut
+
+
+
+sub xmlprefix {
+  my $self = shift;
+  if (@_) { 
+    ${$self}{'XMLPREFIX'} = shift;
+  }
+  return ${$self}{'XMLPREFIX'};
+}
+
 
 
 =back
