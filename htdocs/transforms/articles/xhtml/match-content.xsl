@@ -7,7 +7,7 @@
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
   xmlns:office="http://openoffice.org/2000/office" 
   xmlns:type="http://www.kjetil.kjernsmo.net/software/TABOO/NS/MediaType/Output"  
-  exclude-result-prefixes="office user comm art rdf wn dc i18n texts html type"> 
+  exclude-result-prefixes="office art i18n texts html type"> 
 	    
   <xsl:import href="oo2html.xsl"/>
 
@@ -16,7 +16,7 @@
       <xsl:choose>
 	<xsl:when test="art:article/type:mediatype/type:mimetype = 'application/xhtml+xml'">
 	  <xsl:if test="not($content/html:html/html:body/html:h1)">
-	    <h1><xsl:value-of select="art:article/art:title"/></h1>
+	    <h1><xsl:value-of select="./art:title"/></h1>
 	  </xsl:if>
 	  <xsl:copy-of select="$content/html:html/html:body/child::*"/>
 	</xsl:when>
@@ -28,7 +28,7 @@
 	</xsl:when>
 	<xsl:otherwise>
 	  <xsl:if test="not($content/html/body/h1)">
-	    <h1><xsl:value-of select="art:article/art:title"/></h1>
+	    <h1><xsl:value-of select="./art:title"/></h1>
 	  </xsl:if>
 	  <xsl:copy-of select="$content/html/body/child::*"/>
 	</xsl:otherwise>

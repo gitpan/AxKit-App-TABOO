@@ -30,6 +30,7 @@
   <xsl:param name="request.uri"/>
   <xsl:param name="session.id"/>
   <xsl:param name="neg.lang">en</xsl:param>
+  <xsl:param name="cats.prefix"/>
 
 
   <xsl:template match="/">
@@ -61,6 +62,15 @@
 	<div id="breadcrumb">
 	  <xsl:call-template name="BreadcrumbTop"/>
 	  <xsl:text> &gt; </xsl:text>
+	  <xsl:for-each select="/taboo/cat:category">
+	    <xsl:if test="position() &gt; 1"><!-- TODO: works only for a single subcat -->
+	      <a href="{concat($cats.prefix, preceding-sibling::cat:category[1]/cat:catname)}">
+		<xsl:value-of select="preceding-sibling::cat:category[1]/cat:name"/>
+	      </a>
+	      <xsl:text> &gt; </xsl:text>
+	    </xsl:if>
+	  </xsl:for-each>
+	  
 	</div>
 
 	<div id="container">

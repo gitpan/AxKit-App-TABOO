@@ -30,12 +30,20 @@
   <xsl:param name="request.uri"/>
   <xsl:param name="session.id"/>
   <xsl:param name="neg.lang">en</xsl:param>
+  <xsl:variable name="content"/>
 
   <xsl:template match="/taboo/taboo">
+    <xsl:apply-templates select="art:article">
+      <xsl:with-param name="content" select="document(@contenturl)"/>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <xsl:template match="art:article">
+    <xsl:param name="content"/>
     <html lang="{$neg.lang}">
       <head>
 	<title>
-	  <xsl:value-of select="art:article/art:title"/>
+	  <xsl:value-of select="./art:title"/>
 	  
 	  <xsl:text> | </xsl:text>
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
@@ -47,7 +55,12 @@
 	<xsl:call-template name="CreateHeader"/>
 	<div id="breadcrumb">
 	  <xsl:call-template name="BreadcrumbTop"/>
-	</div>
+	  <xsl:text> &gt; </xsl:text>
+	  <a href="{concat($cats.prefix, ./cat:primcat/cat:catname)}">
+	    <xsl:value-of select="./cat:primcat/cat:name"/>
+	  </a>
+	  <xsl:text> &gt; </xsl:text>
+	</div> 
 	<div id="container">
 	  <xsl:variable name="uri" select="concat('http://',
 	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
@@ -59,7 +72,7 @@
 	    </h2>
 	    
 	    <xsl:call-template name="ArticleContent">
-	      <xsl:with-param name="content" select="document(@contenturl)"/>
+	      <xsl:with-param name="content" select="$content"/>
 	    </xsl:call-template>
 
 	  </div>

@@ -1,5 +1,16 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.18_11 2005-03-16 03:16
+	- YA dev release. 
+	- Bugfixing.
+		* Can't use localhost on virtual hosts.
+		* Rewriting a lot about how authors are displayed.
+		* Quite a few smaller things
+		* Need at least one transform on Providers, even if it
+		  doesn't do a lot
+	- More breadcrumbs on articles and categories.
+	- Debian will contain OpenOffice.org DTDs in the XML catalog. Yay.
+
 0.18_10 2005-03-13 02:50
 	- YA dev release. Bugfixing, but also additions of category stuff.
 

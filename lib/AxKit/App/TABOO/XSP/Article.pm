@@ -14,7 +14,7 @@ use MIME::Type;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.18_05';
+our $VERSION = '0.18_11';
 
 =head1 NAME
 
@@ -144,7 +144,7 @@ sub this_article : struct attribOrChild(primcat) {
     
   my $doc = XML::LibXML::Document->new();
   my $addel = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Article/Output', 'art:article-submission');
-  $addel->setAttribute('contenturl', 'http://localhost' . $lookupurl);
+  $addel->setAttribute('contenturl', $lookupurl);
   $doc->setDocumentElement($addel);
   $article->write_xml($doc, $addel); # Return an XML representation
 EOC
@@ -183,10 +183,12 @@ sub get_article : struct attribOrChild(filename,primcat) {
     foreach my $ext ($article->mimetype->extensions) {
 	my $lookupfile = "/articles/content/$attr_primcat/$attr_filename/$attr_filename.$ext";
 	if (-r $r->document_root . $lookupfile) {
-	    $lookupurl = "http://localhost" . $lookupfile;
+	    $lookupurl = 'http://' . $r->get_server_name . ':' . $r->get_server_port . $lookupfile;
 	}
 	last if $lookupurl;
     }
+    AxKit::Debug(8, "Content really at: " . $lookupurl);
+
     unless ($lookupurl) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => 404,

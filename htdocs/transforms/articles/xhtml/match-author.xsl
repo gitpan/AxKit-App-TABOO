@@ -5,7 +5,7 @@
   xmlns:art="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Article/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
-  exclude-result-prefixes="user art i18n texts html"> 
+  exclude-result-prefixes="user art i18n texts"> 
 
   <xsl:template name="ArticleAuthors">
     <xsl:for-each select="user:author">
