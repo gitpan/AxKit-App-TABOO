@@ -27,10 +27,12 @@ VALUES (
 );
 
 INSERT INTO contributors (
-       username, 
+	Users_ID, 
+      username, 
        authlevel
 ) 
 VALUES (
+	1,
        'guest',
        0
 );

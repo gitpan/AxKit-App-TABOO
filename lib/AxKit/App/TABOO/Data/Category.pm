@@ -13,7 +13,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.09';
+our $VERSION = '0.18';
 
 
 =head1 NAME
@@ -35,6 +35,8 @@ It is often convenient to lump articles together in categories. People do that t
 
 AxKit::App::TABOO::Data::Category->elementorder("catname, name, type, uri, description");
 AxKit::App::TABOO::Data::Category->dbfrom("categories");
+AxKit::App::TABOO::Data::Category->dbtable("categories");
+AxKit::App::TABOO::Data::Category->dbprimkey("catname");
 
 =head1 METHODS
 
@@ -155,8 +157,6 @@ sub new {
   return $self;
 }
 
-#use Alias qw(attr);
-#our ($CATNAME, $NAME, $TYPE, $URI, $DESCRIPTION);
 
 =head1 FORMALITIES
 

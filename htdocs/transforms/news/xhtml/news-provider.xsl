@@ -146,7 +146,18 @@
 	      </div>
 	    </xsl:if>
 	    <xsl:apply-templates select="/taboo/comm:reply"/>
-	    <div class="commentlist">
+	    <div class="commentlist">	      
+	      <ul class="linktoall">
+		<li>		
+		  <a>
+		    <xsl:attribute name="href">
+		      <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+		      <xsl:text>comment/all</xsl:text>
+		  </xsl:attribute>
+		  <xsl:value-of select="i18n:include('everything-linktext')"/>
+		  </a>
+		</li>
+	      </ul>
 	      <xsl:apply-templates select="/taboo/comm:commentlist/comm:reply"/>
 	    </div>
 	  </div>

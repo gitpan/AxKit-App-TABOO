@@ -16,6 +16,7 @@ lib/AxKit/App/TABOO/Data/Productprices.pm
 lib/AxKit/App/TABOO/Data/Productsubtype.pm
 lib/AxKit/App/TABOO/Data/User/Customer.pm
 htdocs/links.xsp
+htdocs/test
+htdocs/articles/content
 sql/webshop-create.sql
 sql/webshop-test.sql
-SIGNATURE

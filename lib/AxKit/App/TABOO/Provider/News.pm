@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 =head1 NAME
 
@@ -107,7 +107,7 @@ sub init {
 
   # We're just loading the part of the story we are sure to be using. 
   $self->{story} = AxKit::App::TABOO::Data::Story->new();
-  $self->{story}->load(what => 'storyname,sectionid,editorok,title,timestamp,lasttimestamp', limit => {sectionid => $self->{sectionid}, storyname => $self->{storyname}});
+  $self->{story}->load(what => 'storyname,minicontent,sectionid,editorok,title,timestamp,lasttimestamp', limit => {sectionid => $self->{sectionid}, storyname => $self->{storyname}});
 
   # Get the timestamps of the story
   $self->{storytimestamp} =  $self->{story}->timestamp();

@@ -101,6 +101,11 @@
 		<xsl:if test="../@type='multiple'">
 		  <xsl:attribute name="multiple">multiple</xsl:attribute>
 		</xsl:if>
+		<xsl:for-each select="./option">
+		  <option value="{@value}">
+		    <xsl:apply-templates/>
+		  </option>
+		</xsl:for-each>
 		<xsl:for-each select="./ct:value/user:level">
 		  <option>
 		    <!-- xsl:attribute name="value"><xsl:number
@@ -108,10 +113,10 @@
 		    <!-- This has to mark as selected both in the case where we have
 			 a single parameter found by param:get, but also where there are
 			 multiple as found by param:enumerate -->
-		<xsl:if test=".=//user:authlevel">
-		  <xsl:attribute name="selected">selected</xsl:attribute>
-		</xsl:if>
-		<xsl:value-of select="."/>
+		    <xsl:if test=".=//user:authlevel">
+		      <xsl:attribute name="selected">selected</xsl:attribute>
+		    </xsl:if>
+		    <xsl:value-of select="."/>
 		  </option>
 		</xsl:for-each>     
 	      </select>

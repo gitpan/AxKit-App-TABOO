@@ -15,7 +15,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.096';
+our $VERSION = '0.18';
 
 
 =head1 NAME
@@ -52,6 +52,11 @@ this taglib.
 
 $NS = 'http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category';
 
+sub _sanatize_catname {
+    my $tmp = lc shift;
+    $tmp =~ tr/a-z/_/cs;
+    return $tmp;
+}
 
 
 package AxKit::App::TABOO::XSP::Category::Handlers;
@@ -112,39 +117,96 @@ sub get_categories : struct attribOrChild(type) {
 EOC
 }
 
-#  sub store {
-#      return << 'EOC'
-#  	my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
-#      $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 
-#      my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
-#    AxKit::Debug(9, "Logged in as $args{'username'} at level $authlevel");
-#      unless ($authlevel) {
-#  	throw Apache::AxKit::Exception::Retval(
-#  					       return_code => AUTH_REQUIRED,
-#  					       -text => "Not authenticated and authorized with an authlevel");
-#      }    my $story = AxKit::App::TABOO::Data::Category->new();
-#      if (($args{'sectionid'} eq 'subqueue') && (! $args{'storyname'}))
-#      {
-#  	$args{'storyname'} = int(rand(100000));
-#      } elsif ($args{'sectionid'} ne 'subqueue') {
-#  	if ($authlevel < AxKit::App::TABOO::XSP::Category::EDITOR) {
-#  	    throw Apache::AxKit::Exception::Retval(
-#  						   return_code => FORBIDDEN,
-#  						   -text => "Editor Priviliges are needed to store non-subqueue section. Your level: " . $authlevel);
-#  	}
-#      }
-#      my $timestamp = localtime;
-#      if (! $args{'timestamp'}) {
-#  	$args{'timestamp'} = $timestamp->datetime;
-#      }
-#      if (! $args{'lasttimestamp'}) {
-#  	$args{'lasttimestamp'} = $timestamp->datetime;
-#      }
-#      $story->populate(\%args);
-#      $story->save();    
-#  EOC
-#  }
+=head2 C<E<lt>store/E<gt>>
+
+It will take whatever data it finds in the L<Apache::Request> object
+held by AxKit, and hand it to a new
+L<AxKit::App::TABOO::Data::Article> object, which will use whatever
+data it finds useful. It will not store anything unless the user is
+logged in and authenticated with an authorization level. It will
+perform different sanity checks and throw exceptions if the user tries
+to add data it is not authorized to do.
+
+Finally, the Data object is instructed to save itself. 
+
+If successful, it will return a C<store> element in the output
+namespace with the number 1.
+
+=cut
+
+
+sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Article/Output}store) {
+    return << 'EOC'
+    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
+    my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
+    AxKit::Debug(9, "Logged in as $args{'username'} at level $authlevel");
+    unless ($authlevel >= 1) {
+  	throw Apache::AxKit::Exception::Retval(
+  					       return_code => AUTH_REQUIRED,
+  					       -text => "Not authenticated and authorized with an authlevel");
+    }    
+    my $cat = AxKit::App::TABOO::Data::Category->new();
+
+    if (($args{'type'} eq 'stsec') && ($authlevel < 6)) {
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => FORBIDDEN,
+					       -text => "Authlevel 6 is needed to make new sections. Your level: " . $authlevel);
+    }
+    if (($args{'type'} eq 'categ') && ($authlevel < 4)) {
+	throw Apache::AxKit::Exception::Retval(
+					       return_code => FORBIDDEN,
+					       -text => "Authlevel 4 is needed to make new categories. Your level: " . $authlevel);
+    }
+
+    $args{'catname'} = AxKit::App::TABOO::XSP::Category::_sanatize_catname($args{'catname'});
+    $cat->populate(\%args);
+    $cat->save();
+    1;
+EOC
+}
+
+=head2 C<E<lt>exists catname="foo"/E<gt>>
+
+This tag will check if a category allready exists. It is a boolean
+tag, which has child elements C<E<lt>trueE<gt>> and
+C<E<lt>falseE<gt>>. It takes a catname, which may be given as an
+attribute or a child element named C<catname>, and if the category is
+found in the data store, the contents of C<E<lt>trueE<gt>> child
+element is included, otherwise, the contents of C<E<lt>falseE<gt>> is
+included.
+
+=cut
+
+sub exists : attribOrChild(catname) {
+    return ''; # Gotta be something here
+}
+
+sub exists___true__open {
+return << 'EOC';
+    my $category = AxKit::App::TABOO::Data::Category->new();
+    if (($attr_catname =~ m/submit/) || 
+	($category->load(what => '1', limit => {catname => $attr_catname}))) {
+EOC
+}
+
+sub exists___true {
+  return '}'
+}
+
+
+sub exists___false__open {
+return << 'EOC';
+    my $category = AxKit::App::TABOO::Data::Category->new();
+    unless (($attr_catname =~ m/submit/) || 
+	    ($category->load(what => '1', limit => {catname => $attr_catname}))) {
+EOC
+}
+
+sub exists___false {
+  return '}'
+}
+
 
     
 1;

@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.1';
+our $VERSION = '0.18_05';
 
 
 1;
@@ -276,6 +276,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   # That's rather evil...
   Alias /news/submit /var/www/news/submit.xsp 
   Alias /login /var/www/login.xsp
+  Alias /categories/submit /var/www/categories/submit.xsp 
 
 
   # Authentication and authorization stuff
@@ -311,12 +312,9 @@ multiple users can post news stories, and comment them. That's
 something that has been done before, of course, but not within the
 design goals stated above.
 
-
-Allthough it is not included in the present distro, I have also come
-quite a long way with code to work on more static articles. The News
-was given attention to first part, because it was the first thing that
-gave people something to play with, but most of the attention will be
-on the static articles from now on.
+From now on most of the attention will be on the static articles from
+now on. A lot of new code is in the present distro, but it has quite a
+lot of issues.
 
 Finally note that things that are there are B<not stable>! Names may
 change, parameters may be different, and I may decide to do things

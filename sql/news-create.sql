@@ -1,5 +1,6 @@
 CREATE TABLE categories (
-       catname	 	VARCHAR(15) PRIMARY KEY,
+	ID	 	SERIAL PRIMARY KEY,
+       catname	 	VARCHAR(15) UNIQUE NOT NULL,
        name	 	VARCHAR(30) NOT NULL, 
        type 		CHAR(5) NOT NULL,
        uri	 	VARCHAR(254),
@@ -9,7 +10,8 @@ CREATE TABLE categories (
 
 
 CREATE TABLE users (
-       username		VARCHAR(8) PRIMARY KEY,
+	ID 		SERIAL PRIMARY KEY,
+       username		VARCHAR(8) UNIQUE NOT NULL,
        name	 	VARCHAR(30) NOT NULL,
        email	 	VARCHAR(129), 
        uri	 	VARCHAR(254),
@@ -18,7 +20,8 @@ CREATE TABLE users (
 
 
 CREATE TABLE contributors (
-       username 	VARCHAR(8) PRIMARY KEY REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE,
+	Users_ID 	INTEGER UNIQUE NOT NULL REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE,
+       username         VARCHAR(8) UNIQUE, /* TODO: remove and change Perl code */
        authlevel 	SMALLINT,
        bio	 	VARCHAR(254)
 );
@@ -34,7 +37,7 @@ CREATE TABLE stories (
        title	     VARCHAR(40) NOT NULL,
        minicontent   TEXT,
        content	     TEXT,
-       username	     VARCHAR(8) NOT NULL REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+       username	     VARCHAR(8) NOT NULL REFERENCES users (username) ON DELETE SET NULL ON UPDATE CASCADE,
        submitterid   VARCHAR(8),
        linktext      VARCHAR(30),
        timestamp     TIMESTAMP NOT NULL,
@@ -50,7 +53,7 @@ CREATE TABLE comments (
        title	     VARCHAR(40) NOT NULL,
        content	     TEXT,
        timestamp     TIMESTAMP NOT NULL,
-       username	     VARCHAR(8) REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE, 
+       username	     VARCHAR(8) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE, 
        PRIMARY KEY (commentpath, storyname, sectionid),
        FOREIGN KEY (storyname, sectionid) REFERENCES stories ON DELETE SET NULL ON UPDATE CASCADE       
 );

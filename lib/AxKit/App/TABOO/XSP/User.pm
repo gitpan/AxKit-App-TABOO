@@ -160,7 +160,11 @@ EOC
 
 =head2 C<E<lt>new-user/E<gt>>
 
-This tag will store the contents of an Apache::Request object in the data store, but perform little checks on the data given. The only thing it checks is that hte username isn't in use and allready. Then, if the authlevel is different from 1, it is checked if the logged in user is privileged to set the authlevel.   
+This tag will store the contents of an Apache::Request object in the
+data store, but perform little checks on the data given. The only
+thing it checks is that the username isn't in use and allready. Then,
+if the authlevel is different from 1, it is checked if the logged in
+user is privileged to set the authlevel.
 
 =cut
 

@@ -4,6 +4,10 @@
 <!-- The general structure is there, but your own titles, URI, -->
 <!-- descriptions and slogans must be given. -->
 
+<!-- It is quite likely that this file will soon be written using the -->
+<!-- TriX data serialization, as it is designed to allow easier XSLT -->
+<!-- transformations. -->
+
 <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"

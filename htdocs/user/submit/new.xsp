@@ -25,7 +25,7 @@
 	    <sendmail:to><param:get name="email"/></sendmail:to>
 	    <sendmail:body>
 	      You've been registered as <param:get name="username"/>
-	      with password <param:get name="passwd"/>.
+	      with password <param:get name="passwd"/> .
 	    </sendmail:body>
 	  </sendmail:send-mail>
 	  <user:new-user/>

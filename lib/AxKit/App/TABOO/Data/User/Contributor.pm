@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.081';
+our $VERSION = '0.2';
 
 
 =head1 NAME
@@ -119,6 +119,7 @@ The C<save()> method has been reimplemented in this class. It is less generic th
 sub save {
   my $self = shift;
   my $dbh = DBI->connect($self->dbconnectargs());
+  my $seq_id;
   my (@fields, @confields);
   my $i=0;
   my $j=0;
@@ -142,14 +143,17 @@ sub save {
     if (($i == 0) && ($j == 0)) {
       carp "No data fields with anything to save";
     } else {
-      my ($sth1, $sth2);
+      my ($sth1, $sth2, $query);
       if (${$self}{'ONFILE'}) {
 	$sth1 = $dbh->prepare("UPDATE users SET " . join('=?,', @fields) . "=? WHERE username=?");
 	$sth2 = $dbh->prepare("UPDATE contributors SET " . join('=?,', @confields) . "=? WHERE username=?");
       } else {
-	$sth1 = $dbh->prepare("INSERT INTO users (" . join(',', @fields) . ") VALUES (" . '?,' x ($i-1) . '?)');
-  	$sth2 = $dbh->prepare("INSERT INTO contributors (" . join(',', @confields) . ") VALUES (" . '?,' x ($j-1) . '?)');
+	($seq_id) = $dbh->selectrow_array("SELECT NEXTVAL('users_id_seq')");
+	$sth1 = $dbh->prepare("INSERT INTO users (" . join(',', @fields) . ",ID) VALUES (" . '?,' x $i . '?)');
+	$query = "INSERT INTO contributors (" . join(',', @confields) . ",Users_ID) VALUES (" . '?,' x $j . '?)';
+  	$sth2 = $dbh->prepare($query);
       }
+      warn "QUERY: $query";
       my $k=1;
       foreach my $key (@fields) {
 	$sth1->bind_param($k, ${$self}{$key});
@@ -157,6 +161,8 @@ sub save {
       }
       if (${$self}{'ONFILE'}) {
 	  $sth1->bind_param($k, ${$self}{'username'});
+      } else {
+	$sth1->bind_param($k, $seq_id);
       }
       $k=1;
       foreach my $key (@confields) {
@@ -165,6 +171,8 @@ sub save {
       }
       if (${$self}{'ONFILE'}) {
 	  $sth2->bind_param($k, ${$self}{'username'});
+      } else {
+	$sth2->bind_param($k, $seq_id);
       }
       if ($i > 0) {
 	$sth1->execute();

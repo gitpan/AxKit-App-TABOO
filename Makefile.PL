@@ -18,11 +18,12 @@ WriteMakefile(
 			     Crypt::GeneratePassword => 0,
 			     Apache::AxKit::Exception => 0,
 			     AxKit::XSP::BasicSession => 0.21,
-			     Formatter::HTML::Textile => 0,
+			     Formatter::HTML::Textile => 0.5,
 			     Apache::AxKit::Plugin::AddXSLParams::Request => 0,
 			     Encode => 1.99,
 			     XML::LibXSLT => 0,
 			     Apache::AxKit::Plugin::Param::Expr => 0,
+			     MIME::Types => 0,
 			   }, # E.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
      (ABSTRACT_FROM => 'lib/AxKit/App/TABOO.pm', # retrieve abstract from module

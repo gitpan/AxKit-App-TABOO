@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.1
-===========================
+AxKit/App/TABOO version 0.18_05
+===============================
 
 This release has not been signed with my GPG key. This is due to that
 I had to move development to another system where my secret key is
@@ -53,7 +53,7 @@ have been extended by the main developer, so there is a style for
 pretty much everything now.
 
 
-This is a first beta release. It is pretty much a useable framework
+0.1 was the first beta release. It is pretty much a useable framework
 for posting news-stories. It consists mainly of News and NewsList
 providers that constructs objects, instruct them to load their data
 based on the URI, get them to write their own XML, and pass this to
@@ -70,6 +70,16 @@ databases.
 It can also take user-entered text that has been marked up with some
 simple syntax like Textile http://www.textism.com/tools/textile/ and
 convert that to HTML.
+
+The 0.18_05 release is very much a development release. It does a lot
+of new things, and the database schema have seen quite a few
+changes. For those wishing to have a look at the better tested
+functionality of TABOO, 0.1 is recommended over the present
+release. However, one should be aware that some of the code in there
+is a dead end, so do not add any valuable content to it. 
+
+Apart from the database changes, this has a lot of new Article code,
+but it has issues... Also, it adds the possibility to add categories.
 
 I'm following the mantra "release early", and have made everything
 I've done available from the start. Several fine folks have poked at

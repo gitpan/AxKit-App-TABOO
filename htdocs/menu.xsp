@@ -30,6 +30,21 @@
       <cat:get-categories type="stsec"/>
     </menu:section>
 
+    <user:is-authorized authlevel="1">
+      <user:true>
+	<menu:section>
+	  <menu:header><i18n:insert>cats-title-menu</i18n:insert></menu:header>	  
+	  <menu:li>
+	    <menu:text>
+	      <i18n:insert>suggest</i18n:insert>
+	      <i18n:insert>new</i18n:insert>
+	    </menu:text>
+	    <menu:url>/categories/submit</menu:url>
+	  </menu:li>
+	</menu:section>
+      </user:true>
+    </user:is-authorized>
+
     <menu:section>
       <menu:header><i18n:insert>users-title-menu</i18n:insert></menu:header>
       <user:is-authorized authlevel="1">

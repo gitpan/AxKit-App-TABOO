@@ -75,7 +75,7 @@ held by AxKit, and hand it to a new L<AxKit::App::TABOO::Data::Story>
 object, which will use whatever data it finds useful. It will not
 store anything unless the user is logged in and authenticated with an
 authorization level. If an authlevel is not found in the user's
-session object, it will throw an exceptions with an C<AUTH_REQUIRED>
+session object, it will throw an exception with an C<AUTH_REQUIRED>
 code. If asked to store certain priviliged fields, it will check the
 authorization level and throw an exception with a C<FORBIDDEN> code if
 not satisfied. If timestamps do not exist, they will be created based
@@ -214,7 +214,7 @@ sub get_story : struct attribOrChild(storyname,sectionid) {
 
 
     my $story = AxKit::App::TABOO::Data::Story->new();
-    unless ($story->load(what => '*', limit => {sectionid => $attr_sectionid, storyname=> $attr_storyname})) {
+    unless ($story->load(limit => {sectionid => $attr_sectionid, storyname=> $attr_storyname})) {
       throw Apache::AxKit::Exception::Retval(
 					     return_code => 404,
 					     -text => "Requested story $attr_storyname not found.");

@@ -102,20 +102,6 @@ VALUES (
        'The really nice feature articles'
 );
 
-INSERT INTO categories (
-       catname,
-       name,
-       type,
-       uri,
-       description
-)
-VALUES ( 
-       'subqueue',
-       'Submission Queue',
-       'stsec',
-       'http://localhost/news/subqueue',
-       'Where submissions go for approval'
-);
 
 
 
@@ -181,22 +167,26 @@ VALUES (
 
 
 INSERT INTO contributors (
+	Users_ID,	
        username, 
        authlevel,
        bio
 ) 
 VALUES (
+	2,
        'kjetil',
        9,
        'TABOO developer'
 );
 
 INSERT INTO contributors (
-       username, 
+       Users_ID,
+	username, 
        authlevel,
        bio
 ) 
 VALUES (
+	3,
        'foo',
        1,
        'We all know Foo'
@@ -204,21 +194,25 @@ VALUES (
 
 
 INSERT INTO contributors (
-       username, 
+       Users_ID,
+	username, 
        authlevel,
        bio
 ) 
 VALUES (
+	4,
        'bar',
        5,
        'Bar is an well known editor'
 );
 
 INSERT INTO contributors (
+	Users_ID,
        username, 
        authlevel
 ) 
 VALUES (
+	5,
        'foobar',
        1
 );
