@@ -21,7 +21,7 @@ use MIME::Types;
 use DBI;
 
 
-our $VERSION = '0.18_05';
+our $VERSION = '0.18_06';
 
 
 =head1 NAME
@@ -294,6 +294,13 @@ sub authorids {
   return @{$self}{'authorids'};
 }
 
+
+sub incat {
+  my $self = shift;
+  my $catname = shift;
+  my $dbh = DBI->connect($self->dbconnectargs());
+  return scalar($dbh->selectrow_array("SELECT 1 FROM articlecats JOIN categories ON (articlecats.Cat_ID = categories.id) WHERE categories.catname=? LIMIT 1", {}, $catname));
+}
 
 =back
 

@@ -15,7 +15,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.18';
+our $VERSION = '0.181';
 
 
 =head1 NAME
@@ -130,13 +130,11 @@ to add data it is not authorized to do.
 
 Finally, the Data object is instructed to save itself. 
 
-If successful, it will return a C<store> element in the output
-namespace with the number 1.
 
 =cut
 
 
-sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Article/Output}store) {
+sub store {
     return << 'EOC'
     my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
@@ -162,7 +160,6 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Article/Outpu
     $args{'catname'} = AxKit::App::TABOO::XSP::Category::_sanatize_catname($args{'catname'});
     $cat->populate(\%args);
     $cat->save();
-    1;
 EOC
 }
 

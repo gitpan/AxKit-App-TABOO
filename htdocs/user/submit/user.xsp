@@ -35,7 +35,7 @@
 		    
 	<ct:control element="input" type="text" name="name" size="30" maxlength="30">
 	  <ct:title><i18n:insert>user-name</i18n:insert></ct:title>
-	  <ct:descr><i18n:insert>new-username-descr</i18n:insert></ct:descr>
+	  <ct:descr><i18n:insert>new-fullname-descr</i18n:insert></ct:descr>
 	  <!-- Have the XSLT include the value -->	  
 	  <ct:value><userinc:name/></ct:value> 
 	</ct:control>

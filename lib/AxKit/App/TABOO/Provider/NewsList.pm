@@ -205,7 +205,7 @@ sub mtime {
 
 sub get_fh {
   throw Apache::AxKit::Exception::IO(
-	      -text => "No fh for News Provider");
+	      -text => "No fh for NewsList Provider");
 }
 
 sub get_strref {

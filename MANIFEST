@@ -64,6 +64,7 @@ lib/AxKit/App/TABOO/Data/Story.pm
 lib/AxKit/App/TABOO/Data/User.pm
 lib/AxKit/App/TABOO/Data/User/Contributor.pm
 lib/AxKit/App/TABOO/Provider/Article.pm
+lib/AxKit/App/TABOO/Provider/Classification.pm
 lib/AxKit/App/TABOO/Provider/News.pm
 lib/AxKit/App/TABOO/Provider/NewsList.pm
 lib/AxKit/App/TABOO/XSP/Article.pm
@@ -81,6 +82,7 @@ sql/article-create.sql
 sql/article-test.sql
 sql/grant.sql
 sql/news-create.sql
+sql/news-minimal-nb.sql
 sql/news-minimal.sql
 sql/news-test.sql
 test.pl

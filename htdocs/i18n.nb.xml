@@ -91,7 +91,7 @@
   <text id="new-password"> Nytt passord </text>
   <text id="register"> Registrer </text>
 
-  <text id="suggested-user-exists"> Brukernavnet er allerede i bruk! </text>
+  <text id="suggested-user-exists"> Brukernavnet er allerede i bruk eller er ugyldig! </text>
   <text id="suggested-user-stored"> Brukerinformasjonen ble lagret! </text>
 
   <text id="suggested-cat-exists"> Kategorinavnet er allerede i bruk! </text>
@@ -132,7 +132,7 @@
   <text id="submit-new-user"> Ny bruker </text>
   <text id="user-info"> Brukerinformasjon </text>
 
-  <text id="new-username-descr"> Velg et ett-ords brukernavn </text>
+  <text id="new-username-descr"> Velg et ett-ords brukernavn. Det kan være opptil 8 tegn, bruk kun små bokstaver fra det engelske alfabetet. Dette vil også brukes i adressen til kommentarer du poster. </text>
   <text id="new-fullname-descr"> Oppgi ditt fulle navn </text>
   <text id="new-email-descr"> Oppgi en gyldig e-post adresse. Passordet ditt vil sendes til denne adressen. </text>
   <text id="new-uri-descr"> Oppgi adressen til en webside som beskriver deg </text>
@@ -164,4 +164,3 @@
   <text id="cat-description"> Beskrivelse </text>
   <text id="cat-description-descr"> En beskrivelse av kategorien. Denne beskrivelsen vil gjerne opptre utenfor kontekst, og må derfor gi mening kun sammen med navnet. Maks 254 tegn. </text>
 </translations>
- 

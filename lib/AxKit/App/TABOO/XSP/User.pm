@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.095';
+our $VERSION = '0.19';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -84,6 +84,26 @@ sub authlevel_extremes {
     my $minlevel = ($authlevel < AxKit::App::TABOO::XSP::User::ADMIN) ? $oldlevel : 0;
     return {'minlevel' => $minlevel, 'maxlevel' => $maxlevel};
 }
+
+
+sub _sanatize_username {
+    my $tmp = lc shift;
+    $tmp =~ tr/a-z/_/cs;
+    return $tmp;
+}
+
+sub _exists_check {
+  my $username = shift;
+  my $user = AxKit::App::TABOO::Data::User->new();
+  warn "SAN: " ._sanatize_username($username);
+  warn "IF: " . ($username eq _sanatize_username($username));
+  if (($username =~ m/comment|thread|all|respond|edit/) || ($user->load_name($username)) || ($username ne _sanatize_username($username))) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 
 package AxKit::App::TABOO::XSP::User::Handlers;
 
@@ -307,8 +327,7 @@ sub exists : attribOrChild(username) {
 
 sub exists___true__open {
 return << 'EOC';
-    my $user = AxKit::App::TABOO::Data::User->new();
-    if (($attr_username =~ m/comment|thread|all|respond|edit/) || ($user->load_name($attr_username))) {
+    if (AxKit::App::TABOO::XSP::User::_exists_check($attr_username)) {
 EOC
 }
 
@@ -319,8 +338,7 @@ sub exists___true {
 
 sub exists___false__open {
 return << 'EOC';
-    my $user = AxKit::App::TABOO::Data::User->new();
-    unless (($attr_username =~ m/comment|thread|all|respond|edit/) || ($user->load_name($attr_username))) {
+    unless (AxKit::App::TABOO::XSP::User::_exists_check($attr_username)) {
 EOC
 }
 
