@@ -69,6 +69,16 @@
 	  <xsl:copy-of select="document($uri)"/>
 
 	  <div class="main">
+
+	    <div class="foundcats">
+	      <xsl:for-each select="/taboo/cat:category">
+		<h2><xsl:value-of select="./cat:name"/></h2>
+		<p class="description">
+		  <xsl:value-of select="./cat:description"/>
+		</p>
+	      </xsl:for-each>
+	    </div>
+
 	    <dl class="articlelist">
 	      <xsl:for-each select="/taboo/art:article">
 		<xsl:apply-templates select="."/>

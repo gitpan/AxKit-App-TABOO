@@ -192,7 +192,7 @@ sub write_xml {
     my $parent = shift;
     my $topel = $doc->createElementNS($self->xmlns(), 
 				      $self->xmlprefix() .':'. $self->xmlelement());
-    if (defined(${$self}{$self->dbprimkey()})) {
+    if ((defined($self->dbprimkey)) && (defined(${$self}{$self->dbprimkey()}))) {
       $topel->setAttributeNS($self->xmlns(), 
 			     $self->xmlprefix() .':key', 
 			     ${$self}{$self->dbprimkey()});
@@ -209,7 +209,7 @@ sub write_xml {
 	elsif (ref($content) eq '') {
 	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	  my $text = XML::LibXML::Text->new($content);
-	  if ($self->elementneedsparse() =~ m/\b$key\b/) {
+	  if ((defined($self->elementneedsparse)) && ($self->elementneedsparse =~ m/\b$key\b/)) {
 	    # Here, we need to format the text coming in, and then
 	    # parse it do add it
 	    my $formatter = Formatter::HTML::Textile->format($content);

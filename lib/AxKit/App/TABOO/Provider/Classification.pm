@@ -11,7 +11,7 @@ use Carp;
 # module.
 
 
-our $VERSION = '0.19_01';
+our $VERSION = '0.19_02';
 
 =head1 NAME
 
@@ -109,6 +109,7 @@ sub init {
   my @uri = split('/', $r->uri);
   splice(@uri, 0, 2); # The first part is just a keyword,
   $self->{cats} = \@uri;
+
   AxKit::Debug(9, "[Classification] Data parsed in init: " . Dumper($self));
   return $self;
 }
@@ -132,7 +133,7 @@ sub process {
     $self->{stories} = AxKit::App::TABOO::Data::Plurals::Stories->new();
     unless ($self->{articles}->incat(@{$self->{cats}})) {
       $self->{articles} = undef;
-      unless ($self->{stories}->incat(shift(@{$self->{cats}}))) { 
+      unless ($self->{stories}->incat(@{$self->{cats}})) { 
 	$self->{exists} = 0;
       }
     }
@@ -152,6 +153,7 @@ sub exists {
 
 
 sub key {
+  no warnings; # To avoid warning when no credential_0 exists
   my $self = shift;
   return $self->{uri} . "/" . $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 }
@@ -176,8 +178,8 @@ sub get_dom {
 					     return_code => 404,
 					     -text => "Category " . $self->{catnotfound} . " was not found");
     }
-    
-    if (scalar(@{$self->{cats}} == 1)) {
+    warn "ANT: " . Dumper($self);
+    if (scalar(@{$self->{cats}}) == 1) {
       my %limit;
       if (! defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})
 	  || ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4)) {
@@ -220,7 +222,9 @@ sub get_dom {
       $self->{articles}->addformatinfo;
       $self->{articles}->write_xml($doc, $rootel);
     }
-    unless (($anyarticles) || ($self->{stories})) {
+    warn Dumper($self->{stories});
+    
+    unless (($anyarticles) || (defined($self->{stories}))) {
       if (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => 403,
@@ -246,12 +250,10 @@ sub get_strref {
 
 sub get_styles {
   my $self = shift;
-  
   my @styles = (
 		{ type => "text/xsl",
 		  href => "/transforms/categories/xhtml/class-provider.xsl" },
 	       );
-		
   return \@styles;
 }
 

@@ -231,3 +231,13 @@ div#user-info dt {
   padding: 0.3em;
   font-weight: bold;
 }
+
+div.foundcats h2 {  
+  color: #473000;
+  margin-bottom: 0.2em;
+}
+div.foundcats p.description {  
+  font-size: smaller;
+  padding-left: 4em;
+  margin-top: 0.3em;
+}
