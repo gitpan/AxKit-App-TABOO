@@ -351,6 +351,7 @@ sub is_authorized : attribOrChild(username,authlevel) {
 
 sub is_authorized___true__open {
 return << 'EOC';
+  AxKit::Debug(9, $Apache::AxKit::Plugin::BasicSession::session{credential_0} . " is authorized at level " . $Apache::AxKit::Plugin::BasicSession::session{authlevel});
   if ((defined($Apache::AxKit::Plugin::BasicSession::session{credential_0}))
       && (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel}))) {
     if (($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0})

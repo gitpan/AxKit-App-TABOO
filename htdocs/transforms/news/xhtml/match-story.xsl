@@ -93,15 +93,17 @@
 	</a>
       </div>
       <xsl:if test="//taboo[@can-edit]">
-	<a>
-	  <xsl:attribute name="href">
-	    <xsl:text>/news/submit?edit=true&amp;sectionid=</xsl:text>
-	    <xsl:value-of select="story:sectionid"/>
-	    <xsl:text>&amp;storyname=</xsl:text>
-	    <xsl:value-of select="story:storyname"/>
-	  </xsl:attribute>
-	  <xsl:value-of select="i18n:include('edit')"/>
-	</a>
+	<div class="editlink">
+	  <a>
+	    <xsl:attribute name="href">
+	      <xsl:text>/news/submit?edit=true&amp;sectionid=</xsl:text>
+	      <xsl:value-of select="story:sectionid"/>
+	      <xsl:text>&amp;storyname=</xsl:text>
+	      <xsl:value-of select="story:storyname"/>
+	    </xsl:attribute>
+	    <xsl:value-of select="i18n:include('edit')"/>
+	  </a>
+	</div>
       </xsl:if>
     </div>
   </xsl:template>

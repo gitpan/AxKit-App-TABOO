@@ -10,6 +10,8 @@
   <xsl:output encoding="utf-8"
     media-type="text/xml" indent="yes"/>
   
+  <xsl:param name="request.headers.host"/>
+
   <xsl:template match="/aggr:stories">
     <!-- constructing the URI using Apache::AxKit::Plugin::Passthru
     and Apache::AxKit::Plugin::AddXSLParams::Request -->

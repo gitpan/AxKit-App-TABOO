@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.082
+AxKit/App/TABOO version 0.083
 =============================
 
 INTRODUCTION
@@ -43,6 +43,11 @@ in the code, that's also rather important to make it maintainable.
 
 For the stuff that goes into the database, OTOH, XSP is used, and
 several taglibs are used.
+
+There is now also some cascading stylesheets, just to do minimal
+formatting. It isn't intended to make it pretty, I'm not actually a
+designer, but to give an idea of how the blocks are intended. I'll get
+a more colorful example in soon.
 
 This is a early release, an alpha in that it does some useful
 things. It consists mainly of News and NewsList providers that
@@ -99,7 +104,7 @@ This module requires these other modules and libraries:
 - Time::Piece
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
-- AxKit::XSP::BasicSession, you should have 0.19 or later.
+- AxKit::XSP::BasicSession, you must have 0.20 or later.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
 - Apache::AxKit::Plugin::AddXSLParams::Request for virtual hosts, but

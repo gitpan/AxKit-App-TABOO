@@ -1,11 +1,12 @@
 Changes
+htdocs/css/basic.css
 htdocs/guest-login.xsp
 htdocs/i18n.en.xml
 htdocs/index.xsp
 htdocs/login.xsp
-htdocs/main.rdf
 htdocs/menu.xsp
 htdocs/news/submit.xsp
+htdocs/site/main.rdf
 htdocs/transforms/index-aggregate.xsl
 htdocs/transforms/insert-i18n.xsl
 htdocs/transforms/news/insert-values-edit.xsl

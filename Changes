@@ -1,6 +1,19 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
-0.082 
+0.083	2004-09-17 01:30
+	- Fixing a few bugs, some small ones, and a big one: The
+	menu.xsp didn't the user's session, because it was called from
+	the server. This also needed a new feature in BasicSession,
+	which is also being updated.
+	- Added some CSS, and a few changes in the output HTML. Right
+	now, text/html is being outputted, I had some problems
+	applying the CSS to xml. 
+	- Moved main.rdf down to a site-dir. The idea is that
+	everything that must be edited is going there.
+	- added explicit xsl:param "declarations" whenever
+	appropriate. A great hacker said it should be there.
+
+0.082 	2004-09-10
 	- Main thing is a new menu system. There is a file menu.xsp
 	  that generates menus, which is currently run by the
 	  mainpage. Still needs work, but the basic idea is there.

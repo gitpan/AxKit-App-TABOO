@@ -14,8 +14,9 @@
   <xsl:import href="/transforms/xhtml/match-control.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
-  <xsl:output version="1.0" encoding="utf-8" 
-    media-type="text/xml" indent="yes"/>  
+  <xsl:output version="1.0" encoding="utf-8" method="html"
+    media-type="text/html" indent="yes"/>  
+  <xsl:param name="request.headers.host"/>
   <xsl:template match="cust:user">
     <html lang="en">
       <head>
@@ -25,23 +26,27 @@
 	  <xsl:value-of select="//user:name"/>
 	  <xsl:text> | </xsl:text>
 	  <xsl:value-of
-	  select="document('/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
+	  select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
 	</title>
+	<link rel="stylesheet" type="text/css" href="/css/basic.css"/>	
       </head>
       <body>      
 	<xsl:call-template name="CreateHeader"/>
-	<h2><xsl:apply-templates select="./cust:title/node()"/></h2>
+	<h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>
 
-	<xsl:apply-templates select="//user:user"/>
+	<xsl:variable name="uri" select="concat('http://',
+	  $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	<xsl:copy-of select="document($uri)"/>
 
+	<div class="main">
+	  <xsl:apply-templates select="//user:user"/>
 
-
-	<form method="GET" action="/user/submit/">
-	  <fieldset>
-	    <xsl:apply-templates select="./ct:control"/>
-	  </fieldset>
-	</form>
-	
+	  <form method="GET" action="/user/submit/">
+	    <fieldset>
+	      <xsl:apply-templates select="./ct:control"/>
+	    </fieldset>
+	  </form>
+	</div>
       </body>
     </html>
   </xsl:template>

@@ -9,22 +9,31 @@
   xmlns="http://www.w3.org/1999/xhtml">
   <xsl:import href="match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
-  <xsl:output encoding="utf-8"
-    media-type="text/xml" indent="yes"/>
+  <xsl:output encoding="utf-8" method="html"
+    media-type="text/html" indent="yes"/>
+  
+  <xsl:param name="request.headers.host"/>
+
   <xsl:template match="/">
     <html lang="en">
       <head>
 	<title>
 	  <xsl:value-of select="//story:story/story:title"/>
 	  <xsl:text> | </xsl:text>
-	  <xsl:value-of select="document('/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
+	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
 	
 	</title>
+	<link rel="stylesheet" type="text/css" href="/css/basic.css"/>
 	<link rel="top" href="/"/>
       </head>
-      <body>      	
+      <body>
 	<xsl:call-template name="CreateHeader"/>
-	<xsl:apply-templates select="//story:story"/>
+	<xsl:variable name="uri" select="concat('http://',
+	  $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	<xsl:copy-of select="document($uri)"/>
+	<div class="main">
+	  <xsl:apply-templates select="//story:story"/>
+	</div>
       </body>
     </html>
   </xsl:template>

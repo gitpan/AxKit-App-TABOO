@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.082';
+our $VERSION = '0.083';
 
 
 1;
@@ -123,16 +123,21 @@ translations with TABOO, but it needs elaboration.
 =head1 CONFIGURATION EXAMPLE
 
 The following is most of the author's AxKit configuration, and should
-be sufficient to get the code that is currently in TABOO going. Apart
-from installing TABOO, you would also need to copy the stuff in
-C<htdocs/> directory in the distribution to C</var/www> or some other
-DocumentRoot (and adjust the below accordingly). You may also want to
-get some of the data in the C<sql/> directory into a database, which
-can be identified by the C<DBI_DSN> environment variable (see
-below). Furthermore, TABOO now allows you to set a separate username
-and password on a databse, and use different databases for different
-virtual hosts. A combination of C<DBI_DSN>, C<PGUSER> and
-C<PGPASSWORD> environment variables will achieve this.
+be sufficient to get the code that is currently in TABOO going. It is
+admittedly a bit messy and could use some reworking. Apart from
+installing TABOO, you would also need to copy the stuff in C<htdocs/>
+directory in the distribution to C</var/www> or some other
+DocumentRoot (and adjust the below accordingly). You will also be
+expected to modify the things that are in the C<site/> directory of
+the document root. The things in there are specifically examples, and
+needs modifying on a per-site basis. 
+
+You may also want to get some of the data in the C<sql/> directory
+into a database, which can be identified by the C<DBI_DSN> environment
+variable (see below). Furthermore, TABOO now allows you to set a
+separate username and password on a databse, and use different
+databases for different virtual hosts. A combination of C<DBI_DSN>,
+C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
 
   RewriteEngine on
@@ -143,6 +148,13 @@ C<PGPASSWORD> environment variables will achieve this.
   RewriteRule ^/user/submit/new$ /user/submit/new.xsp
 
   Alias /news/submit /var/www/news/submit.xsp 
+
+  Alias /login /var/www/login.xsp
+
+  <Location /css/>
+    SetHandler default-handler 
+  </Location>
+
 
   PerlModule AxKit
   SetHandler AxKit
@@ -171,7 +183,6 @@ C<PGPASSWORD> environment variables will achieve this.
   PerlSetVar TABOODataStore DB_File
   PerlSetVar TABOOArgs      "FileName => /tmp/session"
 
-  AxAddPlugin Apache::AxKit::Plugin::BasicSession
   AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::BasicSession
 
   PerlSetVar TABOOLoginScript /login.xsp

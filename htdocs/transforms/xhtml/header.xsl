@@ -12,12 +12,12 @@
       <h1>
 	<a rel="top" href="/">
 	  <xsl:value-of
-	    select="document('/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
+	    select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
 	</a>
       </h1>
       <p class="slogan">
 	<xsl:value-of
-	  select="document('/main.rdf')/rdf:RDF/rdf:Description/wn:slogan"/>
+	  select="document('/site/main.rdf')/rdf:RDF/rdf:Description/wn:slogan"/>
       </p>
     </div>
   </xsl:template>

@@ -30,7 +30,7 @@
 	<xsl:value-of select="i18n:include('homepage')"/>
       </dt>
       <dd>
-	<a href="mailto:{./user:uri}">
+	<a href="{./user:uri}">
 	  <xsl:value-of select="./user:uri"/>
 	</a>
       </dd>

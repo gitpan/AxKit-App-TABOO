@@ -14,8 +14,11 @@
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/news/xhtml/match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
-  <xsl:output encoding="utf-8"
-    media-type="text/xml" indent="yes"/>
+  <xsl:output encoding="utf-8" method="html"
+    media-type="text/html" indent="yes"/>
+  
+  <xsl:param name="request.headers.host"/>
+
   <xsl:template match="/">
     <html lang="en">
       <head>
@@ -29,14 +32,15 @@
 	    </xsl:otherwise>
 	  </xsl:choose>
 	  <xsl:text> | </xsl:text>
-	  <xsl:value-of select="document('/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
+	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
 	</title>
+	<link rel="stylesheet" type="text/css" href="/css/basic.css"/>
 	<link rel="up" href=".."/>
 	<link rel="top" href="/"/>
-     </head>
+      </head>
       <body> 
 	<xsl:call-template name="CreateHeader"/>
-     	<h2>
+     	<h2 id="sectionhead">
 	  <xsl:choose>
 	    <xsl:when test="taboo/category:category/category:type='stsec'">
 	      <xsl:value-of select="taboo/category:category/category:name"/>
@@ -46,16 +50,21 @@
 	    </xsl:otherwise>
 	  </xsl:choose>
 	</h2>
-	<xsl:choose>
-	  <xsl:when test="taboo[@type='list']">
-	    <table>
+	<xsl:variable name="uri" select="concat('http://',
+	  $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	<xsl:copy-of select="document($uri)"/>
+	<div class="main">
+	  <xsl:choose>
+	    <xsl:when test="taboo[@type='list']">
+	      <table>
+		<xsl:apply-templates select="//story:story"/>
+	      </table>
+	    </xsl:when>
+	    <xsl:otherwise>
 	      <xsl:apply-templates select="//story:story"/>
-	    </table>
-	  </xsl:when>
-	  <xsl:otherwise>
-	    <xsl:apply-templates select="//story:story"/>
-	  </xsl:otherwise>
-	</xsl:choose>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</div>
       </body>
     </html>
   </xsl:template>
