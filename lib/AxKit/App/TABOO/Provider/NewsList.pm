@@ -10,7 +10,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.073';
+our $VERSION = '0.074';
 
 =head1 NAME
 
@@ -90,7 +90,7 @@ use Apache::AxKit::Provider;
 
 use AxKit;
 use AxKit::App::TABOO::Data::Plurals::Stories;
-use AxKit::App::TABOO::Data::Plurals::Categories;
+use AxKit::App::TABOO::Data::Category;
 
 use Apache::AxKit::Plugin::BasicSession;
 
@@ -166,11 +166,10 @@ sub process {
   if ($self->{sectionid}) {
     # Iff a resource doesn't exist, it means that the section doesn't
     # exist, so we just check the list of sections
-    my $test = AxKit::App::TABOO::Data::Plurals::Categories->new();  
-    unless ($test->load(what => 'catname', 
-			limit => {type => 'stsec',
-				  catname => $self->{sectionid}}, 
-			entries => 1)) {
+    $self->{section} = AxKit::App::TABOO::Data::Category->new();  
+    unless ($self->{section}->load(what => '*', 
+				   limit => {type => 'stsec',
+					     catname => $self->{sectionid}})) {
       throw Apache::AxKit::Exception::Retval(
 					     return_code => 404,
 					     -text => "Not found by NewsList Provider.");
@@ -194,7 +193,7 @@ sub exists {
 
 sub key {
   my $self = shift;
-  return $self->{uri};
+  return $self->{uri} . "/" . $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 }
 
 
@@ -231,15 +230,39 @@ sub get_strref {
 			 limit => \%limit, 
 			 orderby => 'timestamp DESC', 
 			 entries => $self->{number});
+  $self->{stories}->addcatinfo;
+  $self->{stories}->adduserinfo;
   my $doc = XML::LibXML::Document->new();
   my $rootel = $doc->createElement('taboo');
+  $rootel->setAttribute('type', ($self->{list}) ? 'list':'stories');
+  $rootel->setAttribute('origin', 'NewsList');
+  if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} >= 5) {
+    $rootel->setAttribute('can-edit', '1');
+  }
   $doc->setDocumentElement($rootel);
   $self->{stories}->write_xml($doc, $rootel);
+  if ($self->{section}) {
+    $self->{section}->write_xml($doc, $rootel);
+  }
   $self->{out} = $doc;
   AxKit::Debug(10, Dumper($self->{out}->toString(1)));
 
   return \$self->{out}->toString(1);
 }
+
+sub get_styles {
+  my $self = shift;
+  
+  my @styles = (
+		{ type => "text/xsl",
+		  href => "/transforms/news/xhtml/newslist-provider.xsl" },
+		{ type => "text/xsl",
+		  href => "/transforms/insert-i18n.xsl" },
+	       );
+		
+  return \@styles;
+}
+
 
 =head1 URI USAGE
 
@@ -293,11 +316,15 @@ want to view this and then select what they want to read more about.
 
 =head1 TODO
 
-XSL Transformations need to be done soon.
-
 Since every resource comes with a C<lasttimestamp>, it should be relatively simple to implement C<mtime> better than it is now, but the question is if all code updates C<lasttimestamp> reliably enough...
 
-=head1 BUGS
+The C<get_styles> method is implemented, but just to "make it work
+right now". It needs to take many conditions into account, such as the
+mime type requested by the user. It is even possible it should be
+going into a parent class.
+
+
+=head1 BUGS/QUIRKS
 
 Well, it is an alpha, so there can be bugs...
 
@@ -305,7 +332,6 @@ It is non-trivial is to configure both the News and NewsList providers
 to work and at the same time having the submit.xsp in the same
 directory. There is a somewhat ad hoc example in L<AxKit::App::TABOO>
 now.
-
 
 
 =head1 SEE ALSO

@@ -166,22 +166,22 @@ sub addcatinfo {
     ${$self}{'primcat'} = \$cat;
 
     # We allow several secondary categories, so we may get an array to run through. 
-    my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
-    $cats->xmlelement("seccat");
-    foreach my $catname (@{${$self}{'seccat'}}) {
-      my $cat = AxKit::App::TABOO::Data::Category->new();
-      $cat->load(what => '*', limit => {catname => $catname});
-      $cats->Push($cat);
-    }
-    ${$self}{'seccat'} = \$cats;
-    my $frees = AxKit::App::TABOO::Data::Plurals::Categories->new();
-    $frees->xmlelement("freesubject");
-    foreach my $catname (@{${$self}{'freesubject'}}) {
-      my $cat = AxKit::App::TABOO::Data::Category->new();
-      $cat->load(what => '*', limit => {catname => $catname});
-      $frees->Push($cat);
-    }
-    ${$self}{'freesubject'} = \$frees;
+#      my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
+#      $cats->xmlelement("seccat");
+#      foreach my $catname (@{${$self}{'seccat'}}) {
+#        my $cat = AxKit::App::TABOO::Data::Category->new();
+#        $cat->load(what => '*', limit => {catname => $catname});
+#        $cats->Push($cat);
+#      }
+#      ${$self}{'seccat'} = \$cats;
+#      my $frees = AxKit::App::TABOO::Data::Plurals::Categories->new();
+#      $frees->xmlelement("freesubject");
+#      foreach my $catname (@{${$self}{'freesubject'}}) {
+#        my $cat = AxKit::App::TABOO::Data::Category->new();
+#        $cat->load(what => '*', limit => {catname => $catname});
+#        $frees->Push($cat);
+#      }
+#      ${$self}{'freesubject'} = \$frees;
 
     return $self;
 }

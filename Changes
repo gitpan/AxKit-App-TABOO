@@ -232,3 +232,20 @@ Revision history for Perl extension AxKit::App::TABOO.
 	- NewsList gets its URI documentation. 
 	- Configuration example in main TABOO.pm
 	- A few more cleanups.
+
+0.074	 2004-08-04 17:23
+	- Reorganized the directories with the XSLT files. 
+	- Wrote XSLT to transform to HTML for the NewsList Provider.
+	- Added plural addcatinfo and adduserinfo methods to Stories.
+	- NewsList will include some information about the section if
+	it exists and categories of each story.
+	- I found that the best way to do styling for the Providers
+	were actually to implement get_styles. Those that are there
+	now are rather minimal.
+	- Added some attributes to root elements of the Providers.
+	- Removed the html: prefix in control-html.xsl. This was a
+	bug, and the reason it worked was a bug in libxslt <= 1.1.7.
+	- Added the name of the logged-in user to the key in the
+	Providers. 
+	- Commented out the code to deal with secondary categories. 
+	- A few small changes.

@@ -19,4 +19,8 @@
   <text id="suggested-user-exists"> User name is allready in use! </text>
   <text id="suggested-user-stored"> User information was successfully stored! </text>
 
+  <text id="listing-everything"> Listing all stories </text>
+  <text id="edit"> Edit </text>
+
+
 </translations>

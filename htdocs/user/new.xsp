@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
-<?xml-stylesheet href="make-control.xsl" type="text/xsl"?>
-<?xml-stylesheet href="new2html.xsl" type="text/xsl"?>
-<?xml-stylesheet href="/insert-i18n.xsl" type="text/xsl"?>
+<?xml-stylesheet href="../transforms/user/make-control.xsl" type="text/xsl"?>
+<?xml-stylesheet href="../transforms/user/xhtml/new.xsl" type="text/xsl"?>
+<?xml-stylesheet href="../transforms/insert-i18n.xsl" type="text/xsl"?>
 <xsp:page
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"

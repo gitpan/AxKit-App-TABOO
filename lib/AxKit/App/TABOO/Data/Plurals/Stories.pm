@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.074';
 
 AxKit::App::TABOO::Data::Plurals::Stories->dbtable("stories");
 AxKit::App::TABOO::Data::Plurals::Stories->dbfrom("stories");
@@ -78,7 +78,6 @@ If there is no data that corresponds to the given arguments, this method will re
 
 =cut
 
-
 sub load {
   my ($self, %args) = @_;
   my @stories;
@@ -93,6 +92,34 @@ sub load {
   ${$self}{ENTRIES} = \@stories;
   return $self;
 }
+
+
+=item C<addcatinfo>
+
+=item C<adduserinfo>
+
+These two methods are implemented in a plurals context, and can be called on a plurals object just like a singular object. Each entry will have their data structure extended with user and category information.
+
+=cut
+
+
+sub addcatinfo {
+  my $self = shift;
+  foreach my $story (@{${$self}{ENTRIES}}) {
+    $story->addcatinfo;
+  }
+  return $self;
+}
+
+
+sub adduserinfo {
+  my $self = shift;
+  foreach my $story (@{${$self}{ENTRIES}}) {
+    $story->adduserinfo;
+  }
+  return $self;
+}
+
 
 =back
 

@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.073';
+our $VERSION = '0.074';
 
 
 # Preloaded methods go here.
@@ -133,6 +133,10 @@ get some of the data in the C<sql/> directory into a database called
 C<skepsis> or at least create this database and tables.
 
 
+  RewriteEngine on
+
+  RewriteRule ^/user/(.*[^\.xsp].*) /user/user.xsp?username=$1 
+
   Alias /news/submit /var/www/news/submit.xsp 
 
   PerlModule AxKit
@@ -144,10 +148,6 @@ C<skepsis> or at least create this database and tables.
 
   AxAddStyleMap text/xsl Apache::AxKit::Language::LibXSLT
 
-
-  # Commented out untill we get transformations for NewsList:
-  #AxAddURIProcessor text/xsl /news/provider2html.xsl "^/news/(.*)/(.*)"
-  #AxAddURIProcessor text/xsl /insert-i18n.xsl "^/news/(.*)/(.*)"
 
   <Location />
       AuthType Apache::AxKit::Plugin::BasicAuth
@@ -184,10 +184,10 @@ C<skepsis> or at least create this database and tables.
   </Location>
 
 
-  <LocationMatch ^/news/(submit|\.xsl$)>
+  <Location /news/submit>
   	PerlHandler AxKit
 	AxContentProvider Apache::AxKit::Provider::File
-  </LocationMatch>
+  </Location>
 
 
   <LocationMatch ^/news/(.+)/(.+)/($|comment)>

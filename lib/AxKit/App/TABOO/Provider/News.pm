@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.073';
+our $VERSION = '0.074';
 
 =head1 NAME
 
@@ -147,7 +147,7 @@ sub process {
 # should return a unique identifier for the resource.
 sub key {
   my $self = shift;
-  return $self->{uri};
+  return $self->{uri} . "/" . $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 }
 
 # sub: exists
@@ -204,6 +204,11 @@ sub get_strref {
 
     my $doc = XML::LibXML::Document->new();
     my $rootel = $doc->createElement('taboo');
+    $rootel->setAttribute('type', 'story');
+    $rootel->setAttribute('origin', 'News');
+    if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} >= 5) {
+      $rootel->setAttribute('can-edit', '1');
+    }
     $doc->setDocumentElement($rootel);
     # ===============================================
     # Main logic of what to display goes here
@@ -270,6 +275,22 @@ sub get_strref {
   return \$self->{out}->toString(1);
 }
 
+
+
+sub get_styles {
+  my $self = shift;
+  
+  my @styles = (
+		{ type => "text/xsl",
+		  href => "/transforms/news/xhtml/news-provider.xsl" },
+		{ type => "text/xsl",
+		  href => "/transforms/insert-i18n.xsl" },
+	       );
+		
+  return \@styles;
+}
+
+
 =head1 URI USAGE
 
 The URI in the News Provider consists of several parts that is parsed by the Provider and used directly to construct the objects that contain the data we wish to send to the user. 
@@ -333,7 +354,14 @@ sub _expand_root {
 
 =head1 TODO
 
-Since every resource comes with a C<lasttimestamp>, it should be relatively simple to implement C<mtime> better than it is now, but the question is if all code updates C<lasttimestamp> reliably enough...
+Since every resource comes with a C<lasttimestamp>, it should be
+relatively simple to implement C<mtime> better than it is now, but the
+question is if all code updates C<lasttimestamp> reliably enough...
+
+The C<get_styles> method is implemented, but just to "make it work
+right now". It needs to take many conditions into account, such as the
+mime type requested by the user. It is even possible it should be
+going into a parent class.
 
 =head1 BUGS
 

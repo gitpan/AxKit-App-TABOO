@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="NULL" type="application/x-xsp"?>
+<xsp:page
+  xmlns:xsp="http://www.apache.org/1999/XSP/Core"
+  xmlns="http://www.w3.org/1999/xhtml">
+
+  <html>
+    <head>
+      <title>TABOO exploration shortcuts</title>
+    </head>
+    <body>
+      <h1>TABOO shortcuts</h1>
+      <p>This file simply contains a few shortcut links to help
+       explore functionality of the <a href="http://www.kjetil.kjernsmo.net/software/TABOO/">TABOO</a> implementation.</p>
+      <p>The current version is 0.074</p>
+
+      <h2>User stuff</h2>
+
+      <h3>Log in as something</h3>
+      <p>You may have to delete some cookies when logging in and out.</p>
+      <ul>
+	<li><a
+	    href="login.xsp?credential_0=bar&amp;passwd=trustno1">Login in
+	    as bar</a> (has authlevel 5 Editor)</li>
+	<li><a
+	    href="login.xsp?credential_0=foo&amp;passwd=trustno1">Login in
+	    as foo</a> (has authlevel 1 Foo)</li>
+	<li>Log in as something else:
+	  <form action="login.xsp">
+	    <p>Username: <input type="text" name="credential_0"/>
+	      Password: <input type="text" name="passwd"/> 
+	      <input type="submit" name="testsub" value="Log
+		in"/></p>
+	  </form>
+	</li>
+      </ul>
+      
+      <h3>Editing user info</h3>
+      <ul>
+	<li><a href="user/kjetil">See user kjetil
+	    info</a>. That's my user, with God-like powers! Thus, you can't
+	  do a lot of changes to this user... (The update button is a TODO) </li>
+	<li><a href="user/bar">See user bar</a>. If
+	  logged in as bar, you can change a few things, if logged in as
+	  foo, not a lot.</li>
+	<li><a href="user/foo">See user foo</a>. If
+	    logged in as bar, you can give this user higher authlevel,
+	    for example (but please don't, instead create your own
+	    user to play with).</li>
+	<li><form action="user/user.xsp">See Username 
+	    <input type="text" name="username"/>
+	    <input type="submit" name="testsub" value="Go"/></form>
+	</li>
+      </ul>
+    
+      <h3>New user</h3>
+      <p><a href="user/new">New user registration</a></p>
+
+      <h2>Story</h2>
+      <h3>Looking at it</h3>
+      <p>Illegal operations in this section will result in a Server
+      Error. I don't know why, because it should display proper
+      errors, but it is not really a problem with my code, I think.</p>
+      <ul>
+	<li><a href="/news/testsec/firsttest/">One test</a> that has
+	been approved by an editor. Anybody can look.</li>
+	<li><a href="/news/features/coolhack/">Another example</a>.</li>
+	<li><a href="/news/features/smallcats/">This has not been
+	approved by an editor</a>, thus, you'll need at least
+	authlevel 4 to view it.</li>
+	<li><a href="/news/features/coolhack/comment/all">This is an
+	example with all comments</a> but the transformations are
+	under development, so the comments doesn't show yet. Besides,
+	in this release the Plurals stuff for comments hasn't been
+	implemented, so this may crash...</li>
+      </ul>
+
+      <p>
+	The format for URIs to your stories are straightforward, have
+	a look at those above, but generally, it goes:
+	<code>/news/sectionid/storyname/</code>. Just insert your
+	the section and story name you choose.
+      </p>
+
+      <h3>Submission</h3>
+      <p><a href="news/submit">The Submission Page</a>. It'll
+      behave very differently depending on the priviliges you have
+      when you log in. </p>
+      <p>
+	You must log in as at least guest, which is not possible right now,
+	but will be automatic in the future. For now, log in as
+	something above. 
+      </p>
+      <p>
+	With authlevel above 5, you will be able to mark an article as
+	OK, as well as give it a proper name and change the
+	section. Non-editors will only be able to submit to a
+	"submission queue", and the article will be given a number. 
+      </p>
+
+      <h3>Editing</h3>
+      <p>
+	If you submit something as a lower-privileged user, the
+	article will go to the submission queue with a number to
+	identify it, which can be found by <a
+	  href="/news/subqueue/list">listing the submission queue</a>. If you <a
+	href="news/submit.xsp">create a story</a> when logged in as
+	e.g. <a
+	href="login.xsp?credential_0=bar&amp;passwd=trustno1">bar</a>,
+	you can enter the storyname and sectionid yourself, then you
+	my try to edit it afterwards, by adding a <code>edit</code>
+	query parameter. 
+	</p>
+	<form action="/news/submit.xsp">
+	    <p>Storyname: <input type="text" name="storyname"/>
+	      Sectionid: <input type="text" name="sectionid"/> 
+	      <input type="submit" name="edit" value="Try it!"/></p>
+	</form>
+      
+      <h3>Listing</h3>
+      <p>
+	It is now possible to make lists of stories as well. Like with
+	looking at individual stories, this is done by manipulating
+	the URI in easy to understand ways. You'll get the lists, and
+	if you are authorized to edit, you'll see an edit link as well </p>
+	<ol>
+	<li>The URL <a href="/news/">starts with
+	<code>/news/</code></a>. That'll get you everything you're
+	authorized to see and the only thing it will not contain is
+	the extended version of the content. Only going to the
+	individual stories will get you that. For some reason, this
+	works at my development system, but not here...</li>
+	<li>If you want to get all stories for a section, you will
+	then append the section ID, for example <a href="/news/features"><code>/features</code></a>.</li>
+	<li>If you are logged in as editor, you will get all the stories you
+	  are privileged to see, including those everybody sees and
+	  those not yet approved. If you want to see only those that are
+	  yet to be approved append: 
+	  <ul>
+	    <li><a
+		href="/news/subqueue/editor"><code>/editor</code></a> if
+	      you want to see only those waiting for approval.</li>
+	    <li>or <a href="/news/testsec/unpriv"><code>/unpriv</code></a> if
+	      you want to see what the common people see.</li>
+	  </ul>
+	</li>
+	<li>If you want to be even less verbose, say you'd rather just
+	  want a list, one story per line, then you can on any URL <a
+	    href="/news/list">append <code>/list</code></a>.</li>
+	<li>If you feel that the page was getting a little long or
+	  short, you can append a number of articles to view, <a
+	href="/news/list/4"><code>/4</code></a> for example.</li>
+	</ol>
+<p>
+Note that the number of articles goes last in the URL, always, if you
+give it at all (the server admin sets a default what you get if you
+don't set it). The <code>/list</code> goes second last, ot last if you
+do not supply a number. The section id goes second, just after
+<code>/news/</code>, always.
+
+</p>
+
+<p>
+You may now see what I'm getting at: By using these URLs, building a
+page with different stories from different sources will be a simple
+exercise in aggregation... 
+
+</p>
+<p>
+Some more examples:
+</p>
+<ul>
+<li><a href="/news/features/editor">Anything for
+	    the editor in Features?</a></li>
+<li><a href="/news/subqueue/list">The (in)famous
+	    Submission Queue List.</a></li>
+<li><a href="/news/25">Max 25 stories from the site.</a></li>
+</ul>
+<p>
+Didn't see that many stories...? Go and <a
+	  href="/news/submit.xsp">submit some, then</a>!
+</p>
+
+    </body>
+  </html>
+</xsp:page>
+	
+
+
