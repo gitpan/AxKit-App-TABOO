@@ -215,3 +215,20 @@ Revision history for Perl extension AxKit::App::TABOO.
 
 0.071  	 2004-07-15 17:50
 	- Forgot to add the NewsList Provider to the MANIFEST. 
+
+0.072 	 2004-07-15 17:52
+	- Uhm, was I rushing this....? 
+
+0.073 	 2004-07-17 14:10
+	- Mainly a bugfix and documentation release. 
+	- Found a way to use regex in the Apache config to accomodate
+	for all the things I have in /news/
+	- Use /news/submit rather than /news/submit.xsp
+	- Some minor things in the Story XSP and Data, 
+	       + I had forgot to have the reimplemented load method,
+	       so it didn't return undef. 
+	       + get-story now throws 404 if it can't find the story
+	       to be edited.
+	- NewsList gets its URI documentation. 
+	- Configuration example in main TABOO.pm
+	- A few more cleanups.

@@ -10,11 +10,28 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.073';
 
 =head1 NAME
 
 AxKit::App::TABOO::Provider::NewsList - Provider for listing news stories in TABOO
+
+=head1 SYNOPSIS
+
+In the Apache config:
+
+  <Location /news/>
+  	PerlHandler AxKit
+        AxContentProvider AxKit::App::TABOO::Provider::NewsList
+    	PerlSetVar TABOOListDefaultRecords 20
+    	PerlSetVar TABOOListMaxRecords 200
+  </Location>
+
+
+Please note that this should go B<before> the configuration of the
+L<AxKit::App::TABOO::Provider::NewsList> Provider if you are using
+both.
+
 
 =head1 DESCRIPTION 
 
@@ -23,7 +40,12 @@ therefore contains no method that anybody should use for anything. For
 that reason, this documentation deals with what you should expect to
 be returned for different URIs.
 
-It will return lists of news stories, so it makes use of Plural Stories objects. 
+It will return lists of news stories, so it makes use of Plural
+Stories objects. Stories are returned sorted by timestamp, most recent
+story first.
+
+This Provider will return either the story except the content field
+(which is unsuitable for longer lists of comments), or just title, submitter names and so on, depending on the URI.
 
 In accordance with the TABOO philosophy, it interacts with Data
 objects, that are Perl objects responsible for retrieving data from a
@@ -32,7 +54,28 @@ etc. In contrast with the News provider, this provider mainly
 interacts with Plural objects to make lists of stories. Also, it
 doesn't deal with comments.
 
+=head1 CONFIGURATION DIRECTIVES
+
+=over
+
+=item TABOOListDefaultRecords
+
+The maximum number of stories TABOO will retrieve from the data store
+if the user gives no other instructions in the URI (see below). It is
+recommended that you set this to some reasonable value.
+
+=item TABOOListMaxRecords
+
+The maximum number of stories TABOO will retrieve from the data store
+in any case. If the user requests more than this number, a 403
+Forbidden error will be returned. It is highly recommended that you
+set this to a value you think your server can handle.
+
+=back
+
 =cut
+
+
 
 use Data::Dumper;
 use XML::LibXML;
@@ -198,12 +241,59 @@ sub get_strref {
   return \$self->{out}->toString(1);
 }
 
+=head1 URI USAGE
+
+Like the News Provider, the URI in this Provider consists of several
+parts that is parsed and used directly to construct the objects that
+contain the data we wish to send to the user.
+
+The URIs currently begin with C</news/>. This should be made
+customizable in the future, but currently needs to be hardcoded in the
+httpd.conf and is hardcoded in the Provider itself.
+
+In this provider, C</news/> will return all the news stories, only
+limited in number by the TABOOListMaxRecords directive.
+
+
+Optionally, one may then append a C<sectionid>, to get the stories in
+that section.
+
+By default, any user will see the stories they are authorized to see,
+so a higher privileged user will see both stories that are approved by
+an editor and stories that have yet to be approved. That user may then
+append C</editor>, to see only the stories that has not yet been
+approved, I<or> C</unpriv> to see what unprivileged users see.
+
+The default is to return all information except the
+C<content>-field. With this information, one can build a page to
+display several stories, but with links to the whole story.
+
+In all cases, if you rather want a simple list of titles, timestamp
+and submitter information, you may append C</list> to the URI.
+
+At the end of the URI, you may also append an integer representing how
+many stories you want. This number defaults to the
+TABOOListDefaultRecords value, but may be both smaller and larger than
+that, however not larger than TABOOListMaxRecords.
+
+To take some complete examples:
+
+  /news/features/editor/list/5
+
+This would, if the user is logged in and authorized as an editor
+return a simple list of up to 5 stories from the features section that
+needs to be approved. The list is suitable to get an overview.
+
+  /news/features/30
+
+will return up to 30 stories from the features section, where the
+C<title>, C<minicontent>, etc is included. Normal users will often
+want to view this and then select what they want to read more about.
+
 
 =head1 TODO
 
-Actually, what's non-trivial is to configure both the News and NewsList providers to work at the same time. That's a TODO for the next release. 
-
-XSL Transformations need to be done soon too.
+XSL Transformations need to be done soon.
 
 Since every resource comes with a C<lasttimestamp>, it should be relatively simple to implement C<mtime> better than it is now, but the question is if all code updates C<lasttimestamp> reliably enough...
 
@@ -211,9 +301,16 @@ Since every resource comes with a C<lasttimestamp>, it should be relatively simp
 
 Well, it is an alpha, so there can be bugs...
 
+It is non-trivial is to configure both the News and NewsList providers
+to work and at the same time having the submit.xsp in the same
+directory. There is a somewhat ad hoc example in L<AxKit::App::TABOO>
+now.
+
+
 
 =head1 SEE ALSO
 
+L<AxKit::App::TABOO::Data::Provider::News>,
 L<AxKit::App::TABOO::Data::Plurals::Stories>
 
 

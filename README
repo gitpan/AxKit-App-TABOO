@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.07
-============================
+AxKit/App/TABOO version 0.073
+=============================
 
 INTRODUCTION
 
@@ -61,17 +61,15 @@ The webshop has a lot of Data objects, but had a fixed deadline that
 whooshed by so it has now been put on hold. But it is actually not
 very far from ready to manage a simple webshop.
 
-I have introduced "Plural" data objects now, and that's the main
-reason for releasing "development releases". This is a major
-conceptual step, and the whole "Comments" code need a review to
-conform with the new ideas. Thus, there are some code in the present
-release that used to work that is somewhat flaky. And it is only
-second on the TODO list...
+Plural objects is a conceptual step up which has recently been
+introduced to allow manipulation of more than one Data object. 
+The whole "Comments" code need a review to conform with the new
+ideas. Thus, there are some code in the present release that used to
+work that is somewhat flaky. And it is only second on the TODO list...
 
 TABOO can now also list News stories with the NewsList Provider. The
-headache is to configure it in the Apache config... That's a TODO for
-the next version, as well as writing transformations to display the
-data.
+TODO for the next version is to write transformations to display the
+data. 
 
 But then, the mantra is "release early", isn't it? And besides, Real
 Soon Now this should have evolved into something I can put on a

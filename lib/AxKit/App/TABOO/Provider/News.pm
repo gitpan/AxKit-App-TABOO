@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.073';
 
 =head1 NAME
 
@@ -21,12 +21,13 @@ AxKit::App::TABOO::Provider::News - News Provider for TABOO
 
 In the Apache config:
 
-   <LocationMatch ^/news/(.*)/(.*)/>
+  <LocationMatch ^/news/(.+)/(.+)/($|comment)>
         PerlHandler AxKit
         AxContentProvider AxKit::App::TABOO::Provider::News
-   </LocationMatch>
+  </LocationMatch>
 
 
+Please note that this should go B<after> the configuration of the L<AxKit::App::TABOO::Provider::NewsList> Provider if you are using both.
 
 
 
@@ -158,7 +159,7 @@ sub exists {
 
 
 # sub: mtime
-# Return the modification time in days before the current time.
+# Return the modification time
 # It's used to test the validity of cached data.
 sub mtime {
   my $self=shift;
@@ -338,6 +339,9 @@ Since every resource comes with a C<lasttimestamp>, it should be relatively simp
 
 Well, it is an alpha, so there can be bugs...
 
+=head1 SEE ALSO
+
+L<AxKit::App::TABOO::Provider::NewsList>.
 
 
 =head1 FORMALITIES

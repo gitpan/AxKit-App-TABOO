@@ -22,7 +22,7 @@
 	  <xsl:text>Story Stored</xsl:text>
 	</xsl:if>
 	
-	<form method="GET" action="submit.xsp">
+	<form method="GET" action="submit">
 	  <fieldset>
 	    <xsl:apply-templates select="./control"/>
 	  </fieldset>

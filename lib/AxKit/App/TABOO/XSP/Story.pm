@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head1 NAME
 
@@ -119,7 +119,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
     }
 
     my $timestamp = localtime;
-    unless ($args{'timestamp') {
+    unless ($args{'timestamp'}) {
 	$args{'timestamp'} = $timestamp->datetime;
     }
     unless ($args{'lasttimestamp'}) {
@@ -198,20 +198,19 @@ sub get_story : struct attribOrChild(storyname,sectionid) {
     }
 
     my $story = AxKit::App::TABOO::Data::Story->new();
-    $story->load(what => '*', limit => {sectionid => $attr_sectionid, storyname=> $attr_storyname});
+    unless ($story->load(what => '*', limit => {sectionid => $attr_sectionid, storyname=> $attr_storyname})) {
+      throw Apache::AxKit::Exception::Retval(
+					     return_code => 404,
+					     -text => "Requested story $attr_storyname not found.");
+    }
     $story->adduserinfo();
-
-
     unless ($story->editorok) {
       if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => 401,
 					       -text => "Authentication and higher priviliges required to load story");
       }
-    } 
-
-
-
+    }
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story-loaded');
     $doc->setDocumentElement($root);

@@ -164,15 +164,12 @@ This tag will store the contents of an Apache::Request object in the data store,
 
 =cut
 
-#'
-
 sub new_user
 {
     return << 'EOC';
     my %args = $r->args;
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     if($user->load_name($args{'username'})) {
-	warn "here";
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => FORBIDDEN,
 					       -text => "User exists allready")

@@ -96,7 +96,7 @@ This class reimplements the load method, to support the fact that some data may 
 =over
 
 
-=item * The C<section> which the story has been posted to. Typically, this string will be taken directly from the URI. The use of sections makes it possible to divide the site in different ways. It is not intended that sections will coincide with L<categories|AxKit::App::TABOO::Data::Category>, rather one can have sections with "small news", i.e. blatant rip-offs of other news sites with a few comments added, or longer articles with more unique content.
+=item * The C<sectionid> which the story has been posted to. Typically, this string will be taken directly from the URI. The use of sections makes it possible to divide the site in different ways. As of 0.07, sections are a type of L<category|AxKit::App::TABOO::Data::Category>, specifically C<stsec>, but they are not intended to be like the C<categ> types. Rather, one can have sections with "small news", i.e. blatant rip-offs of other news sites with a few comments added, or longer articles with more unique content.
 
 =item * C<storyname> is a unique identifier for the story. This too will typically be derived from the URI directly.
 
@@ -111,6 +111,7 @@ sub load
 {
   my ($self, %args) = @_;
   my $data = $self->_load(%args);
+  return undef unless ($data);
   if ($data) { ${$self}{'ONFILE'} = 1; }
   foreach my $key (keys(%{$data})) {
     if (defined(${$data}{$key}) && (${$data}{$key} =~ m/^\{(\S+)\}$/)) { # Support SQL3 arrays ad hoc

@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.072';
+our $VERSION = '0.073';
 
 
 # Preloaded methods go here.
@@ -94,25 +94,113 @@ above objects at a time, something that's often necessary. It also
 provides some containment of complexity, taking worries off of your
 head!
 
-Then, there's an AxKit Provider L<AxKit::App::TABOO::Provider::News>,
-that makes use of the four above subclasses, especially Story and
-Comment, to create a page containing an editor-review story and
-user-submitted comments. By simply manipulating the URI in
-easy-to-understand ways, you can load just the story, view the
-comments, separately, in a list or as a thread.
+Then, there are two AxKit Providers:
+L<AxKit::App::TABOO::Provider::News> and
+L<AxKit::App::TABOO::Provider::NewsList>, that makes use of the above
+subclasses, especially Story and Comment in the first case and the
+Stories in the second. The first provider creates a page containing an
+editor-reviewed story and user-submitted comments. The second makes
+lists of stories. By simply manipulating the URI in easy-to-understand
+ways, you can load just the story, view the comments, separately, in a
+list or as a thread, or get simple lists or good overviews of stories.
 
-Currently, it supplies three Taglibs, L<User|AxKit::App::TABOO::XSP::User>,
-L<Story|AxKit::App::TABOO::XSP::Story> and L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide several tags that you may use interface with the Data objects. 
+Currently, it supplies three Taglibs,
+L<User|AxKit::App::TABOO::XSP::User>,
+L<Story|AxKit::App::TABOO::XSP::Story> and
+L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide
+several tags that you may use interface with the Data objects.
 
-Some XSP and XSLT have been written that allows you to enter stories and the News Provider now has some XSLT to produce HTMLized output. 
+Some XSP and XSLT have been written that allows you to enter and edit
+stories, etc.
 
 Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
 editing the information of existing users.
 
-I still have a lot to learn about XSLT, and these are worked on every day, but please try them out.
+As of 0.04, I have tried to include a final step in the stylesheet
+chain, which can take all strings of text from a separate XML file and
+insert them in the final product. This will hopefully make it easy to
+provide many translations with TABOO.
 
-As of 0.04, I have tried to include a final step in the stylesheet chain, which can take all strings of text from a separate XML file and insert them in the final product. This will hopefully make it easy to provide many translations with TABOO.  
+=head1 CONFIGURATION EXAMPLE
+
+The following is most of the author's AxKit configuration, and should
+be sufficient to get the code that is currently in TABOO going. Apart
+from installing TABOO, you would also need to copy the stuff in
+C<htdocs/> directory in the distribution to C</var/www> or some other
+DocumentRoot (and adjust the below accordingly). You may also want to
+get some of the data in the C<sql/> directory into a database called
+C<skepsis> or at least create this database and tables.
+
+
+  Alias /news/submit /var/www/news/submit.xsp 
+
+  PerlModule AxKit
+  SetHandler AxKit
+
+  PerlModule Apache::AxKit::Plugin::BasicAuth
+
+  AxAddStyleMap application/x-xsp Apache::AxKit::Language::XSP
+
+  AxAddStyleMap text/xsl Apache::AxKit::Language::LibXSLT
+
+
+  # Commented out untill we get transformations for NewsList:
+  #AxAddURIProcessor text/xsl /news/provider2html.xsl "^/news/(.*)/(.*)"
+  #AxAddURIProcessor text/xsl /insert-i18n.xsl "^/news/(.*)/(.*)"
+
+  <Location />
+      AuthType Apache::AxKit::Plugin::BasicAuth
+      AuthName TABOO
+  </Location>
+
+
+  # Session Management
+  AxAddPlugin Apache::AxKit::Plugin::BasicSession
+  PerlSetVar TABOODataStore DB_File
+  PerlSetVar TABOOArgs      "FileName => /tmp/session"
+
+  AxAddPlugin Apache::AxKit::Plugin::BasicSession
+  AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::BasicSession
+
+  PerlSetVar TABOOLoginScript /login.xsp
+
+  AxAddXSPTaglib AxKit::XSP::BasicAuth
+  AxAddXSPTaglib AxKit::XSP::BasicSession
+
+  AxAddXSPTaglib AxKit::XSP::Param
+  AxAddXSPTaglib AxKit::XSP::QueryParam
+  AxAddXSPTaglib AxKit::XSP::Sendmail
+
+  AxAddXSPTaglib AxKit::App::TABOO::XSP::User
+  AxAddXSPTaglib AxKit::App::TABOO::XSP::Story
+  AxAddXSPTaglib AxKit::App::TABOO::XSP::Category
+
+  <Location /news/>
+  	PerlHandler AxKit
+        AxContentProvider AxKit::App::TABOO::Provider::NewsList
+    	PerlSetVar TABOOListDefaultRecords 20
+    	PerlSetVar TABOOListMaxRecords 200
+  </Location>
+
+
+  <LocationMatch ^/news/(submit|\.xsl$)>
+  	PerlHandler AxKit
+	AxContentProvider Apache::AxKit::Provider::File
+  </LocationMatch>
+
+
+  <LocationMatch ^/news/(.+)/(.+)/($|comment)>
+        PerlHandler AxKit
+        AxContentProvider AxKit::App::TABOO::Provider::News
+  </LocationMatch>
+
+
+This should get you the authentication and authorization code you
+need, set up XSP and the taglibs you need. Note that the order of the
+Locations matter. The second of them is rather hackish, it doesn't
+feel good, but it was the way I it working...
+
 
 
 =head1 TODO
@@ -135,7 +223,10 @@ differently, depending on how this projects evolves, what new things I
 learn (this is very much a learning process for me), and what kind of
 feedback hackers provide. 
 
-The new webshop code is very badly documented, and since the deadline for it whooshed by, it is now halted a bit... Some of the code is quite OK though, allthough it doesn't work yet. TABOO will make a great webshop platform...!
+The new webshop code is very badly documented, and since the deadline
+for it whooshed by, it is now halted a bit... Some of the code is
+quite OK though, allthough it doesn't work yet. TABOO will make a
+great webshop platform...!
 
 
 =head1 SUPPORT
@@ -150,7 +241,8 @@ needs to be reworked to support the new Plurals concept, but that's
 not at the top of my list for the moment.
 
 
-There are surely some... Please report any you find through CPAN RT: http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO .
+There are surely some... Please report any you find through CPAN RT:
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO .
 
 =head1 AUTHOR
 
