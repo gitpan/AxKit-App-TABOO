@@ -1,5 +1,15 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.094   2004-11-14 05:08
+	- The polishing comments release.
+	  * It can now use a real, RESTy URI, just attach /respond to
+	    reply.
+	  * Make corresponding links to make it easy.
+	  * Some weird errors in the construction of the request
+	    arguments were corrected.
+	  * Made it show the comment one responds to.
+	- A few minor fixes and a bit of testing.
+
 0.093   2004-11-13 04:45
 	- The "Entering comments" initial release.
 	  * New Comment XSP Taglib.

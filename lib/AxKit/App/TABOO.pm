@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.093';
+our $VERSION = '0.094';
 
 
 1;
@@ -116,9 +116,7 @@ Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
 editing the information of existing users.
 
-It allows attaching comments to the news stories, and allthough
-comments can be both read and written, this code needs more work, a
-TODO for the next release.
+It allows attaching comments to the news stories and any comment can simply get a C</respond> appended on its URI to allow for entering a response to it, and this is also easily done through links. It needs a bit more polish, though.
 
 It can also format user-entered text with L<Formatter::HTML::Textile>.
 
@@ -216,12 +214,12 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
   # Providers for News, depending somewhat on the paths.
 
-  <Location /news/>
-        PerlHandler AxKit
+  <LocationMatch ^/news/[^(respond$)]*>
+  	PerlHandler AxKit
         AxContentProvider AxKit::App::TABOO::Provider::NewsList
-        PerlSetVar TABOOListDefaultRecords 20
-        PerlSetVar TABOOListMaxRecords 200
-  </Location>
+    	PerlSetVar TABOOListDefaultRecords 20
+    	PerlSetVar TABOOListMaxRecords 200
+  </LocationMatch>
 
 
   <Location /news/submit>
@@ -233,6 +231,12 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   <LocationMatch ^/news/(.+)/(.+)/($|comment)>
         PerlHandler AxKit
         AxContentProvider AxKit::App::TABOO::Provider::News
+  </LocationMatch>
+
+
+  <LocationMatch ^/news/.+/respond$>
+   	PerlHandler AxKit
+  	AxContentProvider Apache::AxKit::Provider::File
   </LocationMatch>
 
 
@@ -300,9 +304,6 @@ A lot. Because this is a POD, I'm stopping with my lofty visions here
 (there's more of that in the README). It is still in sort of an alpha
 state, but Real Soon Now it should be a beta useful enough to put on a
 test website and have random folks playing with.
-
-Retrieving comments from the data store now works again, and you can
-now enter comments, but this needs more work, and is upcoming.
 
 Allthough it is not included in the present distro, I have also mostly
 finished an Article Provider, which is intended to be used for more

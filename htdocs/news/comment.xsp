@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="NULL" type="application/x-xsp"?>
-<?xml-stylesheet href="../transforms/news/xhtml/comment.xsl" type="text/xsl"?>
-<xsp:page
+<?xml-stylesheet href="/transforms/news/xhtml/comment.xsl" type="text/xsl"?>
+<xsp:page xml:base="/news/"
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
   xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
   xmlns:cust="http://www.kjetil.kjernsmo.net/software/TABOO/NS/CustomGrammar"
@@ -48,7 +48,15 @@
 	<ct:value><i18n:insert>preview</i18n:insert></ct:value>
       </ct:control>
       
+      <param:if-regex name="parentcpath" value="/\w+">
+	<comm:get-comment>
+	  <comm:storyname><param:get name="storyname"/></comm:storyname>
+	  <comm:sectionid><param:get name="sectionid"/></comm:sectionid>
+	  <comm:commentpath><param:get name="parentcpath"/></comm:commentpath>
+	</comm:get-comment>
+      </param:if-regex>
     </param:unless-exists>
   </cust:submit>
 </xsp:page>
+
 

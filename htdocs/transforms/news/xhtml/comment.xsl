@@ -52,7 +52,7 @@
 	  
 	  <div class="main">
 	    
-	    <xsl:apply-templates select="//comm:comment-submission/comm:reply"/>
+	    <xsl:apply-templates select="./comm:comment-submission/comm:reply"/>
 	    
 	    <xsl:if test="//comm:store=1">
 	      <xsl:value-of select="i18n:include('comment-stored')"/>
@@ -65,11 +65,18 @@
 	      </p>
 	    </xsl:if>
 	    
-	    <form method="post" action="comment.xsp">
+	    <form method="post" action="">
 	      <div class="fields">
 		<xsl:apply-templates select="./ct:control"/>
 	      </div>
 	    </form>
+
+	    <xsl:if test="not(//comm:store=1)">
+	      <div class="reply-to">
+		<h2><xsl:value-of select="i18n:include('you-respond-to')"/></h2>
+		<xsl:apply-templates select="./comm:comment-loaded/comm:reply"/>
+	      </div>
+	    </xsl:if>
 	  </div>
 	</div>
 	<xsl:call-template name="CreateFooter"/>
@@ -78,8 +85,3 @@
   </xsl:template>
   
 </xsl:stylesheet>
-
-
-
-
-

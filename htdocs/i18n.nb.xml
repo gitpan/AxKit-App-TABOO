@@ -19,8 +19,12 @@
   <text id="comment-descr"> Tittelen til kommentaren </text>
   <text id="comment-title"> Tittel </text>
 
+  <text id="comment"> kommentar </text>
   <text id="comments"> Kommentarer </text>
   <text id="comments-verb"> kommenterer </text>
+  <text id="you-respond-to"> Du svarer på denne kommentaren: </text>
+  <text id="reply-to-this"> Svar på denne </text>
+  
 
   <text id="minicontent"> Første avsnitt </text>
   <text id="minicontent-descr"> Skriv inn det første avsnittet til

@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.093
+AxKit/App/TABOO version 0.094
 =============================
 
 INTRODUCTION
@@ -67,7 +67,7 @@ TABOO can now also list News stories with the NewsList Provider, and
 there is a rudimentary front page, which is an aggregate of a
 newslist. The "comments" code has been rewritten and stylesheets has
 been begun, but needs more work, and posting comments is now
-supported, but it is easy to do, making it that is next on the TODO list. 
+supported, but it needs some polishing.
 
 TABOO can run on different virtual hosts and operate on different
 databases. 

@@ -14,30 +14,30 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 f3482dba50834aabf0b5652076419214cc65ad56 Changes
+SHA1 84caa550a95840c5c24ca4e552301de60fcb8d9b Changes
 SHA1 2655b4c481a44799a36fba7cb92f66d7eaa3b3ba MANIFEST
 SHA1 5bcd048486d08dc218c5c5a5e2d4aedcb06805b6 MANIFEST.SKIP
-SHA1 428a6c8a3b747f15d697d5a55a81f8643f1bdd7c META.yml
+SHA1 b079a538bbce2a0a1848da2666813137cf9c2f8f META.yml
 SHA1 7cc9034322ad8514f918738a6be675d3d8a79aed Makefile.PL
-SHA1 57b36f8cee5bb6aa383e8fd3296411ccc7a3ff8c README
+SHA1 2b3f9c8ded121b7ea34da89f0ed77bf7b67e3d75 README
 SHA1 e8bf6abaaef1268d81e0f04c1b6094b341f0afbb htdocs/css/basic.css
 SHA1 c18248e6ce242912117e85a51408e13f0736c642 htdocs/guest-login.xsp
-SHA1 725d7cd10fe644bf33dab1390173c78f7fab94bb htdocs/i18n.en.xml
-SHA1 7a19a7b85bd9af643704d645eee364683fa0d928 htdocs/i18n.nb.xml
+SHA1 30e3ed9ade17cf6a1e34af2c22192544cefb5458 htdocs/i18n.en.xml
+SHA1 84734dfc54a64f0086ad15d6b80e370a182279cc htdocs/i18n.nb.xml
 SHA1 41f82abcecf070656ca515451adffb8b062bbd2d htdocs/index.xsp
 SHA1 08ba916e5d7fcf4d63f565464d43f3e369d8bf97 htdocs/login.xsp
 SHA1 edc10fe60ff8ba6936005bcc2905a37e90c1c1ca htdocs/menu.xsp
-SHA1 052711742f8de95a22c94b3348ec57754b49c013 htdocs/news/comment.xsp
+SHA1 2ac3245fc74c91b683d66c796a6eb6dce297aa8a htdocs/news/comment.xsp
 SHA1 7e7fbbf0fca9e01405e0a4e42641cb626a34c042 htdocs/news/submit.xsp
 SHA1 6370a17d437a152ce24e979ea1d3286d81f19b8e htdocs/site/main.rdf
 SHA1 1d555ae92515d42b507f6de120667c9896065eec htdocs/transforms/index-aggregate.xsl
 SHA1 504fce9351e98e0bfa247715d46127c9b59f67f4 htdocs/transforms/insert-i18n.xsl
 SHA1 18ba2002ac2581d09c1dc47908be22a4ea421eb7 htdocs/transforms/news/insert-values-edit.xsl
-SHA1 7052f81926e8ba9ac19d3b2d7a83a0b67861f374 htdocs/transforms/news/xhtml/comment.xsl
-SHA1 a0dda60c8388dbf7e7f1388297be87317443424c htdocs/transforms/news/xhtml/match-comment.xsl
-SHA1 36e9e3a28025786bf04f18204963278a2ae45da4 htdocs/transforms/news/xhtml/match-story.xsl
+SHA1 2e8049d3cb59d02b7334b2ecce8eb541258ba479 htdocs/transforms/news/xhtml/comment.xsl
+SHA1 325c8329669a1ee4eb18c1106f0b96b489e5d14e htdocs/transforms/news/xhtml/match-comment.xsl
+SHA1 fa87aeec7bbc997345136443da04df5f692bb2df htdocs/transforms/news/xhtml/match-story.xsl
 SHA1 f9edf442488fe7f48fe3f0cebe3f0cb3dd10b4f7 htdocs/transforms/news/xhtml/match-user.xsl
-SHA1 733957c5d7f407dd0c2cf8c5ae5112240c1a8fd3 htdocs/transforms/news/xhtml/news-provider.xsl
+SHA1 b237a76229eecd92df577d2d939b3fef367d5833 htdocs/transforms/news/xhtml/news-provider.xsl
 SHA1 86796a8cdf64836256e78edf99cdf86dd84cf9ca htdocs/transforms/news/xhtml/newslist-provider.xsl
 SHA1 68bc2fccaaf68d06b8a18712c1021219bce1dfa4 htdocs/transforms/news/xhtml/submit.xsl
 SHA1 e66e95b4ada6f68c82ef773060f0333439a2df5b htdocs/transforms/user/make-control.xsl
@@ -52,7 +52,7 @@ SHA1 e46923b0a074ed29b9c1a109f2eada7b295ea506 htdocs/transforms/xhtml/match-cont
 SHA1 c1fb46b979237382c7bae1d88e709bbe5f9e8c1e htdocs/transforms/xhtml/match-menu.xsl
 SHA1 5027e37fdc08ea71ff8256c436cb567f5edf3fdb htdocs/user/submit/new.xsp
 SHA1 337512cb3b3c0d17930ca3d7283b6f1d56d09604 htdocs/user/submit/user.xsp
-SHA1 adca29c6ea1886bd87a4d620eb1497efd2d0e65b lib/AxKit/App/TABOO.pm
+SHA1 832a404903cdb5f8b1f7bb58c0bdc587d7efd797 lib/AxKit/App/TABOO.pm
 SHA1 c53f5a549e3d39de95a358763cc8c9f32caabbf7 lib/AxKit/App/TABOO/Data.pm
 SHA1 cd6e0f9e9cfe5a7a2f71d6ba1f13950da9bd348d lib/AxKit/App/TABOO/Data/Category.pm
 SHA1 76ee5ab73145c58d605c023eb0486d9f1666c079 lib/AxKit/App/TABOO/Data/Comment.pm
@@ -66,7 +66,7 @@ SHA1 4cf158760bab7cbe913ab7c9eaee51fa2830d704 lib/AxKit/App/TABOO/Data/User/Cont
 SHA1 239e5edfa70697cc52322670a5edb45b27a8effd lib/AxKit/App/TABOO/Provider/News.pm
 SHA1 ea6d9ea2dfe2cdd09d7f3add9617b4f97ba7911a lib/AxKit/App/TABOO/Provider/NewsList.pm
 SHA1 bdf97c8ef072d36a9512ca4dd5909c5af213c5a5 lib/AxKit/App/TABOO/XSP/Category.pm
-SHA1 e40a9ba26b60740fe921f0da7e3193d5f97466b8 lib/AxKit/App/TABOO/XSP/Comment.pm
+SHA1 9edcd07d84ad40d45965a76ad502db4e18f52969 lib/AxKit/App/TABOO/XSP/Comment.pm
 SHA1 6079b2f355646da5ad361a8902067c7acbabb59f lib/AxKit/App/TABOO/XSP/Story.pm
 SHA1 570e0f545e65861f8cbff1db2fe9c564f8ee7e8c lib/AxKit/App/TABOO/XSP/User.pm
 SHA1 9fb823b9f2554d8867f4a577666398d2cc68a9c0 sql/grant.sql
@@ -77,7 +77,7 @@ SHA1 835b4545bdf1054b755c56cb24f92819156d51d0 test.pl
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.4 (GNU/Linux)
 
-iD8DBQFBlYOrlE/Gp2pqC7wRArzxAJsFSJX00th8YMyffAxcjWsdPXZYzACfcv6O
-thuVjGHDjUM49G7pkrYNePg=
-=L2jF
+iD8DBQFBltoJlE/Gp2pqC7wRAk6bAJ9CX8W2qwhtGsToBzBlDx+SoVA9vwCfR6uC
+ecA7cWMVamCOrxz2NR5RqaA=
+=On8h
 -----END PGP SIGNATURE-----

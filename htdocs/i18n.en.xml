@@ -19,8 +19,11 @@
   <text id="comment-descr"> A title for the comment </text>
   <text id="comment-title"> Title </text>
 
+  <text id="comment"> comment </text>
   <text id="comments"> Comments </text>
   <text id="comments-verb"> comments </text>
+  <text id="you-respond-to"> You respond to this comment: </text>
+  <text id="reply-to-this"> Reply to this </text>
 
   <text id="minicontent"> First paragraph </text>
   <text id="minicontent-descr"> Enter the first paragraph or so

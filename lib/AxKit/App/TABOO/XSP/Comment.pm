@@ -14,7 +14,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.093';
+our $VERSION = '0.094';
 
 =head1 NAME
 
@@ -85,7 +85,10 @@ namespace with the number 1.
 
 sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Output}store) {
     return << 'EOC'
-    my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
+    my %args;
+    foreach my $name ($cgi->param) {
+      $args{$name} = $cgi->param($name);
+    }
     $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
 
     my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
@@ -136,11 +139,11 @@ useful for previewing a submission.
 
 sub this_comment : struct {
     return << 'EOC'
-	my %args = map { $_ => $cgi->param($_) } $cgi->param;
- 
-
+    my %args;
+    foreach my $name ($cgi->param) {
+      $args{$name} = $cgi->param($name);
+    }
     $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
-
     my $timestamp = localtime;
     unless ($args{'timestamp'}) {
 	$args{'timestamp'} = $timestamp->datetime;

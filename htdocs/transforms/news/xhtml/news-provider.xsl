@@ -22,6 +22,7 @@
     doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>  
 
   <xsl:param name="request.headers.host"/>
+  <xsl:param name="request.uri"/>
   <xsl:param name="session.id"/>
   <xsl:param name="neg.lang">en</xsl:param>
 
@@ -62,6 +63,17 @@
 	  <xsl:copy-of select="document($uri)"/>
 	  <div class="main">
 	    <xsl:apply-templates select="/taboo/story:story"/>
+	    <xsl:if test="not(@commentstatus = 'singlecomment' or @commentstatus = 'threadonly')">
+	      <div class="reply-link">
+		<a>
+		  <xsl:attribute name="href">
+		    <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+		    <xsl:text>comment/respond</xsl:text>
+		  </xsl:attribute>
+		  <xsl:value-of select="i18n:include('reply-to-this')"/>
+		</a>
+	      </div>
+	    </xsl:if>
 	    <xsl:apply-templates select="/taboo/comm:reply"/>
 	    <div class="commentlist">
 	      <xsl:apply-templates select="/taboo/comm:commentlist/comm:reply"/>

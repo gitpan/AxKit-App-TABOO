@@ -13,6 +13,8 @@
   <xsl:import href="../../../transforms/insert-i18n.xsl"/>
   <xsl:import href="match-user.xsl"/>
 
+  <xsl:param name="request.uri"/>
+
   <xsl:template match="comm:reply">
     <div class="reply">
       <xsl:attribute name="id">
@@ -32,6 +34,21 @@
       <div class="comm-content">
 	<xsl:apply-templates select="comm:content[not(@raw)]/*" mode="strip-ns"/>
       </div>
+      <xsl:if test="not(ancestor::comm:comment-loaded or ancestor::comm:comment-submission)">
+	<div class="reply-link">
+	  <a>
+	    <xsl:attribute name="href">
+	      <xsl:value-of select="substring-before($request.uri, 'comment/')"/>
+	      <xsl:text>comment</xsl:text>
+	      <xsl:value-of select="comm:commentpath"/>
+	      <xsl:text>/respond</xsl:text>
+	    </xsl:attribute>
+	    <xsl:value-of select="i18n:include('reply-to-this')"/>
+	    <xsl:value-of select="i18n:include('comment')"/>
+	  </a>
+	</div>
+      </xsl:if>
+
       <xsl:apply-templates select="comm:reply"/>
 
     </div>
