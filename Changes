@@ -212,3 +212,6 @@ Revision history for Perl extension AxKit::App::TABOO.
 	- XSP::Story will again set the timestamp to now unless given
 	as a parameter.	
 	- New Grep method for Plurals.
+
+0.071  	 2004-07-15 17:50
+	- Forgot to add the NewsList Provider to the MANIFEST. 

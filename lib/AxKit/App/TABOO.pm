@@ -4,7 +4,7 @@ use 5.6.0;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.071';
 
 
 # Preloaded methods go here.
