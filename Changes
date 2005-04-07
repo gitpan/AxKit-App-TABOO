@@ -1,5 +1,9 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.18_14 2005-04-07 05:25
+	- Dev release
+	- Mostly adding the ability to select categories that have content.
+
 0.18_13 2005-03-22 04:03
 	- Dev release. 
 	- The Article Data object now has a save method that works for

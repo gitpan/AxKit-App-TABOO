@@ -18,7 +18,7 @@ CREATE TABLE articles (
        authorok		BOOLEAN DEFAULT false,
        editorok		BOOLEAN DEFAULT false,
        title		VARCHAR(254) NOT NULL,
-       description	VARCHAR(254) NOT NULL,
+       description	VARCHAR(500) NOT NULL,
        publisher	VARCHAR(254),
        date		DATE,
        type		VARCHAR(254),

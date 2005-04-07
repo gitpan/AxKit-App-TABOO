@@ -21,7 +21,7 @@ use MIME::Types;
 use DBI;
 
 
-our $VERSION = '0.18_13';
+our $VERSION = '0.18_14';
 
 
 =head1 NAME
@@ -140,7 +140,7 @@ sub populate {
       my @arr = split(/\,/, $1);
       ${$self}{$key} = \@arr;
     } else {
-      ${$self}{$key} = Encode::decode_utf8(${$articles}{$key});
+      ${$self}{$key} = Encode::decode_utf8(${$articles}{$key}, Encode::FB_HTMLCREF);
     }
   }
   ${$self}{'authorids'} = shift;
@@ -190,9 +190,11 @@ sub save {
 	my $content = ${$self}{$key};
 	if ($key eq 'format_id') {
 	  my ($fid) = $dbh->selectrow_array("SELECT id FROM mediatypes WHERE mimetype=?", {}, ${$self}{'format'});
+	  croak(${$self}{'format'} . " doesn't exist in database, insert first") unless ($fid);
 	  $sth->bind_param($i, $fid);
 	} elsif ($key eq 'lang_id') {
 	  my ($lid) = $dbh->selectrow_array("SELECT id FROM languages WHERE code=?", {}, ${$self}{'lang'});
+	  croak(${$self}{'lang'} . " doesn't exist in database, insert first") unless ($lid);
 	  $sth->bind_param($i, $lid);
 	} elsif (ref($content) eq '') {
 	  $sth->bind_param($i, $content);
@@ -209,7 +211,8 @@ sub save {
       $sth->execute;
 
       foreach my $catfield (qw(primcat seccat freesubject angles)) {
-	if (ref(${$self}{$catfield}) eq 'ARRAY') {
+	if ((ref(${$self}{$catfield}) eq 'ARRAY') && scalar(@{${$self}{$catfield}})) {
+	  warn Dumper(($articleid, $catfield, @{${$self}{$catfield}}));
 	  $dbh->do("INSERT INTO articlecats (article_id, field, cat_id) SELECT ?,?,id FROM categories WHERE catname IN (?" . ',?' x (scalar(@{${$self}{$catfield}})-1) . ')', {}, ($articleid, $catfield, @{${$self}{$catfield}}));
 	} elsif (defined(${$self}{$catfield})) {
 	  $dbh->do("INSERT INTO articlecats (article_id, field, cat_id) SELECT ?,?,id FROM categories WHERE catname=?", {}, ($articleid, $catfield, ${$self}{$catfield}));
@@ -354,6 +357,10 @@ sub editorok {
 
 There are a few more methods that will be documented in later releases.
 
+
+
+=back
+
 =cut
 
 sub authorok {
@@ -385,7 +392,6 @@ sub authorids {
 
 
 
-=back
 
 =head1 STORED DATA
 
@@ -401,8 +407,6 @@ the object can hold.
 
 This will be documented later.
 
-
-=back
 
 =head1 XML representation
 

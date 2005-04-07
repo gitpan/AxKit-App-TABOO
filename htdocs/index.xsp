@@ -6,10 +6,14 @@
 <xsp:page
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
   xmlns:aggr="http://www.kjetil.kjernsmo.net/software/TABOO/NS/IndexAggr"
-  xmlns="http://www.w3.org/1999/xhtml">
+  xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category">
 
-  <aggr:stories>
-    <aggr:story>/news/unpriv/10</aggr:story>
-  </aggr:stories>
+  <taboo>
+    <aggr:stories>
+      <aggr:story>/news/unpriv/10</aggr:story>
+    </aggr:stories>
+
+    <cat:get-categories type="categ" onlycontent="true"/>
+  </taboo>
 </xsp:page>
 

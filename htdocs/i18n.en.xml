@@ -52,6 +52,7 @@
   the link to the rest of the story. "Read More" is a common, but very
   bad choice. </text>
 
+  <text id="categorized-content"> Categorised content </text>
   <text id="primcat"> Primary Category </text>
   <text id="primcat-descr"> Give the primary categorization for the
   story. Uses a controlled vocabulary. </text>

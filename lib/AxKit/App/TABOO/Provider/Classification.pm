@@ -223,6 +223,7 @@ sub get_dom {
       $self->{articles}->write_xml($doc, $rootel);
     }
     warn Dumper($self->{stories});
+    warn Dumper($self->{articles});
     
     unless (($anyarticles) || (defined($self->{stories}))) {
       if (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel})) {

@@ -33,7 +33,7 @@
     <user:is-authorized authlevel="1">
       <user:true>
 	<menu:section>
-	  <menu:header><i18n:insert>cats-title-menu</i18n:insert></menu:header>	  
+	  <menu:header><i18n:insert>cats-title-menu</i18n:insert></menu:header>
 	  <menu:li>
 	    <menu:text>
 	      <i18n:insert>suggest</i18n:insert>

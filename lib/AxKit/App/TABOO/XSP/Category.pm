@@ -90,13 +90,15 @@ EOC
 }
 
 
-=head2 C<E<lt>get-categories type="foo"/E<gt>>
+=head2 C<E<lt>get-categories type="foo" onlycontent="true"/E<gt>>
 
 This tag will replace itself with some structured XML containing all
 categories of type C<foo>.  It relates to the TABOO Data object
-L<AxKit::App::TABOO::Data::Plurals::Categories>, and calls on that to do
-the hard work. See the documentation of that class to see the
-available types.
+L<AxKit::App::TABOO::Data::Plurals::Categories>, and calls on that to
+do the hard work. See the documentation of that class to see the
+available types. If a boolean C<onlycontent> attribute (or child
+element) is set, it will check if there are articles or stories in the
+C<categ> category types, and return only those.
 
 The root element of the returned object is C<categories> and each
 category is wrapped in an element (surprise!) C<category>. The type
@@ -104,10 +106,10 @@ will also be available in an attribute called C<type>.
 
 =cut
 
-sub get_categories : struct attribOrChild(type) {
+sub get_categories : struct attribOrChild(type,onlycontent) {
     return << 'EOC'
     my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
-    $cats->load(limit => {type => $attr_type});
+    $cats->load(limit => {type => $attr_type}, onlycontent => $attr_onlycontent);
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'cat:categories');
     $root->setAttribute('type', $attr_type);

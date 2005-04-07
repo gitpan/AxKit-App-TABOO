@@ -20,7 +20,7 @@ WriteMakefile(
 			     AxKit::XSP::BasicSession => 0.21,
 			     Formatter::HTML::Textile => 0.5,
 			     Apache::AxKit::Plugin::AddXSLParams::Request => 0,
-			     Encode => 1.99,
+			     Encode => 2.09,
 			     XML::LibXSLT => 0,
 			     Apache::AxKit::Plugin::Param::Expr => 0,
 			     MIME::Types => 0,

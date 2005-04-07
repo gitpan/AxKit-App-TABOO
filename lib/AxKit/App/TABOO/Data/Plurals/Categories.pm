@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.093';
+our $VERSION = '0.18_14';
 
 AxKit::App::TABOO::Data::Plurals::Categories->dbtable("categories");
 AxKit::App::TABOO::Data::Plurals::Categories->dbfrom("categories");
@@ -55,7 +55,7 @@ sub new {
 }
 
 
-=item C<load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]}, orderby =E<gt> fields, entries =E<gt> number)>
+=item C<load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]}, orderby =E<gt> fields, entries =E<gt> number, withcontent =E<gt> boolean)>
 
 This load method can be used to retrieve a number of entries from a
 data store.  It uses named parameters, the first C<what> is used to
@@ -65,7 +65,10 @@ C<limit> argument is to be used to determine which records to
 retrieve, these will be combined by logical AND. You may also supply a
 C<orderby> argument, which is an expression used to determine the
 order of entries returned. Finally, you may supply a C<entries>
-argument, which is the maximum number of entries to retrieve.
+argument, which is the maximum number of entries to retrieve. If a
+boolean C<onlycontent> is set to true, it will check if there are
+articles or stories in the C<categ> category types, and return only
+those.
 
 It will retrieve the data, and then call C<populate()> for each of the
 records retrieved to ensure that the plural data objects actually
@@ -83,12 +86,21 @@ sub load {
   my ($self, %args) = @_;
   my $data = $self->_load(%args); # Does the hard work
   return undef unless (@{$data});
+  my $dbh = DBI->connect($self->dbconnectargs());
+  my @hassomething;
+  if ($args{'onlycontent'}) {
+    @hassomething = @{$dbh->selectcol_arrayref("SELECT catname FROM categories JOIN articlecats ON (categories.id =articlecats.cat_id) WHERE type='categ' UNION SELECT primcat FROM stories")};
+  }
+  my $anything = 0;
   foreach my $entry (@{$data}) {
+    next if (($args{'onlycontent'}) && (! grep(/${$entry}{'catname'}/, @hassomething)));
     my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
     $cat->populate($entry);
     $cat->onfile;
     $self->Push($cat);
+    $anything = 1;
   }
+  return undef unless $anything;
   return $self;
 }
 

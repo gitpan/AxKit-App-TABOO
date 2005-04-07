@@ -23,6 +23,7 @@
   <xsl:param name="session.id"/>
   <xsl:param name="request.headers.host"/>
   <xsl:param name="neg.lang">en</xsl:param>
+  <xsl:param name="cats.prefix"/>
 
   <xsl:template match="/">
     <html lang="{$neg.lang}">
@@ -37,8 +38,8 @@
 	<xsl:call-template name="CreateHeader"/>
 	<div id="container">
 	  <h2>
-	    <xsl:if test="/taboo/cat:category/cat:type='stsec'">
-	      <xsl:value-of select="/taboo/cat:category/cat:name"/>
+	    <xsl:if test="/taboo/taboo/cat:category/cat:type='stsec'">
+	      <xsl:value-of select="/taboo/taboo/cat:category/cat:name"/>
 	    </xsl:if>
 	  </h2>
 	  <xsl:variable name="uri" select="concat('http://',
@@ -46,21 +47,37 @@
 	  <xsl:copy-of select="document($uri)"/>
 	  <div class="main">
 	    <xsl:choose>
-	      <xsl:when test="/taboo[@type='list']">
+	      <xsl:when test="/taboo/taboo[@type='list']">
 		<table>
-		  <xsl:apply-templates select="/taboo/story:story"/>
+		  <xsl:apply-templates select="/taboo/taboo/story:story"/>
 		</table>
 	      </xsl:when>
 	      <xsl:otherwise>
-		<xsl:apply-templates select="/taboo/story:story"/>
+		<xsl:apply-templates select="/taboo/taboo/story:story"/>
 	      </xsl:otherwise>
 	    </xsl:choose>
+	    <div class="catlist">
+	      <h2><xsl:value-of select="i18n:include('categorized-content')"/></h2>
+	      <xsl:apply-templates select="/taboo/cat:categories"/>
+	    </div>
 	  </div>
 	</div>
 	<xsl:call-template name="CreateFooter"/>
       </body>
     </html>
   </xsl:template>
+
+
+  <xsl:template match="cat:categories">
+    <xsl:for-each select="cat:category">
+      <div class="categorylink">
+	<a href="{concat('http://', $request.headers.host, $cats.prefix, ./cat:catname)}">
+	  <xsl:value-of select="./cat:name"/>
+	</a>
+      </div>
+    </xsl:for-each>
+  </xsl:template>
+
 </xsl:stylesheet>
 
 
