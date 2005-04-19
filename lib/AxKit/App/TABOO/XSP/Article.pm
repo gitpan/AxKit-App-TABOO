@@ -14,7 +14,7 @@ use MIME::Type;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.18_11';
+our $VERSION = '0.2';
 
 =head1 NAME
 

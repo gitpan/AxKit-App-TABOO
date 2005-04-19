@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.18_14';
+our $VERSION = '0.2';
 
 AxKit::App::TABOO::Data::Plurals::Categories->dbtable("categories");
 AxKit::App::TABOO::Data::Plurals::Categories->dbfrom("categories");
@@ -28,7 +28,9 @@ AxKit::App::TABOO::Data::Plurals::Categories - Data objects to handle multiple C
 
 =head1 DESCRIPTION
 
-Often, you want to retrieve many different categories from the data store, for example all of a certain type. This is a typical situation where this class shoule be used.
+Often, you want to retrieve many different categories from the data
+store, for example all of a certain type. This is a typical situation
+where this class shoule be used.
 
 =head2 Methods
 
@@ -89,11 +91,11 @@ sub load {
   my $dbh = DBI->connect($self->dbconnectargs());
   my @hassomething;
   if ($args{'onlycontent'}) {
-    @hassomething = @{$dbh->selectcol_arrayref("SELECT catname FROM categories JOIN articlecats ON (categories.id =articlecats.cat_id) WHERE type='categ' UNION SELECT primcat FROM stories")};
+    @hassomething = @{$dbh->selectcol_arrayref("SELECT catname FROM categories JOIN articlecats ON (categories.id =articlecats.cat_id) WHERE type='categ' UNION SELECT primcat FROM stories WHERE NOT sectionid='subqueue'")};
   }
   my $anything = 0;
   foreach my $entry (@{$data}) {
-    next if (($args{'onlycontent'}) && (! grep(/${$entry}{'catname'}/, @hassomething)));
+    next if (($args{'onlycontent'}) && (! grep(/^${$entry}{'catname'}$/, @hassomething)));
     my $cat = AxKit::App::TABOO::Data::Category->new($self->dbconnectargs());
     $cat->populate($entry);
     $cat->onfile;

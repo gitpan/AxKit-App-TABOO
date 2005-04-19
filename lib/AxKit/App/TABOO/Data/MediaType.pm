@@ -14,7 +14,7 @@ use Exception::Class::DBI;
 use MIME::Types;
 
 
-our $VERSION = '0.18';
+our $VERSION = '0.2';
 
 
 =head1 NAME
@@ -30,7 +30,7 @@ AxKit::App::TABOO::Data::MediaType - MediaType Data objects for TABOO
 
 =head1 DESCRIPTION
 
-MIME Types stuff goes here.
+This contains a simple class for MIME Types as defined by IANA.
 
 =cut
 
@@ -39,7 +39,9 @@ AxKit::App::TABOO::Data::MediaType->dbfrom("mediatypes");
 
 =head1 METHODS
 
-This class implements only one method, in addition to the constructor, the rest is inherited from L<AxKit::App::TABOO::Data>.
+This class implements only one method and reimplements two, in
+addition to the constructor, the rest is inherited from
+L<AxKit::App::TABOO::Data>.
 
 =over
 
@@ -48,7 +50,12 @@ This class implements only one method, in addition to the constructor, the rest 
 The constructor. Nothing special.
 
 
-=cut 
+=item C<load(what =E<gt> fields, limit =E<gt> {mimetype =E<gt> value, [...]})>
+
+Nothing very different from other load methods. You would usually load
+an object by specifying the C<mimetype> as in the above example.
+
+=cut
 
 sub load {
   my ($self, %args) = @_;
@@ -63,6 +70,12 @@ sub load {
 }
 
 
+=item C<populate($args)>
+
+The populate method is reimplemented, to deal well with L<MIME::Type>
+objects. Its interface is unchanged, however.
+
+=cut
 
 sub populate {
     my $self = shift;
@@ -74,6 +87,13 @@ sub populate {
     ${$self}{'mimetype'} = ($type) ? $type : ${$args}{'mimetype'};
     return $self;
 }
+
+
+=item C<mimetype>
+
+Will return a L<MIME::Type> object with the loaded MIME Type.
+
+=cut
 
 sub mimetype {
   my $self = shift;
@@ -87,11 +107,6 @@ sub mimetype {
     
 
 =back
-
-=head1 TODO
-
-This does allready most the work it is designed to do, but needs more
-testing and more accurate documentation.
 
 =head1 STORED DATA
 
@@ -141,7 +156,7 @@ namespace or prefix, that are
 
 =item * C<http://www.kjetil.kjernsmo.net/software/TABOO/NS/MediaType/Output>
 
-=item * C<mediatype>
+=item * C<type>
 
 =back
 

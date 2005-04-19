@@ -153,7 +153,7 @@ sub save {
 	$query = "INSERT INTO contributors (" . join(',', @confields) . ",Users_ID) VALUES (" . '?,' x $j . '?)';
   	$sth2 = $dbh->prepare($query);
       }
-      warn "QUERY: $query";
+#      warn "QUERY: $query";
       my $k=1;
       foreach my $key (@fields) {
 	$sth1->bind_param($k, ${$self}{$key});

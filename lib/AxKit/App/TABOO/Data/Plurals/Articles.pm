@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.19';
+our $VERSION = '0.2';
 
 AxKit::App::TABOO::Data::Plurals::Articles->dbtable("articles");
 AxKit::App::TABOO::Data::Plurals::Articles->dbfrom("articles JOIN languages ON (languages.ID = articles.lang_ID) JOIN mediatypes ON (mediatypes.ID = articles.format_ID)");
@@ -30,7 +30,9 @@ AxKit::App::TABOO::Data::Plurals::Articles - Data objects to handle multiple Art
 
 =head1 DESCRIPTION
 
-Often, you want to retrieve many different articles from the data store, for example all belonging to a certain category or a certain section. This is a typical situation where this class shoule be used.
+Often, you want to retrieve many different articles from the data
+store, for example all belonging to a certain category. This is a
+typical situation where this class shoule be used.
 
 =head2 Methods
 
@@ -47,7 +49,7 @@ sub new {
     my $class = ref($that) || $that;
     my $self = {
 	ENTRIES => [], # Internally, some methods finds it useful that the entries are stored in a array of this name.
-	ARTICLE_IDS => [],
+	ARTICLE_IDS => [], # This field gets the id numbers of the articles, and is only here.
 	DBCONNECTARGS => \@_,
 	XMLELEMENT => undef,
 	XMLPREFIX => undef,
@@ -61,17 +63,22 @@ sub new {
 =item C<load(what =E<gt> fields, limit =E<gt> {key =E<gt> value, [...]}, orderby =E<gt> fields, entries =E<gt> number)>
 
 This load method can be used to retrieve a number of entries from a
-data store.  It uses named parameters, the first C<what> is used to
-determine which fields to retrieve. It is a string consisting of a
-commaseparated list of fields, as specified in the data store. The
-C<limit> argument is to be used to determine which records to
-retrieve, these will be combined by logical AND. You may also supply a
-C<orderby> argument, which is an expression used to determine the
-order of entries returned. Usually, it would be a simple string with
-the field name to use, e.g. C<'timestamp'>, but you might want to
-append the keyword "C<DESC>" to it for descending order. Finally, you
-may supply a C<entries> argument, which is the maximum number of
-entries to retrieve.
+data store.  It can use named parameters, but has a unique other
+possibility too, see below. In named parameters mode, the first
+C<what> is used to determine which fields to retrieve. It is a string
+consisting of a commaseparated list of fields, as specified in the
+data store. The C<limit> argument is to be used to determine which
+records to retrieve, these will be combined by logical AND. You may
+also supply a C<orderby> argument, which is an expression used to
+determine the order of entries returned. Usually, it would be a simple
+string with the field name to use, e.g. C<'timestamp'>, but you might
+want to append the keyword "C<DESC>" to it for descending
+order. Finally, you may supply a C<entries> argument, which is the
+maximum number of entries to retrieve.
+
+The other possible use to first use the C<incat> method, see below,
+and then you may call this method on the object without any
+parameters, and the corresponding articles will be loaded.
 
 It will retrieve the data, and then call C<populate()> for each of the
 records retrieved to ensure that the plural data objects actually
@@ -81,6 +88,8 @@ in the parent class).
 
 If there is no data that corresponds to the given arguments, this
 method will return C<undef>.
+
+
 
 =cut
 
@@ -179,6 +188,15 @@ sub addformatinfo {
   return $self;
 }
 
+=item C<incat(@catnames)>
+
+Takes as arguments an array containing array names, and will return
+the number of articles that has been classified into B<all> those
+categories. It will also, internally, store which articles that was,
+so that you may call the C<load> method on the object afterwards
+without any further arguments to load the articles.
+
+=cut
 
 # After pestering axkit-dahut a lot with the problem this routine is
 # supposed to solve, Chris Prather came up with the following

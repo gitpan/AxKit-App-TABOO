@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.18_08
-===============================
+AxKit/App/TABOO version 0.2
+===========================
 
 INTRODUCTION
 
@@ -67,15 +67,14 @@ It can also take user-entered text that has been marked up with some
 simple syntax like Textile http://www.textism.com/tools/textile/ and
 convert that to HTML.
 
-The 0.18_05 release is very much a development release. It does a lot
-of new things, and the database schema have seen quite a few
-changes. For those wishing to have a look at the better tested
-functionality of TABOO, 0.1 is recommended over the present
-release. However, one should be aware that some of the code in there
-is a dead end, so do not add any valuable content to it. 
-
-Apart from the database changes, this has a lot of new Article code,
-but it has issues... Also, it adds the possibility to add categories.
+The 0.2 release is does a lot of new things, and some things are not
+quite as well tested yet, and not quite as well
+documented. Importantly, database schema have seen quite a few
+changes, some of which are incompatible with earlier releases. Apart
+from the database changes, this has a lot of new Article code, which
+makes it possible to get static articles out, and present them
+nicely. A classification provider is important when exploring articles
+and stories, as TABOO offers a lot of ways to categorize stuff.
 
 I'm following the mantra "release early", and have made everything
 I've done available from the start. Several fine folks have poked at
@@ -105,7 +104,7 @@ This module requires these other modules and libraries:
 - DBI
 - DBD::Pg. You need at least 1.32. Earlier versions has problems with 
   SQL3 Arrays, but it may be possible to get away with it.  
-- Encode
+- Encode, 2.09 is needed.
 - Time::Piece
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
@@ -113,14 +112,18 @@ This module requires these other modules and libraries:
 - Formatter::HTML::Textile for formatting.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
+- MIME::Types.
 - Apache::AxKit::Plugin::AddXSLParams::Request for virtual hosts, but
   it is easy to remove this dependency if one wishes.
+- Apache::AxKit::Plugin::Param::Expr.
 - Data::Dumper lists out debugging information, but can be removed. 
 - AxKit will bring along XML::LibXML, and while you could use any
   LibXSLT module supported by AxKit, I recommend XML::LibXSLT, and to
   ease installation, I made it a prerequisite.
-- Apache::AxKit::Plugin::Param::Expr is needed only to use different
-  languages, but I made that a prerequisite too for now.
+- You'd most certainly want a few Formatters, the
+  Apache::AxKit::Provider::File::Formatter and the OpenOffice
+  Provider, but they are not set as prerequisites.
+
 
 You will also need some XML libraries, for example libxml2 and
 libxslt. You will probably have gotten these along with AxKit. TABOO

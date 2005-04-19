@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.18_14';
+our $VERSION = '0.2';
 
 
 1;
@@ -92,20 +92,25 @@ above objects at a time, something that's often necessary. It also
 provides some containment of complexity, taking worries off of your
 head!
 
-Then, there are two AxKit Providers:
-L<AxKit::App::TABOO::Provider::News> and
-L<AxKit::App::TABOO::Provider::NewsList>, that makes use of the above
-subclasses, especially Story and Comment in the first case and the
-Stories in the second. The first provider creates a page containing an
+Then, there are three working AxKit Providers:
+L<AxKit::App::TABOO::Provider::News>,
+L<AxKit::App::TABOO::Provider::NewsList> and
+L<AxKit::App::TABOO::Provider::Classification>, that makes use of the
+above subclasses, especially Story and Comment in the first case, the
+Stories in the second and a combination of those, Categories and
+Articles in the last. The first provider creates a page containing an
 editor-reviewed story and user-submitted comments. The second makes
-lists of stories. By simply manipulating the URI in easy-to-understand
-ways, you can load just the story, view the comments, separately, in a
-list or as a thread, or get simple lists or good overviews of stories.
+lists of stories. The third creates lists of content based on
+categories. By simply manipulating the URI in easy-to-understand ways,
+you can load just the story, view the comments, separately, in a list
+or as a thread, or get simple lists or good overviews of stories, or
+lists of articles and stories in a category.
 
-Currently, it supplies four Taglibs,
+Currently, it supplies five Taglibs,
 L<User|AxKit::App::TABOO::XSP::User>,
 L<Story|AxKit::App::TABOO::XSP::Story>,
-L<Comment|AxKit::App::TABOO::XSP::Comment> and
+L<Comment|AxKit::App::TABOO::XSP::Comment>,
+L<Comment|AxKit::App::TABOO::XSP::Articles>, and
 L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide
 several tags that you may use interface with the Data objects.
 
@@ -127,6 +132,10 @@ It also has some code for i18n, consisting of stylesheets that can
 take all strings of text from a separate XML file and insert them in
 the final product. This makes it easy to provide many translations
 with TABOO, allthough a real multilingual site is not yet supported.
+
+Pionered in 0.2 is the first code to manage more static articles,
+typically background articles with rich metadata. What works now is
+content that has been entered, but entering it is not quite there yet.
 
 =head1 CONFIGURATION EXAMPLE
 
@@ -321,9 +330,11 @@ multiple users can post news stories, and comment them. That's
 something that has been done before, of course, but not within the
 design goals stated above.
 
-From now on most of the attention will be on the static articles from
-now on. A lot of new code is in the present distro, but it has quite a
-lot of issues.
+The Article code needs work still, to save and manipulate articles
+better, but I have actually put what I have in production, and it
+works!
+
+Also, I need some kind of gallery code soonish.
 
 Finally note that things that are there are B<not stable>! Names may
 change, parameters may be different, and I may decide to do things
@@ -340,7 +351,7 @@ the rest of framework. TABOO will make a great webshop platform...!
 
 =head1 SUPPORT
 
-There is now a taboo-dev mailing list that can be subscribed to at 
+There is now a taboo-dev mailing list that can be subscribed to at
 http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
 =head1 BUGS

@@ -15,7 +15,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.182';
+our $VERSION = '0.2';
 
 
 =head1 NAME
@@ -102,14 +102,17 @@ C<categ> category types, and return only those.
 
 The root element of the returned object is C<categories> and each
 category is wrapped in an element (surprise!) C<category>. The type
-will also be available in an attribute called C<type>.
+will also be available in an attribute called C<type>, and ordered
+alphabetically by name.
 
 =cut
 
 sub get_categories : struct attribOrChild(type,onlycontent) {
     return << 'EOC'
     my $cats = AxKit::App::TABOO::Data::Plurals::Categories->new();
-    $cats->load(limit => {type => $attr_type}, onlycontent => $attr_onlycontent);
+    $cats->load(limit => {type => $attr_type}, 
+		onlycontent => $attr_onlycontent, 
+		orderby => 'name');
     my $doc = XML::LibXML::Document->new();
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output', 'cat:categories');
     $root->setAttribute('type', $attr_type);

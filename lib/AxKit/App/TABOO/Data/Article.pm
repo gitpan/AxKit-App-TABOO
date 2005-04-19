@@ -21,7 +21,7 @@ use MIME::Types;
 use DBI;
 
 
-our $VERSION = '0.18_14';
+our $VERSION = '0.2';
 
 
 =head1 NAME
@@ -92,6 +92,13 @@ sub new {
 
 =item C<load(what =E<gt> fields, limit =E<gt> {filename =E<gt> value, primcat =E<gt> value, [...]})>
 
+This is a reimplementation of the load method, see the parent class
+for details. It needs to get the category and user information, which
+is not currently done very rigorously and will happen regardless of
+the C<what> parameter. In the current implementation, C<filename> is
+sufficient to identify an article uniquely, that may change in the
+future, so you may want to supply C<primcat> too.
+
 =cut
 
 sub load
@@ -155,6 +162,14 @@ sub populate {
   }
   return $self;
 }
+
+=item C<save()>
+
+The C<save()> method is reimplemented too, and it works similarly to
+that of the parent class, so it is straightforward to use. Note,
+however, that it is not able yet to update an existing record.
+
+=cut
 
 sub save {
   my $self = shift;
@@ -287,6 +302,16 @@ sub addcatinfo {
   return $self;
 }
 
+=item C<addformatinfo()>
+
+Similarly to adding user info, this method will also add format
+(i.e. MIME type) information, for different types of categories, again
+by creating a reference to a
+L<AxKit::App::TABOO::Data::MediaType>-object and calling its
+C<load>-method with the string from the data loaded by the article as
+argument.
+
+=cut
 
 sub addformatinfo {
     my $self = shift;
@@ -302,7 +327,7 @@ The date method will retrieve or set the date of the
 article. If the date has been loaded earlier from the data storage
 (for example by the load method), you need not supply any
 arguments. If the date is not available, you must supply the
-filename  identifiers, the method will then load it into
+filename  identifier, the method will then load it into
 the data structure first.
 
 The date method will return a L<Time::Piece> object with the
@@ -321,8 +346,8 @@ sub date {
     return $self;
   }
   if (! ${$self}{'date'}) {
-    my $storyname = shift;
-    $self->load(what => 'date', limit => {sectionid => $arg, storyname => $storyname});
+    my $filename = shift;
+    $self->load(what => 'date', limit => {filename => $arg});
   }
   unless (${$self}{'date'}) { return undef; }
   (my $tmp = ${$self}{'date'}) =~ s/\+\d{2}$//;
@@ -335,10 +360,10 @@ sub date {
 This is similar to the date method in interface, but can't be
 used to set the value, only retrieves it. It returns the C<editorok>,
 which is a boolean variable that says can be used to see if an editor
-has approved a story.
+has approved a article.
 
 It takes arguments like the date method does, and it will return
-1 if the story has been approved, 0 if not.
+1 if the article has been approved, 0 if not.
 
 
 =cut
@@ -352,14 +377,10 @@ sub editorok {
   return ${$self}{'editorok'};
 }
 
+=item C<authorok([($filename)])>
 
-=item Additional methods
-
-There are a few more methods that will be documented in later releases.
-
-
-
-=back
+Identical to the C<editorok> method, but will return 1 if the article
+has been approved by its I<authors>, 0 if not.
 
 =cut
 
@@ -371,6 +392,15 @@ sub authorok {
   }
   return ${$self}{'authorok'};
 }
+
+=item C<mimetype>
+
+Will return a L<MIME::Type> object representing the MIME-type of the
+content of the article. In the present implementation, that's all it
+is does, it can't be used to set the MIME-type, also it has to be
+loaded allready before this method is called.
+
+=cut
 
 sub mimetype {
   my $self = shift;
@@ -384,6 +414,13 @@ sub mimetype {
   my MIME::Type $type = $mimetypes->type(${$self}{'format'});
   return $type;
 }
+
+=item C<authorids>
+
+Will return an array containing the usernames of the authors of the
+article, if they have been loaded.
+
+=cut
 
 sub authorids {
   my $self = shift;
@@ -400,12 +437,54 @@ to know them. If you want to subclass this class, you might want to
 use the same names, see the documentation of
 L<AxKit::App::TABOO::Data> for more about this.
 
-In this class it gets even more interesting, because you may pass a
-list of those to the load method. This is useful if you don't want to
-load all data, in those cases where you don't need all the data that
-the object can hold.
+For those who didn't take my word for that the similarity between the
+named fields and column names in the database was a coincidence, well,
+too bad. The data of this class is more complex, and so this isn't
+true anymore here.
 
-This will be documented later.
+Nevertheless, it isn't less useful to know the names, so here goes:
+
+=over
+
+=item * filename - The filename of the content stored in the file system.
+
+=item * primcat - Primary categorization.
+
+=item * seccat - Secondary categorization, an array.
+
+=item * freesubject - Categorization in free subject terms, an array.
+
+=item * angles - Categorization in different viewing angles, an array.
+
+=item * authorok - If the authors have approved the article for publication, boolean.
+
+=item * editorok - If the editors have approved the article for publication, boolean.
+
+=item * authorids - The usernames of the article's author(s), an array.
+
+=item * title - Title of the article.
+
+=item * description - A description of the article.
+
+=item * publisher - URI (preferably) identifying the publisher.
+
+=item * date - Date of publication.
+
+=item * type - "The nature or genre of the content of the resource."
+
+=item * format - The MIME type of the content.
+
+=item * lang - Natural resource of the content.
+
+=item * coverage - "The extent or scope of the content of the resource."
+
+=item * rights - URIs describing copyright policy, e.g. Creative Commons. 
+
+=back
+
+See L<AxKit::App::TABOO::Data::Category> for more about the different
+category types. Also, note that many of these fields are taken from
+the terms of the Dublin Core, including some of the labels.
 
 
 =head1 XML representation
@@ -431,9 +510,10 @@ that are
 
 =head1 BUGS/TODO
 
-This class is really experimental at this point, and has not seen the
-same level of testing as the rest of TABOO. More documentation is also
-needed.
+This class is rather experimental at this point, and has not seen the
+same level of testing as the rest of TABOO. The C<save> method needs
+the ability to update records, and the C<load> method should check the
+C<what> parameter properly.
 
 =head1 FORMALITIES
 

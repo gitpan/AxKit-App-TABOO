@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 AxKit::App::TABOO::Data::Plurals::Users->dbtable("users");
 AxKit::App::TABOO::Data::Plurals::Users->dbfrom("users");
@@ -28,7 +28,9 @@ AxKit::App::TABOO::Data::Plurals::Users - Data objects to handle multiple Users 
 
 =head1 DESCRIPTION
 
-Often, you want to retrieve many different users from the data store, for example all of a certain type. This is a typical situation where this class shoule be used.
+Often, you want to retrieve many different users from the data store,
+for example all with certain privileges. This is a typical situation
+where this class shoule be used.
 
 =head2 Methods
 
@@ -96,7 +98,8 @@ sub load {
 
 =head1 BUGS/TODO
 
-Not anything particular at the moment...
+This is really not very well tested, it gets the users, but probably
+not all the information from subclasses of the singular objects.
 
 
 =head1 FORMALITIES

@@ -11,7 +11,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 
 use DBI;
