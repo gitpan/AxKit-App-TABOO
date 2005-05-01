@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.19';
+our $VERSION = '0.21';
 
 # Some constants
 # TODO: This stuff should go somewhere else!

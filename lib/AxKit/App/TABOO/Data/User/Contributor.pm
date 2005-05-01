@@ -11,7 +11,7 @@ use vars qw/@ISA/;
 use DBI;
 
 
-our $VERSION = '0.2';
+our $VERSION = '0.21';
 
 
 =head1 NAME
@@ -98,11 +98,11 @@ sub load_authlevel {
     my $dbh = DBI->connect($self->dbconnectargs());
     my $sth = $dbh->prepare("SELECT authlevel FROM contributors WHERE username=?");
     $sth->execute($username);
-    my @data = $sth->fetchrow_array;
-    if (@data) {
+    my ($data) = $sth->fetchrow_array;
+    if ($data) {
       ${$self}{'ONFILE'} = 1;
     }
-    ${$self}{'authlevel'} = join('', @data);
+    ${$self}{'authlevel'} = $data;
     ${$self}{'username'} = $username;
     return ${$self}{'authlevel'};
 }

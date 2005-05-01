@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.2';
+our $VERSION = '0.21';
 
 
 1;
@@ -210,7 +210,6 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
 
   # Authentication
-  PerlModule Apache::AxKit::Plugin::BasicAuth
   AxAddPlugin Apache::AxKit::Plugin::BasicSession
   AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::BasicSession
 
@@ -219,9 +218,9 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Story
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Category
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Comment
+  AxAddXSPTaglib AxKit::App::TABOO::XSP::Article
 
   # Other XSPs
-  AxAddXSPTaglib AxKit::XSP::BasicAuth
   AxAddXSPTaglib AxKit::XSP::BasicSession
   AxAddXSPTaglib AxKit::XSP::QueryParam
   AxAddXSPTaglib AxKit::XSP::Sendmail
@@ -298,18 +297,13 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
 
   # Authentication and authorization stuff
-  <Location />
-      AuthType Apache::AxKit::Plugin::BasicAuth
-      AuthName TABOODemo
-  </Location>
 
-  PerlSetVar TABOODemoURIToken SID
-  PerlSetVar TABOODemoDataStore DB_File
-  PerlSetVar TABOODemoArgs      "FileName => /tmp/taboodemo-session"
-  PerlSetVar TABOODemoLoginScript /login.xsp
+  PerlSetVar BasicSessionURIToken SID
+  PerlSetVar BasicSessionDataStore DB_File
+  PerlSetVar BasicSessionArgs      "FileName => /tmp/taboodemo-session"
   # If you like to keep people logged in over a longer time, you may 
-  # extend their session, eg:
-  PerlSetVar TABOODemoCookieExpires +14d
+  # extend their session, eg, but this is not a very Good Thing.
+  PerlSetVar BasicSessionCookieExpires +14d
 
   # /////////////////////////////
 

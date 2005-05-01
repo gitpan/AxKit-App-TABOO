@@ -4,15 +4,13 @@
 
 <xsp:page language="Perl"
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
-  xmlns:auth="http://www.nichework.com/2003/XSP/BasicAuth"
   xmlns:session="http://www.axkit.org/2002/XSP/BasicSession"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam">
   
   <header>
     <session:unless-exists name="credential_0">
-      <param:set name="credential_0" value="guest"/> 
-      <auth:login/>
+      <session:set-attribute name="credential_0" value="guest"/> 
       <session:set-attribute name="authlevel" value="0"/>
     </session:unless-exists>
   </header>

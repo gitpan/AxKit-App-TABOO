@@ -1,5 +1,12 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.21	2005-05-01 02:30
+	- Eliminated the need for BasicAuth by setting credential_0 
+	  directly.
+	- Corrected a bug that occured if it was checked if there is
+	  something in a category, and it didn't even exist.
+	- Some smaller cleanups.
+
 0.2	2005-04-19 05:25
 	The changes from 0.1 is really too large to specify in
 	detail, but I'll list some important:

@@ -16,7 +16,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.2';
+our $VERSION = '0.21';
 
 AxKit::App::TABOO::Data::Plurals::Categories->dbtable("categories");
 AxKit::App::TABOO::Data::Plurals::Categories->dbfrom("categories");
@@ -91,7 +91,12 @@ sub load {
   my $dbh = DBI->connect($self->dbconnectargs());
   my @hassomething;
   if ($args{'onlycontent'}) {
-    @hassomething = @{$dbh->selectcol_arrayref("SELECT catname FROM categories JOIN articlecats ON (categories.id =articlecats.cat_id) WHERE type='categ' UNION SELECT primcat FROM stories WHERE NOT sectionid='subqueue'")};
+    my $tmp = $dbh->selectcol_arrayref("SELECT catname FROM categories JOIN articlecats ON (categories.id =articlecats.cat_id) WHERE type='categ' UNION SELECT primcat FROM stories WHERE NOT sectionid='subqueue'");
+    if (ref($tmp) eq 'ARRAY') {
+      @hassomething = @{$tmp};
+    } else {
+      return undef;
+    }
   }
   my $anything = 0;
   foreach my $entry (@{$data}) {

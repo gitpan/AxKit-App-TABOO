@@ -6,7 +6,6 @@
   xmlns:xsp="http://www.apache.org/1999/XSP/Core"
   xmlns:cust="http://www.kjetil.kjernsmo.net/software/TABOO/NS/CustomGrammar"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
-  xmlns:auth="http://www.nichework.com/2003/XSP/BasicAuth"
   xmlns:session="http://www.axkit.org/2002/XSP/BasicSession"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User"
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam"
@@ -20,11 +19,20 @@
 	  <user:clear><param:get name="passwd"/></user:clear>
 	  <user:true>
 	    <!-- In here, everything is OK, and we log the user in,
-	    after first invalidating any other sessions. -->
-	    <xsp:logic><auth:logout/>;<session:invalidate/>;<auth:login/>;
+		 after first invalidating any other sessions. -->
+	    <xsp:logic>
+	      <session:invalidate/>;
+	      <session:set-attribute name="credential_0">
+		<session:value><param:get name="credential_0"/></session:value>
+	      </session:set-attribute>;
 	      <session:set-attribute name="authlevel">
-		<session:value><user:get-authlevel><user:username><param:get name="credential_0"/></user:username></user:get-authlevel></session:value>
-	      </session:set-attribute>;</xsp:logic>
+		<session:value>
+		  <user:get-authlevel><!-- whitespace _is_ significant here -->
+		    <user:username><param:get name="credential_0"/></user:username>
+		  </user:get-authlevel>
+		</session:value>
+	      </session:set-attribute>;
+	    </xsp:logic>
 	    <i18n:insert>password-valid</i18n:insert>
 	  </user:true>
 	  <user:false><i18n:insert>password-invalid</i18n:insert></user:false>
