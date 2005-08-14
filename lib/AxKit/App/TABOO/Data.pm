@@ -151,7 +151,7 @@ sub _load {
 	$query .= " AND ";
       }
     }
-#    warn $query;
+    warn $query;
     if ($nothing) {
       # Then, none of the fields were actually sent with a value, so
       # load won't return anything sensible...

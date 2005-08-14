@@ -16,6 +16,7 @@
   <text id="story-stored"> Story Stored </text>
   <text id="comment-stored"> Comment stored and attached </text>
   <text id="submit-story-menu"> Submit Story </text>
+  <text id="submit-article-menu"> Submit article </text>
   <text id="article-descr"> The title of the article </text>
   <text id="article-title"> Title </text>
   <text id="comment-descr"> A title for the comment </text>
@@ -24,8 +25,12 @@
   <text id="article-description-descr"> A description of the contents of the article. This description will usually occur outside of context and must therefore give meaning only along with the title. Max 254 characters. </text>
   <text id="article-description"> Description </text>
 
-  <text id="article-file-upload-descr"> You may here upload a file to the server. </text>
+  <text id="article-file-upload-descr"> You may here upload a file to the server by using this field or write in a text and a short name underneath. </text>
   <text id="article-file-upload"> File upload </text>
+  <text id="article-filename-descr"> Even if you do not upload a file you will still have to give a name for the article. This will be used in the address etc and must be only lowercase letters and numbers and no spaces. You may concatenate several words. </text>
++  <text id="article-filename"> Article name </text>
++  <text id="article-textstring-descr"> The text of the article itself. </text>
++  <text id="article-textstring"> Article text </text>
 
   <text id="comment"> comment </text>
   <text id="comments"> Comments </text>
@@ -56,6 +61,10 @@
   <text id="primcat"> Primary Category </text>
   <text id="primcat-descr"> Give the primary categorization for the
   story. Uses a controlled vocabulary. </text>
+
+  <text id="language"> Natural language </text>
+  <text id="language-descr"> Give the language in which the article is written. </text>
+
 
   <text id="article-sectionid"> Section </text>
   <text id="article-sectionid-descr"> Choose the section to post the
@@ -96,6 +105,12 @@
 
   <text id="suggested-cat-exists"> The category name is allready in use! </text>
   <text id="suggested-cat-stored"> Category information was stored! </text>
+  <text id="problem-occured"> Problems occured </text>
+  <text id="unknown-problem"> A problem with unknown cause </text>
+  <text id="either-upload-or-filename"> You must either upload a file, or write a short name and the article text in the text field.</text>
+  <text id="nosave-problem"> The articles was not saved as expected. You may try with a different name or contact webmaster</text>
+
+
 
   <text id="listing-everything"> Listing all stories </text>
   <text id="list-noun"> list </text>
@@ -111,6 +126,7 @@
   <text id="repeat"> Repeat </text>
   <text id="not-found"> not found </text>
   <text id="suggest"> Suggest </text>
+  <text id="missing"> missing</text>
 
   <text id="top"> Topp </text>
   <text id="me"> Me </text>
@@ -123,6 +139,7 @@
   <text id="new"> new </text>
 
   <text id="stories-title-menu"> News </text>
+  <text id="articles-title-menu"> Articles </text>
   <text id="sections-menu"> Sections </text>
   <text id="category-menu"> Classifications categories </text>
   <text id="angles-menu"> Angles of view </text>

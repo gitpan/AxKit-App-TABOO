@@ -13,7 +13,7 @@
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
   xmlns:office="http://openoffice.org/2000/office" 
-  exclude-result-prefixes="office user art rdf wn dc i18n texts html cust ct"> 
+  exclude-result-prefixes="office user art cat rdf wn dc i18n texts html cust ct"> 
 
 
   <xsl:import href="/transforms/xhtml/header.xsl"/>
@@ -54,35 +54,68 @@
 	</div>
 	<div id="container">
 	  <xsl:variable name="uri" select="concat('http://',
-	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
 	  <div class="main">
 	    <h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>
 
 	    <xsl:apply-templates select="./art:article-submission"/>
-
-
-	    <xsl:choose>
-	      <xsl:when test="//art:store=1">
-		<xsl:value-of select="i18n:include('article-stored')"/>
+	    
+	    <xsl:if test="art:problem">
+	      <div class="error">
+		<h2><xsl:value-of select="i18n:include('problem-occured')"/></h2> 	
 		<p>
-		  <xsl:value-of
-		      select="i18n:include('return-to-top-page')"/> 
-		  <a rel="top" href="/"><xsl:value-of
-		  select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>
-		  </a>
+		  <xsl:for-each select="art:problem">
+		    <xsl:choose>
+		      <xsl:when test=". = 'title'">
+			<xsl:value-of select="i18n:include('article-title')"/>
+			<xsl:value-of select="i18n:include('missing')"/>
+		      </xsl:when>
+		      <xsl:when test=". = 'authorid'">
+			<xsl:value-of select="i18n:include('authorid')"/>
+			<xsl:value-of select="i18n:include('missing')"/>
+		      </xsl:when>
+		      <xsl:when test=". = 'description'">
+			<xsl:value-of select="i18n:include('article-description')"/>
+			<xsl:value-of select="i18n:include('missing')"/>
+		      </xsl:when>
+		      <xsl:when test=". = 'primcat'">
+			<xsl:value-of select="i18n:include('primcat')"/>
+			<xsl:value-of select="i18n:include('missing')"/>
+		      </xsl:when>
+		      <xsl:when test=". = 'code'">
+			<xsl:value-of select="i18n:include('language')"/>
+			<xsl:value-of select="i18n:include('missing')"/>
+		      </xsl:when>
+		      <xsl:when test=". = 'text'">
+			<xsl:value-of select="i18n:include('article-textstring')"/>
+			<xsl:value-of select="i18n:include('missing')"/>
+		      </xsl:when>
+		      <xsl:when test=". = 'filename' or . = 'upfile'">
+			<xsl:value-of select="i18n:include('either-upload-or-filename')"/>
+			
+		      </xsl:when>
+		      <xsl:when test=". = 'nosave'">
+			<xsl:value-of select="i18n:include('nosave-problem')"/>
+		      </xsl:when>
+		      <xsl:otherwise>
+			<xsl:value-of select="i18n:include('unknown-problem')"/>
+		      </xsl:otherwise>
+		    </xsl:choose>
+		    <xsl:text>.</xsl:text>
+		  </xsl:for-each>
 		</p>
-	      </xsl:when>
-	      <xsl:otherwise>
-		<form method="post" enctype="multipart/form-data" action="/articles/submit.xsp">
-		  <div class="fields">
-		    <xsl:apply-templates select="./ct:control"/>
-		  </div>
-		</form>
-		
-		<xsl:call-template name="TextileInstructions"/>
-	      </xsl:otherwise>
-	    </xsl:choose>
+	      </div>
+	    </xsl:if>
+	    
+	    <form method="post" enctype="multipart/form-data" action="/articles/submit">
+	      <div class="fields">
+		<xsl:apply-templates select="./ct:control"/>
+	      </div>
+	    </form>
+	    
+	    <xsl:call-template name="TextileInstructions"/>
+
 	  </div>
 	</div>
 	<xsl:call-template name="CreateFooter"/>
@@ -99,8 +132,8 @@
     <xsl:value-of select="@contenturl"/>
 
     <!-- xsl:call-template name="ArticleContent">
-      <xsl:with-param name="content" select="document(@contenturl)"/>
-    </xsl:call-template -->
+	 <xsl:with-param name="content" select="document(@contenturl)"/>
+	 </xsl:call-template -->
 
 
   </xsl:template>

@@ -43,8 +43,12 @@
 	    </xsl:if>
 	  </h2>
 	  <xsl:variable name="uri" select="concat('http://',
-	    $request.headers.host, '/menu.xsp?SID=' , $session.id)"/>
+	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
+	  <div class="catlist">
+	    <h2><xsl:value-of select="i18n:include('categorized-content')"/></h2>
+	    <xsl:apply-templates select="/taboo/cat:categories"/>
+	  </div>
 	  <div class="main">
 	    <xsl:choose>
 	      <xsl:when test="/taboo/taboo[@type='list']">
@@ -56,10 +60,7 @@
 		<xsl:apply-templates select="/taboo/taboo/story:story"/>
 	      </xsl:otherwise>
 	    </xsl:choose>
-	    <div class="catlist">
-	      <h2><xsl:value-of select="i18n:include('categorized-content')"/></h2>
-	      <xsl:apply-templates select="/taboo/cat:categories"/>
-	    </div>
+
 	  </div>
 	</div>
 	<xsl:call-template name="CreateFooter"/>
@@ -71,7 +72,7 @@
   <xsl:template match="cat:categories">
     <xsl:for-each select="cat:category">
       <div class="categorylink">
-	<a href="{concat('http://', $request.headers.host, $cats.prefix, ./cat:catname)}">
+	<a href="{concat('http://', substring-before($request.headers.host, ':'), $cats.prefix, ./cat:catname)}">
 	  <xsl:value-of select="./cat:name"/>
 	</a>
       </div>

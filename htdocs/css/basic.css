@@ -91,6 +91,15 @@ div.menu-section ul li {
   padding-left: 0;
 }
 
+div.catlist {  
+  float : left;
+  clear : left;
+  margin : 1em;
+}
+
+div.catlist h2 {  
+  font-size : 110%;
+}
 
 h2#sectionhead, h2.pagetitle {
   padding: 0.4em 0.7em;

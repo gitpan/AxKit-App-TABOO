@@ -14,7 +14,7 @@ use Data::Dumper;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -52,9 +52,13 @@ Add this taglib to AxKit (via httpd.conf or .htaccess):
 
 =head1 DESCRIPTION
 
-This XSP taglib provides a few tags to retrieve, set, modify and save user information, as it communicates with TABOO Data objects, particulary L<AxKit::App::TABOO::Data::User> and <AxKit::App::TABOO::Data::User::Contributor>. 
+This XSP taglib provides a few tags to retrieve, set, modify and save
+user information, as it communicates with TABOO Data objects,
+particulary L<AxKit::App::TABOO::Data::User> and
+<AxKit::App::TABOO::Data::User::Contributor>.
 
-L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write this taglib.
+L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write
+this taglib.
 
 =cut
 
@@ -110,7 +114,13 @@ package AxKit::App::TABOO::XSP::User::Handlers;
 
 =head2 C<E<lt>store/E<gt>>
 
-It will take whatever data it finds in the L<Apache::Request> object held by AxKit, and hand it to a new L<AxKit::App::TABOO::Data::User> object, which will use whatever data it finds useful. It may also take  C<newpasswd1> and C<newpasswd2> fields, and if they are encountered, they will be checked if they are equal and then the password will be encrypted before it is sent to the Data object. The Data object is then instructed to save itself. 
+It will take whatever data it finds in the L<Apache::Request> object
+held by AxKit, and hand it to a new L<AxKit::App::TABOO::Data::User>
+object, which will use whatever data it finds useful. It may also take
+C<newpasswd1> and C<newpasswd2> fields, and if they are encountered,
+they will be checked if they are equal and then the password will be
+encrypted before it is sent to the Data object. The Data object is
+then instructed to save itself.
 
 =cut
 
@@ -215,7 +225,8 @@ EOC
 
 =head2 C<E<lt>get-passwd username="foo"/E<gt>>
 
-This tag will return the password of a user. The username may be given in an attribute or child element named C<username>.
+This tag will return the password of a user. The username may be given
+in an attribute or child element named C<username>.
 
 =cut
 
@@ -231,7 +242,10 @@ EOC
 
 =head2 C<E<lt>get-authlevel username="foo"/E<gt>>
 
-This tag will return the authorization level of a user, which is an integer that may be used to grant or deny access to certain elements or pages. The username may be given in an attribute or child element named C<username>.
+This tag will return the authorization level of a user, which is an
+integer that may be used to grant or deny access to certain elements
+or pages. The username may be given in an attribute or child element
+named C<username>.
 
 =cut
 
@@ -248,7 +262,9 @@ EOC
 
 =head2 C<E<lt>get-user username="foo"/E<gt>>
 
-This tag will return and XML representation of the user information. The username may be given in an attribute or child element named C<username>.
+This tag will return and XML representation of the user
+information. The username may be given in an attribute or child
+element named C<username>.
 
 =cut
 
@@ -269,7 +285,14 @@ EOC
 
 =head2 C<E<lt>password-matchesE<gt>>
 
-This tag is a boolean tag, which has child elements C<E<lt>trueE<gt>> and C<E<lt>falseE<gt>>. First, it needs a username, which may be given as an attribute or a child element named C<username>, and the cleartext password in a child element C<E<lt>clearE<gt>>. If the password is valid, the contents of the C<E<lt>trueE<gt>> element will be included in the output document. Conversely, if it is invalid, the contents of C<E<lt>falseE<gt>> will be in the result document. For example:
+This tag is a boolean tag, which has child elements C<E<lt>trueE<gt>>
+and C<E<lt>falseE<gt>>. First, it needs a username, which may be given
+as an attribute or a child element named C<username>, and the
+cleartext password in a child element C<E<lt>clearE<gt>>. If the
+password is valid, the contents of the C<E<lt>trueE<gt>> element will
+be included in the output document. Conversely, if it is invalid, the
+contents of C<E<lt>falseE<gt>> will be in the result document. For
+example:
 
       <user:password-matches>
 	<user:username>foo</user:username>
@@ -315,7 +338,13 @@ sub password_matches___false {
 
 =head2 C<E<lt>exists username="foo"/E<gt>>
 
-This tag will check if a user allready exists. Like C<E<lt>password-matchesE<gt>> this tag is a boolean tag, which has child elements C<E<lt>trueE<gt>> and C<E<lt>falseE<gt>>. It takes a username, which may be given as an attribute or a child element named C<username>, and if the user is found in the data store, the contents of C<E<lt>trueE<gt>> child element is included, otherwise, the contents of C<E<lt>falseE<gt>> is included. 
+This tag will check if a user allready exists. Like
+C<E<lt>password-matchesE<gt>> this tag is a boolean tag, which has
+child elements C<E<lt>trueE<gt>> and C<E<lt>falseE<gt>>. It takes a
+username, which may be given as an attribute or a child element named
+C<username>, and if the user is found in the data store, the contents
+of C<E<lt>trueE<gt>> child element is included, otherwise, the
+contents of C<E<lt>falseE<gt>> is included.
 
 =cut
 
@@ -348,13 +377,14 @@ sub exists___false {
 =head2 C<E<lt>is-authorized authlevel="5" username="foo"E<gt>>
 
 This is a boolean tag, which has child elements C<E<lt>trueE<gt>> and
-C<E<lt>falseE<gt>>. It takes an autherization level in an attribute or child
-element named C<authlevel>, and an attribute or child element named
-C<username>. If the authenticated user has it least this level I<or>
-the given C<username> matches the username of the authenticated user,
-the contents of the C<E<lt>trueE<gt>> element will be included in the output
-document. Conversely, if the user has insufficient privileges the
-contents of C<E<lt>falseE<gt>> will be in the result document. 
+C<E<lt>falseE<gt>>. It takes an autherization level in an attribute or
+child element named C<authlevel>, and an attribute or child element
+named C<username>. If the authenticated user has it least this level
+I<or> the given C<username> matches the username of the authenticated
+user, the contents of the C<E<lt>trueE<gt>> element will be included
+in the output document. Conversely, if the user has insufficient
+privileges the contents of C<E<lt>falseE<gt>> will be in the result
+document.
 
 B<NOTE:> This should I<not> be looked upon as a "security feature".
 While it is possible to use it to make sure that an input control is
@@ -409,11 +439,12 @@ sub is_authorized___false {
 
 =head2 C<E<lt>valid-authlevels/E<gt>>
 
-This returns a list of the authorization levels that the present user can legitimitely set. This is an ugly and temporary solution, I think it should be worked out elsewhere than the taglib, but I couldn't find a way to do it....
+This returns a list of the authorization levels that the present user
+can legitimitely set. This is an ugly and temporary solution, I think
+it should be worked out elsewhere than the taglib, but I couldn't find
+a way to do it....
 
 =cut
-
-#'
 
 sub valid_authlevels : nodelist({http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output}level) attribOrChild(username) {
     return << 'EOC';
@@ -428,11 +459,11 @@ EOC
 
 =head2 C<E<lt>random-password/E<gt>>
 
-Shamelessly stolen from Jörg Walter's L<AxKit::XSP::Auth> taglib, this would generate a new random password, see his documentation for details.  
+Shamelessly stolen from Jörg Walter's L<AxKit::XSP::Auth> taglib, this
+would generate a new random password, see his documentation for
+details.
 
 =cut
-
-#'
 
 sub random_password : expr attribOrChild(lang,signs,numbers,minlen,maxlen)
 {
@@ -444,7 +475,10 @@ sub random_password : expr attribOrChild(lang,signs,numbers,minlen,maxlen)
 
 =head1 TODO
 
-Currently, C<E<lt>existsE<gt>> checks if a user exists by checking if the real name is defined. This is likely to change in the future. Do not rely on this behaviour, but do make sure every-one has a real name! 
+Currently, C<E<lt>existsE<gt>> checks if a user exists by checking if
+the real name is defined. This is likely to change in the future. Do
+not rely on this behaviour, but do make sure every-one has a real
+name!
 
 
 =head1 FORMALITIES

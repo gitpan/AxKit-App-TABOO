@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.21
-============================
+AxKit/App/TABOO version 0.3
+===========================
 
 INTRODUCTION
 
@@ -134,6 +134,17 @@ that.
 Additionally, you may experience that the installation hangs on
 wanting DB_File. I believe this is a bug in some other package, but I
 haven't nailed it down yet. Just install DB_File and you'll be fine.
+
+SUBVERSION REPOSITORY 
+
+TABOO is currently maintained in a Subversion repository. The trunk
+can be checked out anonymously using e.g.:
+
+  svn checkout http://svn.kjernsmo.net/TABOO/trunk TABOO  
+
+It is also available using the svn schema as well as svn+ssh for
+committers.
+
 
 SUPPORT
 

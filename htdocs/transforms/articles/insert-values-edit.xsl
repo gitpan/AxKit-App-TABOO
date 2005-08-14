@@ -59,6 +59,16 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:param name="code"/>
+
+  <xsl:template match="val:insert[@name='code']">
+    <xsl:if test="$code = ''">
+      <xsl:value-of select="/cust:submit/art:article-loaded/art:article/art:code"/>  
+    </xsl:if>
+    <xsl:if test="not($code = '')">
+      <xsl:value-of select="$code"/>  
+    </xsl:if>
+  </xsl:template>
 
 
   <xsl:param name="editorok"/>
@@ -92,6 +102,23 @@
     <xsl:if test="not($upfile = '')">
       <xsl:value-of select="$upfile"/>  
     </xsl:if>    
+  </xsl:template>
+
+  <xsl:param name="filename"/>
+
+  <xsl:template match="val:insert[@name='filename']">
+    <xsl:if test="$filename = ''">
+      <xsl:value-of select="/cust:submit/art:article-loaded/art:article/art:filename"/>  
+    </xsl:if>
+    <xsl:if test="not($filename = '')">
+      <xsl:value-of select="$filename"/>  
+    </xsl:if>    
+  </xsl:template>
+
+  <xsl:param name="text"/>
+
+  <xsl:template match="val:insert[@name='text']">
+    <xsl:value-of select="$text"/>  
   </xsl:template>
 
 

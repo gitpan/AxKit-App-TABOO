@@ -1,5 +1,19 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.32	2005-08-14 
+	- Long time coming... Has been so many things to attend to...
+	- Mainly about writing articles to DB.
+	  * Numerous things with how files are written.
+	  * store is replaced by store_required for now.
+	  * Supports both upload and textarea entry.
+	- Now works only behind a reverse proxy (will change).
+	- Language data objects and XSP.
+	- New SVN repository
+	- Documentation cleanups and linewraps.
+	- Plurals will check if limit is actually given.
+	- 0.32 because it is released on my 32. birthday! :-)
+	
+	
 0.21	2005-05-01 02:30
 	- Eliminated the need for BasicAuth by setting credential_0 
 	  directly.

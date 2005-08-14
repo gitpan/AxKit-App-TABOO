@@ -4,7 +4,7 @@ use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.21';
+our $VERSION = '0.32';
 
 
 1;
@@ -106,12 +106,13 @@ you can load just the story, view the comments, separately, in a list
 or as a thread, or get simple lists or good overviews of stories, or
 lists of articles and stories in a category.
 
-Currently, it supplies five Taglibs,
+Currently, it supplies six Taglibs,
 L<User|AxKit::App::TABOO::XSP::User>,
 L<Story|AxKit::App::TABOO::XSP::Story>,
 L<Comment|AxKit::App::TABOO::XSP::Comment>,
-L<Comment|AxKit::App::TABOO::XSP::Articles>, and
-L<Category|AxKit::App::TABOO::XSP::Category>. These taglibs provide
+L<Comment|AxKit::App::TABOO::XSP::Articles>,
+L<Category|AxKit::App::TABOO::XSP::Category> and
+L<Category|AxKit::App::TABOO::XSP::Language>. These taglibs provide
 several tags that you may use interface with the Data objects.
 
 There is quite a lot of XSP and XSLT now that allows you to enter and edit
@@ -134,8 +135,9 @@ the final product. This makes it easy to provide many translations
 with TABOO, allthough a real multilingual site is not yet supported.
 
 Pionered in 0.2 is the first code to manage more static articles,
-typically background articles with rich metadata. What works now is
-content that has been entered, but entering it is not quite there yet.
+typically background articles with rich metadata. Content can be
+displayed, and that's pretty robust. Entering articles also works, but
+they cannot be edited yet.
 
 =head1 CONFIGURATION EXAMPLE
 
@@ -219,6 +221,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Category
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Comment
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Article
+  AxAddXSPTaglib AxKit::App::TABOO::XSP::Language
 
   # Other XSPs
   AxAddXSPTaglib AxKit::XSP::BasicSession
@@ -295,6 +298,9 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   Alias /login /var/www/login.xsp
   Alias /categories/submit /var/www/categories/submit.xsp 
 
+  Alias /articles/submit /var/www/articles/submit.xsp 
+  Alias /articles/edit /var/www/articles/edit.xsp 
+
 
   # Authentication and authorization stuff
 
@@ -324,9 +330,8 @@ multiple users can post news stories, and comment them. That's
 something that has been done before, of course, but not within the
 design goals stated above.
 
-The Article code needs work still, to save and manipulate articles
-better, but I have actually put what I have in production, and it
-works!
+The Article code needs work still, manipulate articles better, but I
+have actually put what I have in production, and it works!
 
 Also, I need some kind of gallery code soonish.
 
@@ -352,6 +357,16 @@ http://lists.kjernsmo.net/mailman/listinfo/taboo-dev
 
 There are surely some... Please report any you find through CPAN RT:
 http://rt.cpan.org/NoAuth/Bugs.html?Dist=AxKit-App-TABOO .
+
+=head1 SUBVERSION REPOSITORY
+
+TABOO is currently maintained in a Subversion repository. The trunk
+can be checked out anonymously using e.g.:
+
+  svn checkout http://svn.kjernsmo.net/TABOO/trunk TABOO  
+
+It is also available using the svn schema and svn+ssh for committers.
+
 
 =head1 AUTHOR
 

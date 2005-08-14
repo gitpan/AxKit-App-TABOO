@@ -27,7 +27,9 @@ AxKit::App::TABOO::Data::User::Contributor - Contributor Data objects for TABOO
 
 =head1 DESCRIPTION
 
-This Data class subclasses L<AxKit::App::TABOO::Data::User> to add an authentication level and optional biographical information for a contributor to a site. 
+This Data class subclasses L<AxKit::App::TABOO::Data::User> to add an
+authentication level and optional biographical information for a
+contributor to a site.
 
 
 =cut
@@ -38,13 +40,15 @@ AxKit::App::TABOO::Data::User::Contributor->elementorder("username, name, email,
 
 =head1 METHODS
 
-This class implements two methods, the rest is inherited from L<AxKit::App::TABOO::Data::User>.
+This class implements two methods, the rest is inherited from
+L<AxKit::App::TABOO::Data::User>.
 
 =over
 
 =item C<new(@dbconnectargs)>
 
-The constructor. Makes sure that we inherit the data members from our superclass. Apart from that, nothing special.
+The constructor. Makes sure that we inherit the data members from our
+superclass. Apart from that, nothing special.
 
 =cut
 
@@ -88,7 +92,13 @@ sub load {
 
 =item C<load_authlevel($username)>
 
-This is an ad hoc method to retrieve the authorization level of a user, and it takes a C<$username> key to identify whose level to retrieve. It will return a number that may be used to decide whether or not to grant access to an object or a data member. It will also populate the corresponding data fields of the object. You may therefore call C<write_xml> on the object afterwards and have markup for the username and level. 
+This is an ad hoc method to retrieve the authorization level of a
+user, and it takes a C<$username> key to identify whose level to
+retrieve. It will return a number that may be used to decide whether
+or not to grant access to an object or a data member. It will also
+populate the corresponding data fields of the object. You may
+therefore call C<write_xml> on the object afterwards and have markup
+for the username and level.
 
 =cut
 
@@ -111,7 +121,10 @@ sub load_authlevel {
 
 =item C<save()>
 
-The C<save()> method has been reimplemented in this class. It is less generic than the method of the grandparent class, but it saves data to two different tables, and should do its job well. It takes no parameters.
+The C<save()> method has been reimplemented in this class. It is less
+generic than the method of the grandparent class, but it saves data to
+two different tables, and should do its job well. It takes no
+parameters.
 
 
 =cut
@@ -190,16 +203,24 @@ sub save {
 
 =head1 STORED DATA
 
-The data is stored in named fields, and for certain uses, it is good to know them. If you want to subclass this class, you might want to use the same names, see the documentation of L<AxKit::APP::TABOO::Data> for more about this.
+The data is stored in named fields, and for certain uses, it is good
+to know them. If you want to subclass this class, you might want to
+use the same names, see the documentation of
+L<AxKit::APP::TABOO::Data> for more about this.
 
-In addition to the names of the L<parent|AxKit::APP::TABOO::Data::User>, this class adds the following fields:
+In addition to the names of the
+L<parent|AxKit::APP::TABOO::Data::User>, this class adds the following
+fields:
 
 
 =over
 
 =item * authlevel
 
-An integer representing the authorization level of a user. In the present implementation, it is a signed two-byte integer. It is intended to be used to decide whether or not to grant access to an object or a data member.
+An integer representing the authorization level of a user. In the
+present implementation, it is a signed two-byte integer. It is
+intended to be used to decide whether or not to grant access to an
+object or a data member.
 
 =item * bio
 
@@ -211,7 +232,9 @@ This is likely to be extended in future versions.
 
 =head1 BUGS/TODO
 
-You cannot use the save method in this class to save an object in the case where there is a record for the parent class, but lacks one for this class. 
+You cannot use the save method in this class to save an object in the
+case where there is a record for the parent class, but lacks one for
+this class.
 
 
 =head1 FORMALITIES

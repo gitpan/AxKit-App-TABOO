@@ -46,6 +46,14 @@
     </user:is-authorized>
 
     <menu:section>
+      <menu:header><i18n:insert>articles-title-menu</i18n:insert></menu:header>
+      <menu:li>
+	<menu:text><i18n:insert>submit-article-menu</i18n:insert></menu:text>
+	<menu:url>/articles/submit</menu:url>
+      </menu:li>
+    </menu:section>
+
+    <menu:section>
       <menu:header><i18n:insert>users-title-menu</i18n:insert></menu:header>
       <user:is-authorized authlevel="1">
 	<user:true>

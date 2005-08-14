@@ -7,6 +7,8 @@
 tar.gz$
 .bak$
 .tmp$
+^.svn/
+/.svn/
 lib/AxKit/App/TABOO/Provider.pm
 lib/AxKit/App/TABOO/Data/OrderedItem.pm
 lib/AxKit/App/TABOO/Data/Order.pm

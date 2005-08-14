@@ -1,4 +1,5 @@
 Changes
+htdocs/articles/edit.xsp
 htdocs/articles/provider.xsp
 htdocs/articles/submit.xsp
 htdocs/categories/submit.xsp
@@ -56,11 +57,13 @@ lib/AxKit/App/TABOO/Data.pm
 lib/AxKit/App/TABOO/Data/Article.pm
 lib/AxKit/App/TABOO/Data/Category.pm
 lib/AxKit/App/TABOO/Data/Comment.pm
+lib/AxKit/App/TABOO/Data/Language.pm
 lib/AxKit/App/TABOO/Data/MediaType.pm
 lib/AxKit/App/TABOO/Data/Plurals.pm
 lib/AxKit/App/TABOO/Data/Plurals/Articles.pm
 lib/AxKit/App/TABOO/Data/Plurals/Categories.pm
 lib/AxKit/App/TABOO/Data/Plurals/Comments.pm
+lib/AxKit/App/TABOO/Data/Plurals/Languages.pm
 lib/AxKit/App/TABOO/Data/Plurals/MediaTypes.pm
 lib/AxKit/App/TABOO/Data/Plurals/Stories.pm
 lib/AxKit/App/TABOO/Data/Plurals/Users.pm
@@ -74,6 +77,7 @@ lib/AxKit/App/TABOO/Provider/NewsList.pm
 lib/AxKit/App/TABOO/XSP/Article.pm
 lib/AxKit/App/TABOO/XSP/Category.pm
 lib/AxKit/App/TABOO/XSP/Comment.pm
+lib/AxKit/App/TABOO/XSP/Language.pm
 lib/AxKit/App/TABOO/XSP/Story.pm
 lib/AxKit/App/TABOO/XSP/User.pm
 Makefile.PL

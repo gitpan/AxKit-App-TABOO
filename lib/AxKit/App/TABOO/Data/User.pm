@@ -10,7 +10,7 @@ use vars qw/@ISA/;
 
 use DBI;
 
-our $VERSION = '0.085';
+our $VERSION = '0.3';
 
 
 =head1 NAME
@@ -26,7 +26,8 @@ AxKit::App::TABOO::Data::User - User Data objects for TABOO
 
 =head1 DESCRIPTION
 
-This Data class contains basic user information, such as name, e-mail address, an encrypted password, and so on. 
+This Data class contains basic user information, such as name, e-mail
+address, an encrypted password, and so on.
 
 =cut
 
@@ -37,7 +38,8 @@ AxKit::App::TABOO::Data::User->elementorder("username, name, email, uri, passwd"
 
 =head1 METHODS
 
-This class implements two methods, the rest is inherited from L<AxKit::App::TABOO::Data>.
+This class implements two methods, the rest is inherited from
+L<AxKit::App::TABOO::Data>.
 
 =over
 
@@ -66,12 +68,14 @@ sub new {
     return $self;
 }
 
-#use Alias qw(attr);
-#our ($username, $name, $email, $uri, $passwd);
-
 =item C<load_name($username)>
 
-This is an ad hoc method to retrieve the full name of a user, and it takes a C<$username> key to identify the user to retrieve. It will return a string with the full name, but it will also populate the corresponding data fields of the object. You may therefore call C<write_xml> on the object afterwards and have markup for the username and name. 
+This is an ad hoc method to retrieve the full name of a user, and it
+takes a C<$username> key to identify the user to retrieve. It will
+return a string with the full name, but it will also populate the
+corresponding data fields of the object. You may therefore call
+C<write_xml> on the object afterwards and have markup for the username
+and name.
 
 =cut
 
@@ -92,7 +96,12 @@ sub load_name {
 
 =item C<load_passwd($username)>
 
-This is an ad hoc method to retrieve the encrypted password of a user, and it takes a C<$username> key to identify the user to retrieve. It will return a string with the encrypted password, but it will also populate the corresponding data fields of the object. You may therefore call C<write_xml> on the object afterwards and have markup for the username and passwd. 
+This is an ad hoc method to retrieve the encrypted password of a user,
+and it takes a C<$username> key to identify the user to retrieve. It
+will return a string with the encrypted password, but it will also
+populate the corresponding data fields of the object. You may
+therefore call C<write_xml> on the object afterwards and have markup
+for the username and passwd.
 
 =cut
 
@@ -115,9 +124,15 @@ sub load_passwd {
 
 =head1 STORED DATA
 
-The data is stored in named fields, and for certain uses, it is good to know them. If you want to subclass this class, you might want to use the same names, see the documentation of L<AxKit::App::TABOO::Data> for more about this.
+The data is stored in named fields, and for certain uses, it is good
+to know them. If you want to subclass this class, you might want to
+use the same names, see the documentation of
+L<AxKit::App::TABOO::Data> for more about this.
 
-It is natural to subclass this as TABOO grows: One may record more information about contributors to the site, or customers for a webshop. For an example, see L<AxKit::App::TABOO::Data::User::Contributor>
+It is natural to subclass this as TABOO grows: One may record more
+information about contributors to the site, or customers for a
+webshop. For an example, see
+L<AxKit::App::TABOO::Data::User::Contributor>
 
 These are the names of the stored data of this class:
 
@@ -125,7 +140,8 @@ These are the names of the stored data of this class:
 
 =item * username
 
-A simple word containing a unique name and identifier for the category. Usually known as a username... 
+A simple word containing a unique name and identifier for the
+category. Usually known as a username...
 
 =item * name
 
@@ -137,11 +153,16 @@ The person's e-mail address.
 
 =item * uri
 
-In the Semantic Web you'd like to identify things and their relationships with URIs. So, we try to record URIs for everybody. For those who have stable home page, it may be convenient to use that URL, but for others, we may just have to come up with something smart.
+In the Semantic Web you'd like to identify things and their
+relationships with URIs. So, we try to record URIs for everybody. For
+those who have stable home page, it may be convenient to use that URL,
+but for others, we may just have to come up with something smart.
 
 =item * passwd
 
-The user's encrypted password. Allthough it I<is> encrypted, you may not want to throw it around too much. Perhaps it should have been stored somewhere else entirely. YMMV.
+The user's encrypted password. Allthough it I<is> encrypted, you may
+not want to throw it around too much. Perhaps it should have been
+stored somewhere else entirely. YMMV.
 
 =back
 

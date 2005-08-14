@@ -22,10 +22,10 @@ CREATE TABLE articles (
        publisher	VARCHAR(254),
        date		DATE,
        type		VARCHAR(254),
-       format_ID 	INTEGER REFERENCES mediatypes ON DELETE RESTRICT ON UPDATE CASCADE,
+       format_ID 	INTEGER NOT NULL REFERENCES mediatypes ON DELETE RESTRICT ON UPDATE CASCADE,
        identifieruri  	VARCHAR(254),
        identifierurn  	VARCHAR(254),
-       lang_ID		INTEGER REFERENCES languages ON DELETE RESTRICT ON UPDATE CASCADE,
+       lang_ID		INTEGER NOT NULL REFERENCES languages ON DELETE RESTRICT ON UPDATE CASCADE,
        coverage		VARCHAR(254),
        rights		VARCHAR(254)[]
 );

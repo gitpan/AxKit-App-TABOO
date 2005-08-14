@@ -12,7 +12,7 @@
       <form method="get" action="http://www.google.com/search">
 	<div class="fields">
 	  <input type="text" name="q"/>
-	  <input type="hidden" value="{$request.headers.host}" name="as_sitesearch"/>
+	  <input type="hidden" value="{substring-before($request.headers.host, ':')}" name="as_sitesearch"/>
 	  <input type="submit" name="btnG">
 	    <xsl:attribute name="value">	    
 	      <xsl:value-of select="i18n:include('search')"/>

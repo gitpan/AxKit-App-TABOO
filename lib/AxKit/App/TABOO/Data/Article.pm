@@ -21,7 +21,7 @@ use MIME::Types;
 use DBI;
 
 
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 
 =head1 NAME
@@ -110,6 +110,7 @@ sub load
   }
   $args{'what'} = $what;
   my $data = $self->_load(%args);
+  warn Dumper($data);
   return undef unless ($data);
   ${$self}{'ONFILE'} = 1;
   my $dbh = DBI->connect($self->dbconnectargs());
@@ -119,6 +120,7 @@ sub load
   my $users = $dbh->selectcol_arrayref("SELECT users.username FROM users JOIN articleusers ON (users.ID = Users_ID) JOIN articles ON (articleusers.Article_ID=articles.ID) WHERE articleusers.Article_ID=? ORDER BY articleusers.Users_ID", {}, (${$data}{'id'}));
 
   $self->populate($data,$categories,$users);
+  warn Dumper($self);
   return $self;
 }
 
@@ -134,7 +136,6 @@ etc. C<$users> must contain an arrayref with the C<username>s of the
 authors.
 
 =cut
-
 
 
 sub populate {
@@ -359,7 +360,7 @@ sub date {
 
 This is similar to the date method in interface, but can't be
 used to set the value, only retrieves it. It returns the C<editorok>,
-which is a boolean variable that says can be used to see if an editor
+which is a boolean variable that can be used to see if an editor
 has approved a article.
 
 It takes arguments like the date method does, and it will return
@@ -372,6 +373,7 @@ sub editorok {
   my $self = shift;
   unless (defined(${$self}{'editorok'})) {
     my ($filename) = @_;
+    croak "No filename given to editorok and no earlier record" unless ($filename);
     $self->load(what => 'editorok', limit => {filename => $filename});
   }
   return ${$self}{'editorok'};
@@ -388,6 +390,7 @@ sub authorok {
   my $self = shift;
   unless (defined(${$self}{'authorok'})) {
     my ($filename) = @_;
+    croak "No filename given to authorok and no earlier record" unless ($filename);
     $self->load(what => 'authorok', limit => {filename => $filename});
   }
   return ${$self}{'authorok'};
@@ -428,7 +431,7 @@ sub authorids {
 }
 
 
-
+=back
 
 =head1 STORED DATA
 

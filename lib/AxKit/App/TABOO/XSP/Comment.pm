@@ -39,9 +39,12 @@ Add this taglib to AxKit (via httpd.conf or .htaccess):
 
 =head1 DESCRIPTION
 
-This XSP taglib provides a single (for now) tag to store information related to news stories, as it communicates with TABOO Data objects, particulary L<AxKit::App::TABOO::Data::Comment>.
+This XSP taglib provides a single (for now) tag to store information
+related to news stories, as it communicates with TABOO Data objects,
+particulary L<AxKit::App::TABOO::Data::Comment>.
 
-L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write this taglib.
+L<Apache::AxKit::Language::XSP::SimpleTaglib> has been used to write
+this taglib.
 
 =cut
 

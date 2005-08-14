@@ -16,6 +16,7 @@
   <text id="story-stored"> Nyhetssak lagret </text>
   <text id="comment-stored"> Kommentar lagret og lagt til </text>
   <text id="submit-story-menu"> Send inn sak </text>
+  <text id="submit-article-menu"> Send inn artikkel </text>
   <text id="article-descr"> Overskriften til artikkelen </text>
   <text id="article-title"> Tittel </text>
   <text id="comment-descr"> Overskriften til kommentaren </text>
@@ -23,8 +24,12 @@
   <text id="article-description-descr"> En beskrivelse av innholdet i artikkelen. Denne beskrivelsen vil gjerne opptre utenfor kontekst, og må derfor gi mening kun sammen med tittelen. Maks 254 tegn. </text>
   <text id="article-description"> Beskrivelse </text>
 
-  <text id="article-file-upload-descr"> Du kan her sende en fil til serveren. </text>
+  <text id="article-file-upload-descr"> Du kan enten sende en fil til serveren ved å bruke dette feltet, eller skrive inn tekst og et kort navn under. </text>
   <text id="article-file-upload"> Opplasting av fil </text>
+  <text id="article-filename-descr"> Hvis du ikke laster opp en fil må du likevel gi et navn for artikkelen som vil brukes i blant annet adressen, og skal være bare små bokstaver og tall men ingen mellomrom. Den kan være sammensatt av flere ord. </text>
+  <text id="article-filename"> Saksnavn </text>
+  <text id="article-textstring-descr"> Selve teksten til artikkelen kan skrives inn i feltet under. </text>
+  <text id="article-textstring"> Artikkel-tekst </text>
 
   <text id="comment"> kommentar </text>
   <text id="comments"> Kommentarer </text>
@@ -57,6 +62,9 @@
   <text id="primcat"> Primær kategori </text>
   <text id="primcat-descr"> Angi primær kategorisering for artikkelen.
   Bruker et kontrollert vokabular. </text>
+
+  <text id="language"> Naturlig språk </text>
+  <text id="language-descr"> Angi språket artikkelen er skrevet på. </text>
 
   <text id="article-sectionid"> Seksjon </text>
   <text id="article-sectionid-descr"> Velg hvilken seksjon artikkelen
@@ -98,6 +106,11 @@
 
   <text id="suggested-cat-exists"> Kategorinavnet er allerede i bruk! </text>
   <text id="suggested-cat-stored"> Kategori-informasjonen ble lagret! </text>
+  <text id="problem-occured"> Problemer oppsto </text>
+  <text id="unknown-problem"> Et problem med ukjent årsak </text>
+  <text id="either-upload-or-filename"> Du må enten gi et kort filnavn sammen med tekst i tekstfeltet eller laste opp en fil</text>
+  <text id="nosave-problem"> Artikkelen ble ikke lagret som forventet. Du kan prøve å gi den et annen navn eller kontakte webmaster</text>
+
 
   <text id="listing-everything"> Lister opp alle saker </text>
   <text id="list-noun"> liste </text>
@@ -113,6 +126,7 @@
   <text id="repeat"> Gjenta </text>
   <text id="not-found"> ikke funnet </text>
   <text id="suggest"> Foreslå </text>
+  <text id="missing"> mangler</text>
 
   <text id="top"> Topp </text>
   <text id="me"> Meg </text>
@@ -125,6 +139,7 @@
   <text id="new"> ny </text>
 
   <text id="stories-title-menu"> Nyheter </text>
+  <text id="articles-title-menu"> Artikler </text>
   <text id="sections-menu"> Seksjoner </text>
   <text id="category-menu"> Klassifiseringskategorier </text>
   <text id="frees-menu"> Frie emneord </text>

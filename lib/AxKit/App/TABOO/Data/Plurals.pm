@@ -15,7 +15,7 @@ use DBI;
 use Exception::Class::DBI;
 
 
-our $VERSION = '0.091';
+our $VERSION = '0.3';
 
 
 =head1 NAME
@@ -115,7 +115,7 @@ containing the data from the storage.
 sub _load {
   my ($self, %args) = @_;
   my $what = $args{'what'} || '*';
-  my %arg =  %{$args{'limit'}};
+  my %arg = %{$args{'limit'}} if (ref($args{'limit'}) eq 'HASH');
   my $orderby = $args{'orderby'};
   my $entries = $args{'entries'};
   my $dbh = DBI->connect($self->dbconnectargs());

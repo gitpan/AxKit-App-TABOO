@@ -9,10 +9,11 @@
   xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User/Output"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category/Output"
+  xmlns:lang="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Language/Output"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:texts="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N/Texts"
   extension-element-prefixes="i18n"
-  exclude-result-prefixes="user story cat ct i18n texts">
+  exclude-result-prefixes="user story cat lang ct i18n texts">
 
 
   <xsl:import href="../../transforms/insert-i18n.xsl"/>
@@ -121,6 +122,9 @@
 		</xsl:for-each>     
 	      </select>
 	    </xsl:when>
+	    <xsl:when test="./lang:languages">
+	      <xsl:apply-templates select="./lang:languages"/>
+	    </xsl:when>
 	    <xsl:otherwise>
 	      <xsl:apply-templates select="./cat:categories"/>
 	    </xsl:otherwise>
@@ -149,6 +153,27 @@
 	<xsl:attribute name="selected">selected</xsl:attribute>
       </xsl:if>
       <xsl:value-of select="cat:name"/>
+    </option>
+  </xsl:template>
+  
+  <xsl:template match="lang:languages">
+    <select name="{../@name}" id="{../@name}">
+      <xsl:if test="../@type='multiple'">
+	<xsl:attribute name="multiple">multiple</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="./lang:language"/>
+    </select>
+  </xsl:template>
+  
+  <xsl:template match="lang:language">
+    <option value="{lang:code}">
+      <!-- This has to mark as selected both in the case where we have
+      a single parameter found by param:get, but also where there are
+      multiple as found by param:enumerate -->
+      <xsl:if test="//ct:value=lang:code">
+	<xsl:attribute name="selected">selected</xsl:attribute>
+      </xsl:if>
+      <xsl:value-of select="lang:localname"/>
     </option>
   </xsl:template>
   
