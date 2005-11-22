@@ -6,15 +6,16 @@ use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
 use AxKit;
 use AxKit::App::TABOO::Data::Story;
+use AxKit::App::TABOO::Data::Plurals::Stories;
 use Apache::AxKit::Plugin::BasicSession;
 use Time::Piece ':override';
 use XML::LibXML;
-
+use IDNA::Punycode;
 
 
 use vars qw/$NS/;
 
-our $VERSION = '0.2';
+our $VERSION = '0.33';
 
 =head1 NAME
 
@@ -64,6 +65,49 @@ use constant DIRECTOR  => 7;
 use constant GURU      => 8;
 use constant GOD       => 9;
 
+# This sub will create a useful storyname from the title
+sub _create_storyname {
+    my $intitle = shift;
+    my $nl = 30; # Should be the length of storyname in the table
+    chomp($intitle);
+ 
+    my $endno = '';
+    if ($intitle =~ m/(\d+)$/) { # if it ends with a number, the number might be useful, so preserve it
+	$endno = $1;
+    }
+    idn_prefix('');
+    warn "INTITLE: ". $intitle;
+    $intitle = encode_punycode(lc($intitle));
+    $intitle =~ s/\s/_/gs;
+    warn $intitle;
+    warn $endno;
+    warn length($endno);
+    
+    my $base = substr($intitle, 0, $nl-2-length($endno));
+    
+    warn $base;
+    my $storyname = $base . $endno;
+    my $stories = AxKit::App::TABOO::Data::Plurals::Stories->new();
+    
+    my $i = 1;    
+    while ($stories->exists(storyname => $storyname)) { # Checking if the story exists
+	$base = substr($base, 0, $nl-3-length($i)-length($endno));
+	$storyname = $base . $endno . '-' . $i;
+	AxKit::Debug(9, "Try '$storyname' for storyname");
+
+	$i++;
+	if ($i>99) { # We've gone too far allready
+	    throw Apache::AxKit::Exception::Retval(
+						   return_code => 500,
+						   -text => "Tried $i storynames, all taken. Editors need more imagination.");
+	}
+    }
+    if (length($storyname) > $nl) { # Is likely to cause a crash
+	AxKit::Debug(2, "Length of '$storyname' is higher than $nl");
+    }
+    return $storyname;
+}
+
 package AxKit::App::TABOO::XSP::Story::Handlers;
 
 =head1 Tag Reference
@@ -105,10 +149,10 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
 					       return_code => AUTH_REQUIRED,
 					       -text => "Not authenticated and authorized with an authlevel");
     }
-    if (($args{'sectionid'} eq 'subqueue') && (! $args{'storyname'}))
-    {
-	$args{'storyname'} = int(rand(100000));
-    } elsif ($args{'sectionid'} ne 'subqueue') {
+    unless ($args{'storyname'}) {
+	$args{'storyname'} = AxKit::App::TABOO::XSP::Story::_create_storyname($args{'title'});
+    } 
+    if ($args{'sectionid'} ne 'subqueue') {
 	if ($authlevel < AxKit::App::TABOO::XSP::Story::EDITOR) {
 	    throw Apache::AxKit::Exception::Retval(
 						   return_code => FORBIDDEN,
@@ -128,12 +172,6 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
 
     my $story = AxKit::App::TABOO::Data::Story->new();
 
-    my $oldstorykey = undef;
-    if ($args{'auto-storyname'}) {
-	$oldstorykey = $args{'auto-storyname'};
-	delete $args{'auto-storyname'};
-    }
-
     my $timestamp = localtime;
     unless ($args{'timestamp'}) {
 	$args{'timestamp'} = $timestamp->datetime;
@@ -143,7 +181,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
     }
 
     $story->populate(\%args);
-    $story->save($oldstorykey);
+    $story->save;
     1;
 EOC
 }
@@ -236,20 +274,6 @@ EOC
 
 
 1;
-
-=head1 Quirks 
-
-There are a few things that I'm not sure how to handle that I've
-included in this release in an inelegant way. For example, if you want
-to update an old record with a new storyname (which is not unusual, if
-for example you don't like the storyname used by the submitter), then
-you need to include this somehow. For the time being, you must supply
-the storyname as a query parameter C<auto-storyname>, and the supplied
-C<submit.xsp> does this. It is then understood by the
-C<E<lt>storeE<gt>> tag, which does the right thing, but I feel that
-such a tag shouldn't really need to be aware of such things, from an
-aestetical POW, suggestion on how to do it differently are welcome.
-
 
 =head1 FORMALITIES
 

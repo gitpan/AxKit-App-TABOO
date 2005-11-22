@@ -13,6 +13,7 @@
   
   <xsl:import href="/transforms/news/xhtml/match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="/transforms/xhtml/rightsidebar.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -45,6 +46,7 @@
 	  <xsl:variable name="uri" select="concat('http://',
 	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
+	  <xsl:call-template name="CreateRightSidebar"/>
 	  <div class="catlist">
 	    <h2><xsl:value-of select="i18n:include('categorized-content')"/></h2>
 	    <xsl:apply-templates select="/taboo/cat:categories"/>

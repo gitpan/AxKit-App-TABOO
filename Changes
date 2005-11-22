@@ -1,5 +1,17 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.33	2005-11-22
+	- Make storyname automagically from title
+	  * Adds IDNA::Punycode depend
+	  * removes auto-storyname, it is final
+	  * Checks for existing names
+	  * Reorg incat method of Stor(y|ies)
+	- Set a right sidebar with CSS.
+	- Ensure no entities in Textile output
+	- Can control where the article redirects to.
+	  
+
+
 0.32	2005-08-14 
 	- Long time coming... Has been so many things to attend to...
 	- Mainly about writing articles to DB.

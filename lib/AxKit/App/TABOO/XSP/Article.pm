@@ -134,7 +134,10 @@ take plain text and save it to a local file. It doesn't do many
 security checks yet.
 
 If the save was successful, it will redirect to C</articles/edit>, so
-that the submitter can continue editing of non-required fields.
+that the submitter can continue editing of non-required fields. To
+control where it redirects to, you should supply an attribute or child
+element C<redirect> containing the URL of the page to redirect to and
+C<retval>, with the HTTP return value. The latter defaults to 302.
 
 If something went wrong, the tag will return a nodelist
 C<problem>. The nodelist will contain the data store name of the
@@ -143,7 +146,7 @@ field(s) that weren't present, or C<nosave> if the save itself failed.
 =cut
 
 
-sub store_required : nodelist({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Article/Output}art:problem) {
+sub store_required : nodelist({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Article/Output}art:problem) attribOrChild(redirect,retval) {
   return << 'EOC'
   my @errors = ();
   foreach my $required (qw(title authorid description primcat code)) {
@@ -184,9 +187,9 @@ sub store_required : nodelist({http://www.kjetil.kjernsmo.net/software/TABOO/NS/
   }
       
   unless (@errors) { # Actually, everything went fine here, so we redirect to continue
-    $cgi->status(302);
-    $cgi->err_headers_out->add("Location" => '/articles/edit');
-    Apache::exit(302);
+    $cgi->status($attr_retval || 302);
+    $cgi->err_headers_out->add("Location" => $attr_redirect || '/');
+    Apache::exit($attr_retval || 302);
   } else { 
     AxKit::Debug(9, "Things that went wrong: " . join(' ', @errors));
   }

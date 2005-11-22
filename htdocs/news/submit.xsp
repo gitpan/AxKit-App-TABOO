@@ -108,33 +108,14 @@
 	    <ct:descr><i18n:insert>editorok-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="editorok"/></ct:value>
 	  </ct:control>
-	  <ct:control element="input" type="text" name="storyname" size="12" maxlength="12">
-	    <ct:title><i18n:insert>storyname</i18n:insert></ct:title>
-	    <ct:descr>
-	      <i18n:insert>storyname-descr</i18n:insert>
-	      <param:if-regex name="storyname" value="\d{5}">
-		<i18n:insert>storyname-descr-editorhelp</i18n:insert>
-	      </param:if-regex>
-	    </ct:descr>
-	    <ct:value><val:insert name="storyname"/></ct:value>
-	  </ct:control>
 	  <ct:control element="input" type="text" name="submitterid" size="8" maxlength="8">
 	    <ct:title><i18n:insert>submitterid</i18n:insert></ct:title>
 	    <ct:descr><i18n:insert>submitterid-descr</i18n:insert></ct:descr>
 	    <ct:value><val:insert name="submitterid"/></ct:value>
 	  </ct:control>
-	  <param:if-exists name="auto-storyname">
-	    <ct:control element="input" type="hidden" name="auto-storyname"> 
-	      <ct:value><param:get name="auto-storyname"/></ct:value>
-	    </ct:control>
-	  </param:if-exists>
-	  <param:unless-exists name="auto-storyname">
-	    <param:if-exists name="edit">
-	      <ct:control element="input" type="hidden" name="auto-storyname"> 
-		<ct:value><param:get name="storyname"/></ct:value>
-	      </ct:control>
-	    </param:if-exists>
-	  </param:unless-exists>
+	  <ct:control element="input" type="hidden" name="storyname"> 
+	    <ct:value><param:get name="storyname"/></ct:value>
+	  </ct:control>
 	</user:true>
 	<user:false>
 	  <ct:control element="input" type="hidden" name="sectionid"> 

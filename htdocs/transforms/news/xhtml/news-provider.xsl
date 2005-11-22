@@ -16,6 +16,7 @@
   <xsl:import href="match-comment.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
   <xsl:import href="match-breadcrumbs.xsl"/>
+  <xsl:import href="/transforms/xhtml/rightsidebar.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -130,6 +131,7 @@
 	  <xsl:variable name="uri" select="concat('http://',
 	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
+	  <xsl:call-template name="CreateRightSidebar"/>
 	  <div class="main">
 	    <div id="the-story">
 	      <xsl:apply-templates select="/taboo/story:story"/>

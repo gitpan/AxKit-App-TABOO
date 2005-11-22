@@ -17,7 +17,7 @@
   <cust:submit>    
     <cust:title><i18n:insert>submit-article</i18n:insert></cust:title>
     <param:if-exists name="submitted">
-      <art:store-required/>
+      <art:store-required redirect="/articles/edit"/>
     </param:if-exists>
     <ct:control name="title" type="text" element="input" size="40" maxlength="254">
       <ct:title><i18n:insert>article-title</i18n:insert></ct:title>

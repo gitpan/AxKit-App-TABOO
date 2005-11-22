@@ -16,6 +16,7 @@
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/news/xhtml/match-story.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="/transforms/xhtml/rightsidebar.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/> 
   <xsl:import href="/transforms/news/xhtml/match-breadcrumbs.xsl"/>
   <xsl:import href="/transforms/articles/xhtml/match-metadata.xsl"/>
@@ -77,6 +78,7 @@
 	  <xsl:variable name="uri" select="concat('http://',
 	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
+	  <xsl:call-template name="CreateRightSidebar"/>
 
 	  <div class="main">
 

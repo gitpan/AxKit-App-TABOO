@@ -50,6 +50,7 @@ htdocs/transforms/xhtml/index.xsl
 htdocs/transforms/xhtml/login.xsl
 htdocs/transforms/xhtml/match-control.xsl
 htdocs/transforms/xhtml/match-menu.xsl
+htdocs/transforms/xhtml/rightsidebar.xsl
 htdocs/user/submit/new.xsp
 htdocs/user/submit/user.xsp
 lib/AxKit/App/TABOO.pm

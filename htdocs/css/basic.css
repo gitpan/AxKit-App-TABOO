@@ -85,6 +85,8 @@ div.menu input {
 div.main { 
   margin-left: 15em;
   padding: 0 1em;
+  max-width: 38em;
+  margin-right: 14em;
 }
 
 div.menu-section ul li { 
@@ -94,11 +96,17 @@ div.menu-section ul li {
 div.catlist {  
   float : left;
   clear : left;
+  width : 10em;
   margin : 1em;
 }
 
 div.catlist h2 {  
   font-size : 110%;
+}
+
+div.rightsidebar {  
+  float : right;
+  width : 10em;
 }
 
 h2#sectionhead, h2.pagetitle {

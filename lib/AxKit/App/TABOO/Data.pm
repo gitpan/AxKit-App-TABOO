@@ -11,7 +11,7 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.2';
+our $VERSION = '0.33';
 
 
 use DBI;
@@ -214,6 +214,7 @@ sub write_xml {
 	    # parse it do add it
 	    my $formatter = Formatter::HTML::Textile->format($content);
 	    $formatter->charset('utf-8');
+	    $formatter->char_encoding(0);
 	    my $html = $formatter->fragment;
 	    if ($html) {
 	      my $parser = XML::LibXML->new();

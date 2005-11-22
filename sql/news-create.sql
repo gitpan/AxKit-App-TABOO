@@ -27,7 +27,7 @@ CREATE TABLE contributors (
 );
 
 CREATE TABLE stories (
-       storyname     VARCHAR(12),
+       storyname     VARCHAR(30) NOT NULL,
        sectionid     VARCHAR(15),
        image	     VARCHAR(100),
        primcat	     VARCHAR(15) NOT NULL REFERENCES categories (catname) ON DELETE RESTRICT ON UPDATE CASCADE,

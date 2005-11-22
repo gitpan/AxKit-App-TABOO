@@ -120,19 +120,23 @@ sub adduserinfo {
   return $self;
 }
 
-=item C<incat($catname)>
+=item C<exists(key =E<gt> value, [...])>
 
-This checks if there exists a story categorised into the C<$catname> category. 
+This checks if there exists a story with the limits specified as a
+hash, by the template of the C<limit> argument of the C<load> method.
 
 It will return the number of such stories.
 
 =cut
 
 
-sub incat {
-  my $self = shift;
-  my $catname = shift;
-  return scalar(@{$self->_load(what => '*', limit => {primcat => $catname})});
+sub exists {
+  my ($self, %limit) = @_;
+  if (%limit) {
+    return scalar(@{$self->_load(what => '1', limit => \%limit)});
+  } else {
+    return scalar(@{$self->_load(what => '1')});
+  }
 }
 
 

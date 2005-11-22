@@ -14,6 +14,7 @@
   <xsl:import href="match-user.xsl"/>
   <xsl:import href="/transforms/xhtml/match-control.xsl"/>
   <xsl:import href="/transforms/xhtml/header.xsl"/>
+  <xsl:import href="/transforms/xhtml/rightsidebar.xsl"/>
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/news/xhtml/match-breadcrumbs.xsl"/>
@@ -52,7 +53,8 @@
 	  <xsl:variable name="uri" select="concat('http://',
 	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
-	  
+	  <xsl:call-template name="CreateRightSidebar"/>
+
 	  <div class="main">
 	    <div id="user-info">
 	      <xsl:apply-templates select="./*/user:user"/>
