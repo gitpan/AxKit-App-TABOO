@@ -17,7 +17,7 @@ WriteMakefile(
                              AxKit::XSP::Sendmail => 0,
 			     Crypt::GeneratePassword => 0,
 			     Apache::AxKit::Exception => 0,
-			     AxKit::XSP::BasicSession => 0.21,
+			     Session => 0,
 			     Formatter::HTML::Textile => 0.5,
 			     Apache::AxKit::Plugin::AddXSLParams::Request => 0,
 			     Encode => 2.09,

@@ -1,11 +1,76 @@
 package AxKit::App::TABOO;
 
+our $VERSION = '0.39_1';
+
 use 5.7.3;
 use strict;
 use warnings;
 
-our $VERSION = '0.33';
+use Session;
+use Apache;
+use Apache::Cookie;
+use Apache::Request;
+use AxKit;
 
+sub session_config {
+  my $r = shift;
+  my $prefix = $r->dir_config( 'TABOOPrefix') || 'TABOO';
+  my %session_config = (
+			Store     => $r->dir_config( $prefix . 'DataStore' ) || 'DB_File',
+			Lock      => $r->dir_config( $prefix . 'Lock' ) || 'Null',
+			Generate  => $r->dir_config( $prefix . 'Generate' ) || 'MD5',
+			Serialize => $r->dir_config( $prefix . 'Serialize' ) || 'Storable'
+		       );
+   
+  # When using Postgres, a different default is needed.  
+  if ($session_config{'Store'} eq 'Postgres') {
+    $session_config{'Commit'} = 1;
+    $session_config{'Serialize'} = $r->dir_config( $prefix . 'Serialize' ) || 'Base64'
+  }
+
+  
+  # Load session-type specific parameters, comma-separated, name => value pairs
+  foreach my $arg ( split( /\s*,\s*/, $r->dir_config($prefix . 'Args'))) {
+    my ($key, $value) = split( /\s*=>\s*/, $arg );
+    $session_config{$key} = $value;
+  }
+
+  return %session_config;
+}
+
+sub session {
+  my $r = shift;
+  my $req = Apache::Request->instance($r);
+  my $vid = $req->param('VID');
+  unless ($vid) { # Then look in the cookie
+    my $cookies = Apache::Cookie->fetch;
+    my $tmp = $cookies->{'VID'};
+    return undef unless defined($tmp);
+    $vid = $tmp->value;
+    return undef unless ($vid); # No session key
+  }
+  AxKit::Debug(9, "User's visitor ID: $vid");
+  return new Session $vid, session_config($r);
+}
+    
+
+sub authlevel {
+  my $session = shift;
+  if (defined($session)) {
+    return $session->get('authlevel');
+  } else {
+    return 0;
+  }
+}
+
+sub loggedin {
+  my $session = shift;
+  if (defined($session)) {
+    return $session->get('loggedin');
+  } else {
+    return 'guest';
+  }
+}
 
 1;
 __END__
@@ -17,14 +82,13 @@ AxKit::App::TABOO - Object Oriented Publishing Framework for AxKit
 
 =head1 INTRODUCTION
 
-There is no code in this file. It may be some day, but for now, it is
-a placeholder, but one where it is convenient to say what this is, and
-my design philosophy for it. 
-
 AxKit::App::TABOO is a object oriented approach to creating a
 publishing system on the top of AxKit, the XML Application Server. 
 The two O's thus stands for Object Oriented, AB for AxKit-Based. 
 I don't know what the T stands for yet, suggestions are welcome! 
+
+This file holds only a few session and authentication functions, that
+I didn't quite knew where to put. This may change.
 
 
 =head1 DESIGN PHILOSOPHY
@@ -158,7 +222,6 @@ separate username and password on a databse, and use different
 databases for different virtual hosts. A combination of C<DBI_DSN>,
 C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
-
   # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   # The below directives are common for all virtual hosts, if you run such
 
@@ -210,25 +273,34 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   AxAddPlugin Apache::AxKit::Plugin::Param::Expr
   PerlAddVar AxParamExpr neg.lang '"nb"'
 
+  AxAddPlugin AxKit::App::TABOO::AddXSLParams::Session
 
-  # Authentication
-  AxAddPlugin Apache::AxKit::Plugin::BasicSession
-  AxAddPlugin Apache::AxKit::Plugin::AddXSLParams::BasicSession
 
   # TABOO XSPs
   AxAddXSPTaglib AxKit::App::TABOO::XSP::User
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Story
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Category
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Comment
-  AxAddXSPTaglib AxKit::App::TABOO::XSP::Article
+#  AxAddXSPTaglib AxKit::App::TABOO::XSP::Article
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Language
 
+
+
+
   # Other XSPs
-  AxAddXSPTaglib AxKit::XSP::BasicSession
+
   AxAddXSPTaglib AxKit::XSP::QueryParam
   AxAddXSPTaglib AxKit::XSP::Sendmail
 
   PerlAddVar AxParamExpr cats.prefix '"/cats/"'
+
+  PerlModule AxKit::App::TABOO::Handler::Login
+  <Location /login>
+     SetHandler perl-script
+     PerlHandler AxKit::App::TABOO::Handler::Login
+     PerlSendHeader On
+  </Location>
+
 
   <Location /cats/>
   	PerlHandler AxKit
@@ -295,7 +367,6 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   # Aliases, rather than files have a full filesystem path. 
   # That's rather evil...
   Alias /news/submit /var/www/news/submit.xsp 
-  Alias /login /var/www/login.xsp
   Alias /categories/submit /var/www/categories/submit.xsp 
 
   Alias /articles/submit /var/www/articles/submit.xsp 
@@ -304,12 +375,8 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
   # Authentication and authorization stuff
 
-  PerlSetVar BasicSessionURIToken SID
-  PerlSetVar BasicSessionDataStore DB_File
-  PerlSetVar BasicSessionArgs      "FileName => /tmp/taboodemo-session"
-  # If you like to keep people logged in over a longer time, you may 
-  # extend their session, eg, but this is not a very Good Thing.
-  PerlSetVar BasicSessionCookieExpires +14d
+  PerlSetVar TABOODataStore DB_File
+  PerlSetVar TABOOArgs      "FileName => /tmp/taboodemo-session"
 
   # /////////////////////////////
 
@@ -378,7 +445,7 @@ L<AxKit>, L<AxKit::App::TABOO::Data>, L<AxKit::App::TABOO::Provider::News>.
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003-2005 Kjetil Kjernsmo. This program is free
+Copyright (c) 2003-2006 Kjetil Kjernsmo. This program is free
 software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
 

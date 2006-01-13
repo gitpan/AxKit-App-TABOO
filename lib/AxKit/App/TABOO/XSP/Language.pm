@@ -7,7 +7,6 @@ use Apache::AxKit::Exception;
 use AxKit;
 use AxKit::App::TABOO::Data::Language;
 use AxKit::App::TABOO::Data::Plurals::Languages;
-use Apache::AxKit::Plugin::BasicSession;
 use Time::Piece ':override';
 use XML::LibXML;
 
@@ -15,7 +14,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.3';
+our $VERSION = '0.4';
 
 
 =head1 NAME

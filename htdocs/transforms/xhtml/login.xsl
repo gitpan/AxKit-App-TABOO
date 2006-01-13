@@ -22,7 +22,7 @@
     doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>  
  
   <xsl:param name="session.id"/>
-  <xsl:param name="session.keys.credential_0"/>
+  <xsl:param name="session.loggedin"/>
   <xsl:param name="request.headers.host"/>
   <xsl:param name="request.headers.referer"/>
   <xsl:param name="neg.lang">en</xsl:param>
@@ -49,10 +49,12 @@
 	<div id="container">
 	  <h2 class="pagetitle">
 	    <xsl:value-of select="i18n:include('login')"/>
-	    <xsl:value-of select="$session.keys.credential_0"/> 
+	    <xsl:value-of select="$session.loggedin"/> 
 	  </h2>
+
+
 	  <!-- xsl:variable name="uri" select="concat('http://',
-	  substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
+	  substring-before($request.headers.host, ':'), '/menu.xsp?VID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/ -->
 	  <div class="main">
 	    

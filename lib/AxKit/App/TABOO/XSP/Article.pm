@@ -6,7 +6,8 @@ use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
 use AxKit;
 use AxKit::App::TABOO::Data::Article;
-use Apache::AxKit::Plugin::BasicSession;
+use AxKit::App::TABOO;
+use Session;
 use Time::Piece ':override';
 use XML::LibXML;
 use IO::File;
@@ -14,7 +15,7 @@ use MIME::Type;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.3';
+our $VERSION = '0.4';
 
 =head1 NAME
 
@@ -237,7 +238,7 @@ or child elements.
 
 
 sub get_article : struct attribOrChild(filename,primcat) {
-    return << 'EOC'
+   # return << 'EOC'
     AxKit::Debug(8, "We look for article with filename: '" . $attr_filename . "'");
     my $article = AxKit::App::TABOO::Data::Article->new();
     unless ($article->load(limit => { filename => $attr_filename })) {
@@ -246,13 +247,15 @@ sub get_article : struct attribOrChild(filename,primcat) {
 					       -text => "Article with identifier $attr_filename not found");
     }	
     unless ($article->editorok && $article->authorok) {
-	if (! $Apache::AxKit::Plugin::BasicSession::session{authlevel}) {
+        my $session = AxKit::App::TABOO::session($r);
+	my $authlevel = AxKit::App::TABOO::authlevel($session);
+	if (!$authlevel) {
 	    throw Apache::AxKit::Exception::Retval(
 						   return_code => 401,
 						   -text => "Not authorised with an authlevel");
 	}
-	unless (grep(/$Apache::AxKit::Plugin::BasicSession::session{credential_0}/, @{$article->authorids}) || 
-		($Apache::AxKit::Plugin::BasicSession::session{authlevel} >= 5)) {
+	my $editinguser = AxKit::App::TABOO::loggedin($session);
+	unless (grep(/$editinguser/, @{$article->authorids}) || ($authlevel >= 5)) {
 	    throw Apache::AxKit::Exception::Retval(
 						   return_code => 403,
 						   -text => "Authentication and higher priviliges required to load article");

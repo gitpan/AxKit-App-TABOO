@@ -8,7 +8,8 @@ use AxKit;
 use AxKit::App::TABOO::Data::Comment;
 use AxKit::App::TABOO::Data::Plurals::Comments;
 use AxKit::App::TABOO::Data::Story;
-use Apache::AxKit::Plugin::BasicSession;
+use AxKit::App::TABOO;
+use Session;
 use Time::Piece ':override';
 use XML::LibXML;
 
@@ -16,7 +17,7 @@ use XML::LibXML;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.094';
+our $VERSION = '0.4';
 
 =head1 NAME
 
@@ -94,9 +95,10 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Outpu
     foreach my $name ($cgi->param) {
       $args{$name} = $cgi->param($name);
     }
-    $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+    my $session = AxKit::App::TABOO::session($r);
+    $args{'username'} = AxKit::App::TABOO::loggedin($session);
 
-    my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
+    my $authlevel = AxKit::App::TABOO::authlevel($session);
     AxKit::Debug(6, "Logged in as $args{'username'} at level $authlevel");
     unless (defined($authlevel)) {
 	throw Apache::AxKit::Exception::Retval(
@@ -156,7 +158,7 @@ sub this_comment : struct {
     foreach my $name ($cgi->param) {
       $args{$name} = $cgi->param($name);
     }
-    $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+    $args{'username'} = AxKit::App::TABOO::loggedin(AxKit::App::TABOO::session($r));
     my $timestamp = localtime;
     unless ($args{'timestamp'}) {
 	$args{'timestamp'} = $timestamp->datetime;

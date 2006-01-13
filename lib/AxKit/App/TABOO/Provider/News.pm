@@ -11,7 +11,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.2';
+our $VERSION = '0.4';
 
 =head1 NAME
 
@@ -64,12 +64,11 @@ use Apache::AxKit::Exception;
 use Apache::AxKit::Provider;
 
 use AxKit;
+use AxKit::App::TABOO;
 use AxKit::App::TABOO::Data::Story;
 use AxKit::App::TABOO::Data::Comment;
 use AxKit::App::TABOO::Data::Plurals::Comments;
 use AxKit::App::TABOO::Data::Category;
-
-use Apache::AxKit::Plugin::BasicSession;
 
 
 # sub: Init
@@ -86,7 +85,8 @@ sub init {
   
   # Remember: No user named "all", "thread" or "comment" 
     
-    
+  $self->{session} = AxKit::App::TABOO::session($r);
+
   # Parse the URI to find if we thread, have comments, name of post, etc
   ($self->{sectionid}, $self->{storyname}) = $r->uri =~ m|^/news/(.*?)/(.*?)/|i;
   $self->{showthread} = ($r->uri =~ m|/thread$|i) ?1:0;
@@ -152,11 +152,9 @@ sub process {
 
 
 
-# sub: key
-# should return a unique identifier for the resource.
 sub key {
   my $self = shift;
-  return $self->{uri} . "/" . $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+  return $self->{uri} . "/" . AxKit::App::TABOO::loggedin($self->{session});
 }
 
 # sub: exists
@@ -201,6 +199,7 @@ sub get_strref {
     AxKit::Debug(5, "[News] Output allready created in earlier run, reusing");
   } else {
     # This has to go here due to a quirk in AxKit, se bug report in rt.cpan.org
+    my $authlevel = AxKit::App::TABOO::authlevel($self->{session});
       unless ($self->{exists}) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => 404,
@@ -209,7 +208,7 @@ sub get_strref {
       $self->{editorok} = $self->{story}->editorok();
       # No point in going any further if the user isn't authorized:
       unless ($self->{editorok}) {
-	if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) {
+	if ($authlevel < 4) {
 	  throw Apache::AxKit::Exception::Retval(
 						 return_code => 401,
 						 -text => "Authentication and higher priviliges required");
@@ -222,7 +221,7 @@ sub get_strref {
     my $rootel = $doc->createElement('taboo');
     $rootel->setAttribute('type', 'story');
     $rootel->setAttribute('origin', 'News');
-    if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} >= 5) {
+    if ($authlevel >= 5) {
       $rootel->setAttribute('can-edit', '1');
     }
     $doc->setDocumentElement($rootel);

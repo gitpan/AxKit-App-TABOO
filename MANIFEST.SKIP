@@ -9,6 +9,7 @@ tar.gz$
 .tmp$
 ^.svn/
 /.svn/
+SIGNATURE
 lib/AxKit/App/TABOO/Provider.pm
 lib/AxKit/App/TABOO/Data/OrderedItem.pm
 lib/AxKit/App/TABOO/Data/Order.pm
@@ -17,6 +18,7 @@ lib/AxKit/App/TABOO/Data/Product.pm
 lib/AxKit/App/TABOO/Data/Productprices.pm
 lib/AxKit/App/TABOO/Data/Productsubtype.pm
 lib/AxKit/App/TABOO/Data/User/Customer.pm
+lib/AxKit/App/TABOO/Provider/Login.pm
 htdocs/links.xsp
 htdocs/test
 htdocs/usr/

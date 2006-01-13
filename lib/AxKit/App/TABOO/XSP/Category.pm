@@ -5,9 +5,10 @@ use warnings;
 use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
 use AxKit;
+use AxKit::App::TABOO;
 use AxKit::App::TABOO::Data::Category;
 use AxKit::App::TABOO::Data::Plurals::Categories;
-use Apache::AxKit::Plugin::BasicSession;
+use Session;
 use Time::Piece ':override';
 use XML::LibXML;
 
@@ -15,7 +16,7 @@ use XML::LibXML;
 use vars qw/$NS/;
 
 
-our $VERSION = '0.2';
+our $VERSION = '0.4';
 
 
 =head1 NAME
@@ -142,7 +143,7 @@ Finally, the Data object is instructed to save itself.
 sub store {
     return << 'EOC'
     my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
-    my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
+    my $authlevel = AxKit::App::TABOO::authlevel(AxKit::App::TABOO::session($r));
     AxKit::Debug(9, "Logged in as $args{'username'} at level $authlevel");
     unless ($authlevel >= 1) {
   	throw Apache::AxKit::Exception::Retval(

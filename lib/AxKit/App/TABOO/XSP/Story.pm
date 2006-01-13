@@ -2,12 +2,14 @@ package AxKit::App::TABOO::XSP::Story;
 use 5.6.0;
 use strict;
 use warnings;
+use utf8;
 use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
 use AxKit;
+use AxKit::App::TABOO;
 use AxKit::App::TABOO::Data::Story;
 use AxKit::App::TABOO::Data::Plurals::Stories;
-use Apache::AxKit::Plugin::BasicSession;
+use Session;
 use Time::Piece ':override';
 use XML::LibXML;
 use IDNA::Punycode;
@@ -15,7 +17,7 @@ use IDNA::Punycode;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.33';
+our $VERSION = '0.4';
 
 =head1 NAME
 
@@ -72,20 +74,22 @@ sub _create_storyname {
     chomp($intitle);
  
     my $endno = '';
+    $intitle =~ s/\p{TerminalPunctuation}//gs; # Remove terminal punctutation
     if ($intitle =~ m/(\d+)$/) { # if it ends with a number, the number might be useful, so preserve it
 	$endno = $1;
     }
     idn_prefix('');
-    warn "INTITLE: ". $intitle;
+#    warn "INTITLE: ". $intitle;
     $intitle = encode_punycode(lc($intitle));
-    $intitle =~ s/\s/_/gs;
-    warn $intitle;
-    warn $endno;
-    warn length($endno);
+    $intitle =~ s/\s/_/gs; # All spaces become _
+    $intitle =~ s/[^a-z0-9\-_]//g; # Remove all now not a alphanumeric or -
+#    warn $intitle;
+#    warn $endno;
+#    warn length($endno);
     
     my $base = substr($intitle, 0, $nl-2-length($endno));
     
-    warn $base;
+#    warn $base;
     my $storyname = $base . $endno;
     my $stories = AxKit::App::TABOO::Data::Plurals::Stories->new();
     
@@ -140,10 +144,11 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
       $args{$name} = $cgi->param($name);
     }
 
-    $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+    my $session = AxKit::App::TABOO::session($r);
+    $args{'username'} = AxKit::App::TABOO::loggedin($session);
 
-    my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
-  AxKit::Debug(6, "Logged in as $args{'username'} at level $authlevel");
+    my $authlevel = AxKit::App::TABOO::authlevel($session); 
+    AxKit::Debug(6, "Logged in as $args{'username'} at level $authlevel");
     unless (defined($authlevel)) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => AUTH_REQUIRED,
@@ -197,17 +202,14 @@ useful for previewing a submission.
 
 sub this_story : struct {
     return << 'EOC'
-	my %args = map { $_ => $cgi->param($_) } $cgi->param;
- 
+    my %args = map { $_ => $cgi->param($_) } $cgi->param;
 
-    $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+    $args{'username'} = AxKit::App::TABOO::loggedin(AxKit::App::TABOO::session($r));
 
-    
     unless ($args{'submitterid'}) {
       # If the submitterid is not set, we set it to the current username
 	$args{'submitterid'} = $args{'username'}
     }
-    
     
     my $timestamp = localtime;
     unless ($args{'timestamp'}) {
@@ -246,8 +248,10 @@ sub get_story : struct attribOrChild(storyname,sectionid) {
       $args{$name} = $cgi->param($name);
     }
 
+    my $session = AxKit::App::TABOO::session($r);
+
     unless ($args{'username'}) {
-      $args{'username'} = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+      $args{'username'} = AxKit::App::TABOO::loggedin($session);
     }
 
 
@@ -259,7 +263,7 @@ sub get_story : struct attribOrChild(storyname,sectionid) {
     }
     $story->adduserinfo();
     unless ($story->editorok) {
-      if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) {
+      if (AxKit::App::TABOO::authlevel($session) < 4) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => 401,
 					       -text => "Authentication and higher priviliges required to load story");

@@ -85,8 +85,8 @@ div.menu input {
 div.main { 
   margin-left: 15em;
   padding: 0 1em;
-  max-width: 38em;
-  margin-right: 14em;
+  max-width: 41em;
+  margin-right: 12em;
 }
 
 div.menu-section ul li { 
@@ -211,6 +211,7 @@ div.reply {
 
 div.comm-content {  
   padding: 0.7em;
+  background: #fff;
 }
 
 div.commentlist {  

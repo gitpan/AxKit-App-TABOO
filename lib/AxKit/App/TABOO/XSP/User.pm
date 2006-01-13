@@ -5,16 +5,18 @@ use warnings;
 use Apache::AxKit::Language::XSP::SimpleTaglib;
 use Apache::AxKit::Exception;
 use AxKit;
+use AxKit::App::TABOO;
 use AxKit::App::TABOO::Data::User;
 use AxKit::App::TABOO::Data::User::Contributor;
-use Apache::AxKit::Plugin::BasicSession;
+use Session;
+use Apache::Cookie;
 use Crypt::GeneratePassword;
 use Data::Dumper;
 
 use vars qw/$NS/;
 
 
-our $VERSION = '0.22';
+our $VERSION = '0.4';
 
 # Some constants
 # TODO: This stuff should go somewhere else!
@@ -81,8 +83,10 @@ sub makeSalt {
 # level we are allowed to give that user. 
 sub authlevel_extremes {
     my $username = shift;
-    my $authlevel = $Apache::AxKit::Plugin::BasicSession::session{authlevel};
-    my $maxlevel = ($username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0}) ? $authlevel : ($authlevel - 2);
+    my $r = Apache->request;
+    my $session = AxKit::App::TABOO::session($r);
+    my $authlevel = AxKit::App::TABOO::authlevel($session);
+    my $maxlevel = ($username eq AxKit::App::TABOO::loggedin($session)) ? $authlevel : ($authlevel - 2);
     my $user = AxKit::App::TABOO::Data::User::Contributor->new();
     my $oldlevel = $user->load_authlevel($username);
     my $minlevel = ($authlevel < AxKit::App::TABOO::XSP::User::ADMIN) ? $oldlevel : 0;
@@ -127,8 +131,9 @@ then instructed to save itself.
 sub store {
     return << 'EOC';
     my %args = map { $_ => join('', $cgi->param($_)) } $cgi->param;
-    my $editinguser = $Apache::AxKit::Plugin::BasicSession::session{credential_0};
-    my $authlevel =  $Apache::AxKit::Plugin::BasicSession::session{authlevel};
+    my $session = AxKit::App::TABOO::session($r);
+    my $editinguser = AxKit::App::TABOO::loggedin($session);
+    my $authlevel = AxKit::App::TABOO::authlevel($session);
     AxKit::Debug(9, $editinguser . " logged in at level " . $authlevel);
     unless (defined($authlevel)) {
 	throw Apache::AxKit::Exception::Retval(
@@ -283,58 +288,6 @@ EOC
 
 
 
-=head2 C<E<lt>password-matchesE<gt>>
-
-This tag is a boolean tag, which has child elements C<E<lt>trueE<gt>>
-and C<E<lt>falseE<gt>>. First, it needs a username, which may be given
-as an attribute or a child element named C<username>, and the
-cleartext password in a child element C<E<lt>clearE<gt>>. If the
-password is valid, the contents of the C<E<lt>trueE<gt>> element will
-be included in the output document. Conversely, if it is invalid, the
-contents of C<E<lt>falseE<gt>> will be in the result document. For
-example:
-
-      <user:password-matches>
-	<user:username>foo</user:username>
-	<user:clear>trustno1</user:clear>
-	<user:true><p>Password is valid</p></user:true>
-	<user:false><p>Password is invalid</p></user:false>
-      </user:password-matches>
-
-=cut
-
-
-sub password_matches : attribOrChild(username) child(clear) {
-    return ''; # Gotta be something here
-}
-
-sub password_matches___true__open {
-return << 'EOC';
-    my $user = AxKit::App::TABOO::Data::User->new();
-    my $encrypted = $user->load_passwd($attr_username);
-# AxKit::Debug(10, "Passwds: $attr_clear, $encrypted, " . crypt($attr_clear,$encrypted));
-    if ($attr_clear && $encrypted && (crypt($attr_clear,$encrypted) eq $encrypted)) {
-EOC
-}
-
-sub password_matches___true {
-  return '}'
-}
-
-
-sub password_matches___false__open {
-return << 'EOC';
-    my $user = AxKit::App::TABOO::Data::User->new();
-    my $encrypted = $user->load_passwd($attr_username); 
-    if (crypt($attr_clear,$encrypted) ne $encrypted) {
-EOC
-}
-
-sub password_matches___false {
-  return '}'
-}
-
-
 
 =head2 C<E<lt>exists username="foo"/E<gt>>
 
@@ -406,12 +359,15 @@ sub is_authorized : attribOrChild(username,authlevel) {
 
 sub is_authorized___true__open {
 return << 'EOC';
-  AxKit::Debug(9, $Apache::AxKit::Plugin::BasicSession::session{credential_0} . " is authorized at level " . $Apache::AxKit::Plugin::BasicSession::session{authlevel});
-  if ((defined($Apache::AxKit::Plugin::BasicSession::session{credential_0}))
-      && (defined($Apache::AxKit::Plugin::BasicSession::session{authlevel}))) {
-    if (($attr_username eq $Apache::AxKit::Plugin::BasicSession::session{credential_0})
+  my $session = AxKit::App::TABOO::session($r);
+  my $editinguser = AxKit::App::TABOO::loggedin($session);
+  my $authlevel = AxKit::App::TABOO::authlevel($session);
+  AxKit::Debug(9, $editinguser . " is authorized at level " . $authlevel);
+  if ((defined($editinguser))
+      && (defined($authlevel))) {
+    if (($attr_username eq $editinguser)
       || (($attr_authlevel) 
-	  && ($attr_authlevel <= $Apache::AxKit::Plugin::BasicSession::session{authlevel}))) # Grant access
+	  && ($attr_authlevel <= $authlevel))) # Grant access
 	{
 EOC
 }
@@ -424,10 +380,13 @@ sub is_authorized___true {
 
 sub is_authorized___false__open { 
 return << 'EOC'; 
-  if ((! defined($Apache::AxKit::Plugin::BasicSession::session{credential_0})
-       || ($attr_username ne $Apache::AxKit::Plugin::BasicSession::session{credential_0}))
-      && ((! defined($Apache::AxKit::Plugin::BasicSession::session{authlevel}))
-	  || ($attr_authlevel > $Apache::AxKit::Plugin::BasicSession::session{authlevel}))) # Deny access
+  my $session = AxKit::App::TABOO::session($r);
+  my $editinguser = AxKit::App::TABOO::loggedin($session);
+  my $authlevel = AxKit::App::TABOO::authlevel($session);
+  if ((! defined($editinguser)
+       || ($attr_username ne $editinguser))
+      && ((! defined($authlevel))
+	  || ($attr_authlevel > $authlevel))) # Deny access
     {
 EOC
 }  
@@ -469,6 +428,17 @@ sub random_password : expr attribOrChild(lang,signs,numbers,minlen,maxlen)
 {
 	return 'Crypt::GeneratePassword::word(int($attr_minlen)||7,int($attr_maxlen)||7,$attr_lang,int($attr_signs),(defined $attr_numbers?int($attr_numbers):2))';
 }
+
+=head2 C<E<lt>authnuser/E<gt>>
+
+This tag will return the username of the logged in and authenticated user.
+
+=cut
+
+sub authnuser : expr {
+  return 'AxKit::App::TABOO::loggedin(AxKit::App::TABOO::session($r));'
+}
+
 
 
 1;

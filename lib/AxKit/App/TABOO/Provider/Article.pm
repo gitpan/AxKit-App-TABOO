@@ -29,6 +29,7 @@ use vars qw/@ISA/;
 use Apache;
 use Apache::AxKit::Exception;
 use Apache::AxKit::Provider;
+use AxKit::App::TABOO;
 use AxKit;
 
 # sub: Init

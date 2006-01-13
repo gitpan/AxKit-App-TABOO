@@ -9,7 +9,6 @@
   xmlns:cust="http://www.kjetil.kjernsmo.net/software/TABOO/NS/CustomGrammar"
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N">
-  <xsp:import>Data::Dumper</xsp:import>
   <cust:category>
     <param:if-exists name="submitted">
       <cat:exists>

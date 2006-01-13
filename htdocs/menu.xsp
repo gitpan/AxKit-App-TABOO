@@ -8,7 +8,6 @@
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category"
-  xmlns:session="http://www.axkit.org/2002/XSP/BasicSession"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User">
     
   <menu:menu>
@@ -59,7 +58,7 @@
 	<user:true>
 	  <menu:li>
 	    <menu:text><i18n:insert>me</i18n:insert></menu:text>
-	    <menu:url>/user/<session:get-attribute name="credential_0"/></menu:url>
+	    <menu:url>/user/<user:authnuser/></menu:url>
 	  </menu:li>
 	</user:true>
 	<user:false>
@@ -69,12 +68,12 @@
 	  </menu:li>
 	  <menu:li id="login">
 	    <ct:control element="input" type="text"
-	    name="credential_0" maxlength="8">
+	    name="username" maxlength="8">
 	      <ct:title>
 		<i18n:insert>username</i18n:insert>:
 	      </ct:title>
 	    </ct:control>
-	    <ct:control element="input" type="password" name="passwd">
+	    <ct:control element="input" type="password" name="clear">
 	      <ct:title>
 		<i18n:insert>password</i18n:insert>:
 	      </ct:title>

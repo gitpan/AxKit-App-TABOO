@@ -25,7 +25,7 @@
       <!-- constructing the URI using Apache::AxKit::Plugin::Passthru
 	   and Apache::AxKit::Plugin::AddXSLParams::Request -->
       <xsl:variable name="uri" select="concat('http://',
-				       substring-before($request.headers.host, ':'), ., '?passthru=1&amp;SID=', $session.id)"/>
+				       substring-before($request.headers.host, ':'), ., '?passthru=1&amp;VID=', $session.id)"/>
       
       <xsl:copy-of select="document($uri)"/>
     </xsl:for-each>

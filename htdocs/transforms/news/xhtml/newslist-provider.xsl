@@ -72,7 +72,7 @@
 	    </xsl:choose>
 	  </h2>
 	  <xsl:variable name="uri" select="concat('http://',
-	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
+	    substring-before($request.headers.host, ':'), '/menu.xsp?VID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
 	  <xsl:call-template name="CreateRightSidebar"/>
 	  <div class="main">

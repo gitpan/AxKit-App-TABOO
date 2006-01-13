@@ -54,7 +54,7 @@
 	</div>
 	<div id="container">
 	  <xsl:variable name="uri" select="concat('http://',
-	    substring-before($request.headers.host, ':'), '/menu.xsp?SID=' , $session.id)"/>
+	    substring-before($request.headers.host, ':'), '/menu.xsp?VID=' , $session.id)"/>
 	  <xsl:copy-of select="document($uri)"/>
 	  <div class="main">
 	    <h2 class="pagetitle"><xsl:apply-templates select="./cust:title/node()"/></h2>

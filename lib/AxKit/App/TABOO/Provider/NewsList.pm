@@ -10,7 +10,7 @@ use Carp;
 # what you should expect from this module. 
 
 
-our $VERSION = '0.1';
+our $VERSION = '0.4';
 
 =head1 NAME
 
@@ -89,10 +89,9 @@ use Apache::AxKit::Exception;
 use Apache::AxKit::Provider;
 
 use AxKit;
+use AxKit::App::TABOO;
 use AxKit::App::TABOO::Data::Plurals::Stories;
 use AxKit::App::TABOO::Data::Category;
-
-use Apache::AxKit::Plugin::BasicSession;
 
 
 sub init {
@@ -107,6 +106,7 @@ sub init {
   $self->{maxrecords} = $r->dir_config('TABOOListMaxRecords');
 
   $self->{uri} = $r->uri;
+  $self->{session} = AxKit::App::TABOO::session($r);
 
   my @uri = split('/', $r->uri);
   
@@ -147,7 +147,7 @@ sub process {
 					   return_code => 404,
 					   -text => "URIs should not end with /");  
   }
-  if (($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) && ($self->{editor})) {
+  if ((AxKit::App::TABOO::authlevel($self->{session}) < 4) && ($self->{editor})) {
     throw Apache::AxKit::Exception::Retval(
 					   return_code => 401,
 					   -text => "You're not allowed to see editor-only stories without being authenticated as one.");
@@ -193,7 +193,7 @@ sub exists {
 
 sub key {
   my $self = shift;
-  return $self->{uri} . "/" . $Apache::AxKit::Plugin::BasicSession::session{credential_0};
+  return $self->{uri} . "/" . AxKit::App::TABOO::loggedin($self->{session});
 }
 
 
@@ -215,7 +215,8 @@ sub get_strref {
     $what .= ',minicontent,seccat,freesubject,image,username,linktext,lasttimestamp';
   }
   my %limit;
-  if (($Apache::AxKit::Plugin::BasicSession::session{authlevel} < 4) || ($self->{unpriv})) {
+  my $authlevel = AxKit::App::TABOO::authlevel($self->{session});
+  if (($authlevel < 4) || ($self->{unpriv})) {
     $limit{'editorok'} = 1;
   } elsif ($self->{editor}) {
     $limit{'editorok'} = 0;
@@ -236,7 +237,7 @@ sub get_strref {
   my $rootel = $doc->createElement('taboo');
   $rootel->setAttribute('type', ($self->{list}) ? 'list':'stories');
   $rootel->setAttribute('origin', 'NewsList');
-  if ($Apache::AxKit::Plugin::BasicSession::session{authlevel} >= 5) {
+  if ($authlevel >= 5) {
     $rootel->setAttribute('can-edit', '1');
   }
   $doc->setDocumentElement($rootel);
