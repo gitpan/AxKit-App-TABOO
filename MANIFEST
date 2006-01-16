@@ -86,6 +86,7 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 README
+SIGNATURE
 sql/article-create.sql
 sql/article-test.sql
 sql/grant.sql

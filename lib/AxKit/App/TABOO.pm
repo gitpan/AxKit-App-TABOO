@@ -1,6 +1,6 @@
 package AxKit::App::TABOO;
 
-our $VERSION = '0.39_1';
+our $VERSION = '0.39_2';
 
 use 5.7.3;
 use strict;
@@ -184,7 +184,10 @@ stories and TABOO is nearly useable as a news-site management framework.
 
 Furthermore, there is also some user-management code, including
 authentication and authorization, to allow adding new users and
-editing the information of existing users.
+editing the information of existing users. Important in this respect
+are L<AxKit::App::TABOO::Handler::Login> and
+L<AxKit::App::TABOO::AddXSLParams::Session> and handle the
+authentication and add session information to XSLT.
 
 It allows attaching comments to the news stories and any comment can
 simply get a C</respond> appended on its URI to allow for entering a

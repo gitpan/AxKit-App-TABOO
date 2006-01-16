@@ -113,7 +113,7 @@ sub process {
     $self->{stories} = AxKit::App::TABOO::Data::Plurals::Stories->new();
     unless ($self->{articles}->incat(@{$self->{cats}})) {
       $self->{articles} = undef;
-      unless ($self->{stories}->exists(catname => @{$self->{cats}})) { 
+      unless ($self->{stories}->exists(primcat => @{$self->{cats}})) { 
 	$self->{exists} = 0;
       }
     }
@@ -202,8 +202,8 @@ sub get_dom {
       $self->{articles}->addformatinfo;
       $self->{articles}->write_xml($doc, $rootel);
     }
-    warn Dumper($self->{stories});
-    warn Dumper($self->{articles});
+#    warn Dumper($self->{stories});
+#    warn Dumper($self->{articles});
     
     unless (($anyarticles) || (defined($self->{stories}))) {
       if (defined($authlevel)) {

@@ -15,11 +15,10 @@ use warnings;
 use Carp;
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.1';
 
 sub handler {
   my $r = shift;
-# my $r = Apache->request;
 
   my %session_config = AxKit::App::TABOO::session_config($r);
 
@@ -53,3 +52,53 @@ sub handler {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+AxKit::App::TABOO::Handler::Login - Straight mod_perl handler to authenticate a user in TABOO
+
+=head1 SYNOPSIS
+
+  # in httpd.conf
+    PerlModule AxKit::App::TABOO::Handler::Login
+  <Location /login>
+     SetHandler perl-script
+     PerlHandler AxKit::App::TABOO::Handler::Login
+     PerlSendHeader On
+  </Location>
+
+  PerlSetVar TABOODataStore DB_File
+  PerlSetVar TABOOArgs      "FileName => /tmp/taboodemo-session"
+
+
+=head1 DESCRIPTION
+
+This is a straight mod_perl handler to do the authentication in
+TABOO. It has come into being after having struggled with
+L<Apache::AxKit::Plugin::Session> and L<AxKit::XSP::BasicSession> and
+will simply give the user a cookie if the password matches, and set
+the username and the authorisation level in the session. Not my
+preferred way of doing things, but it shall have to do for now.
+
+The session datastore uses L<Session> and can be configured like that
+module, see the above example.
+
+=head1 TODO
+
+This does something as atrocious as returning a HTML document
+directly. I tried returning something to transform with XSLT, but will
+have to find a better solution. I tried with an AxKit Provider too,
+but that segfaulted on me.
+
+I'd really like to get L<Apache::AxKit::Plugin::Session> going.
+
+=head1 SEE ALSO
+
+L<AxKit::App::TABOO::AddXSLParams::Session>
+
+=head1 FORMALITIES
+
+See L<AxKit::App::TABOO>.
+
+=cut

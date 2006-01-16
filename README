@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.33
-============================
+AxKit/App/TABOO version 0.39_2
+==============================
 
 INTRODUCTION
 
@@ -108,7 +108,7 @@ This module requires these other modules and libraries:
 - Time::Piece
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
-- AxKit::XSP::BasicSession, you must have 0.21 or later.
+- Session for the object oriented approach to Apache Sessions
 - Formatter::HTML::Textile for formatting.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
@@ -158,6 +158,6 @@ find it so usable it is worth an install.
 
 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003-2005 Kjetil Kjernsmo. This program is free
+Copyright (c) 2003-2006 Kjetil Kjernsmo. This program is free
 software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
