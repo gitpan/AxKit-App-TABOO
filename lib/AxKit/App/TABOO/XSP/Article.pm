@@ -238,7 +238,7 @@ or child elements.
 
 
 sub get_article : struct attribOrChild(filename,primcat) {
-   # return << 'EOC'
+    return << 'EOC'
     AxKit::Debug(8, "We look for article with filename: '" . $attr_filename . "'");
     my $article = AxKit::App::TABOO::Data::Article->new();
     unless ($article->load(limit => { filename => $attr_filename })) {

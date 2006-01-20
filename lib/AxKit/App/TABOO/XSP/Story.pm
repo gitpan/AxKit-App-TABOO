@@ -12,6 +12,7 @@ use AxKit::App::TABOO::Data::Plurals::Stories;
 use Session;
 use Time::Piece ':override';
 use XML::LibXML;
+use Text::Unaccent;
 use IDNA::Punycode;
 
 
@@ -75,13 +76,14 @@ sub _create_storyname {
  
     my $endno = '';
     $intitle =~ s/\p{TerminalPunctuation}//gs; # Remove terminal punctutation
-    if ($intitle =~ m/(\d+)$/) { # if it ends with a number, the number might be useful, so preserve it
+    if ($intitle =~ s/(\d+)$//) { # if it ends with a number, the number might be useful, so put it into a variable but strip it
 	$endno = $1;
     }
     idn_prefix('');
 #    warn "INTITLE: ". $intitle;
-    $intitle = encode_punycode(lc($intitle));
-    $intitle =~ s/\s/_/gs; # All spaces become _
+    $intitle = unac_string('utf8', $intitle); # Try to translate most
+    $intitle = encode_punycode(lc($intitle)); # Punycode the rest if needed
+    $intitle =~ s/\s+/_/gs; # All spaces become one _
     $intitle =~ s/[^a-z0-9\-_]//g; # Remove all now not a alphanumeric or -
 #    warn $intitle;
 #    warn $endno;

@@ -4,7 +4,6 @@ htdocs/articles/provider.xsp
 htdocs/articles/submit.xsp
 htdocs/categories/submit.xsp
 htdocs/css/basic.css
-htdocs/guest-login.xsp
 htdocs/i18n.en.xml
 htdocs/i18n.nb.xml
 htdocs/index.xsp

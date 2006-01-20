@@ -1,6 +1,6 @@
 package AxKit::App::TABOO;
 
-our $VERSION = '0.39_2';
+our $VERSION = '0.4';
 
 use 5.7.3;
 use strict;
@@ -284,7 +284,7 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Story
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Category
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Comment
-#  AxAddXSPTaglib AxKit::App::TABOO::XSP::Article
+  AxAddXSPTaglib AxKit::App::TABOO::XSP::Article
   AxAddXSPTaglib AxKit::App::TABOO::XSP::Language
 
 

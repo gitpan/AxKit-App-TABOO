@@ -24,6 +24,7 @@ WriteMakefile(
 			     XML::LibXSLT => 0,
 			     Apache::AxKit::Plugin::Param::Expr => 0,
 			     MIME::Types => 0,
+			     Text::Unaccent => 1.07,
 			     IDNA::Punycode => 0,
 			   }, # E.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005

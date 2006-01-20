@@ -32,27 +32,37 @@
 	</xsl:otherwise>
       </xsl:choose>
     </h2>
-    <div id="byline">
-      <xsl:if test="user:submitter">
-	<xsl:value-of select="i18n:include('submit-by')"/>
-	<xsl:apply-templates select="user:submitter"/>
-      </xsl:if>
-      <xsl:if test="user:user">
-	<xsl:value-of select="i18n:include('posted-by')"/>
-	<xsl:apply-templates select="user:user"/>
-      </xsl:if>
-    </div>
-    <xsl:if test="cat:primcat">
-      <div id="catinfo">
-	<xsl:value-of select="i18n:include('to-cat')"/>
-	<xsl:apply-templates select="cat:primcat"/>
+    <div class="headerdata">
+      <div id="byline">
+	<xsl:if test="user:submitter">
+	  <span class="user-submitter">
+	    <xsl:value-of select="i18n:include('submit-by')"/>
+	    <xsl:apply-templates select="user:submitter"/>
+	  </span>
+	</xsl:if>
+	<xsl:if test="user:user">
+	  <span class="user-poster">
+	    <xsl:value-of select="i18n:include('posted-by')"/>
+	    <xsl:apply-templates select="user:user"/>
+	  </span>
+	</xsl:if>
       </div>
-    </xsl:if>
-    <div id="timeinfo">
-      <xsl:value-of select="i18n:include('on-time')"/>
-      <xsl:apply-templates select="story:timestamp"/>
-      <xsl:value-of select="i18n:include('last-changed')"/>
-      <xsl:apply-templates select="story:lasttimestamp"/>
+      <xsl:if test="cat:primcat">
+	<div id="catinfo">
+	  <xsl:value-of select="i18n:include('to-cat')"/>
+	  <xsl:apply-templates select="cat:primcat"/>
+	</div>
+      </xsl:if>
+      <div id="timeinfo">
+	<span class="on-time">
+	  <xsl:value-of select="i18n:include('on-time')"/>
+	  <xsl:apply-templates select="story:timestamp"/>
+	</span>
+	<span class="last-changed">
+	  <xsl:value-of select="i18n:include('last-changed')"/>
+	  <xsl:apply-templates select="story:lasttimestamp"/>
+	</span>
+      </div>
     </div>
     <div class="minicontent">
       <xsl:apply-templates select="story:minicontent[not(@raw)]/*" mode="strip-ns"/>
@@ -85,21 +95,31 @@
 	  <xsl:value-of select="story:title"/>
 	</a>
       </h3>
-      <div class="byline">
-	<xsl:value-of select="i18n:include('submit-by')"/>
-	<xsl:apply-templates select="user:submitter"/>
-	<xsl:value-of select="i18n:include('posted-by')"/>
-	<xsl:apply-templates select="user:user"/>
-      </div>
-      <div class="catinfo">
-	<xsl:value-of select="i18n:include('to-cat')"/>
-	<xsl:apply-templates select="cat:primcat"/>
-      </div>
-      <div class="timeinfo">
-	<xsl:value-of select="i18n:include('on-time')"/>
-	<xsl:apply-templates select="story:timestamp"/>
-	<xsl:value-of select="i18n:include('last-changed')"/>
-	<xsl:apply-templates select="story:lasttimestamp"/>
+      <div class="headerdata">
+	<div class="byline">
+	  <span class="user-submitter">
+	    <xsl:value-of select="i18n:include('submit-by')"/>
+	    <xsl:apply-templates select="user:submitter"/>
+	  </span>
+	  <span class="user-poster">
+	    <xsl:value-of select="i18n:include('posted-by')"/>
+	    <xsl:apply-templates select="user:user"/>
+	  </span>
+	</div>
+	<div class="catinfo">
+	  <xsl:value-of select="i18n:include('to-cat')"/>
+	  <xsl:apply-templates select="cat:primcat"/>
+	</div>
+	<div class="timeinfo">
+	  <span class="on-time">
+	    <xsl:value-of select="i18n:include('on-time')"/>
+	    <xsl:apply-templates select="story:timestamp"/>
+	  </span>
+	  <span class="last-changed">
+	    <xsl:value-of select="i18n:include('last-changed')"/>
+	    <xsl:apply-templates select="story:lasttimestamp"/>
+	  </span>
+	</div>
       </div>
       <div class="minicontent">
 	<xsl:apply-templates select="story:minicontent[not(@raw)]/*" mode="strip-ns"/>

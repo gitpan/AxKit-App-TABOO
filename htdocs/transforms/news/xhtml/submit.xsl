@@ -87,6 +87,8 @@
 		<xsl:value-of select="i18n:include('story-stored')"/>
 		<p>
 		  <xsl:value-of
+		      select="i18n:include('editors-will-check')"/> 
+		  <xsl:value-of
 		      select="i18n:include('return-to-top-page')"/> 
 		  <a rel="top" href="/"><xsl:value-of
 		  select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_1"/>

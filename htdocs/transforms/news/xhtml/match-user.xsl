@@ -5,15 +5,13 @@
   exclude-result-prefixes="user"> 
 
   <xsl:template match="user:user|user:submitter">
-    <span class="by">
-      <a>
-	<xsl:attribute name="href">
-	  <xsl:text>/user/</xsl:text><xsl:value-of
-	  select="user:username"/>
-	</xsl:attribute>
-	<xsl:value-of select="user:name"/>
-      </a>
-    </span>
+    <a>
+      <xsl:attribute name="href">
+	<xsl:text>/user/</xsl:text><xsl:value-of
+	select="user:username"/>
+      </xsl:attribute>
+      <xsl:value-of select="user:name"/>
+    </a>
   </xsl:template>
 
 </xsl:stylesheet>

@@ -15,7 +15,7 @@ use warnings;
 use Carp;
 
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 sub handler {
   my $r = shift;
@@ -28,23 +28,25 @@ sub handler {
     my $session = new Session $1, %session_config;
     $session->delete if defined $session;
   }
-  my $outtext = '<html><head><title>Log in</title></head><body><h1>Log in</h1>';
+  my $outtext = '<html><head>';
   my $req = Apache::Request->instance($r);
   my $user = AxKit::App::TABOO::Data::User::Contributor->new();
   my $authlevel = $user->load_authlevel($req->param('username'));
   if ($authlevel) { # So, the user exists
     my $encrypted = $user->load_passwd($req->param('username'));
     if ($req->param('clear') && $encrypted && (crypt($req->param('clear'),$encrypted) eq $encrypted)) {
+      my $redirect = $r->header_in("Referer") || '/';
       my $session = new Session undef, %session_config;
       $r->header_out("Set-Cookie" => 'VID='.$session->session_id());
       $session->set(authlevel => $authlevel);
       $session->set(loggedin => $req->param('username'));
-      $outtext .= '<p>Password is valid, go to <a href="/">main page</a>.</p>';
+      $outtext .= '<meta http-equiv="refresh" content="1;url='.$redirect.'">';
+      $outtext .= '<title>Log in</title></head><body><h1>Logged in</h1><p>Password is valid, go to <a href="/">main page</a>.</p>';
     } else {
-      $outtext .= '<p>Password is invalid, go back and try again!</p>';
+      $outtext .= '<title>Log in</title></head><body><h1>Log in</h1><p>Password is invalid, go back and try again!</p>';
     }
   } else {
-    $outtext .= '<p>Username was not found, go back and try again!</p>';
+    $outtext .= '<title>Log in</title></head><body><h1>Log in</h1><p>Username was not found, go back and try again!</p>';
   }
   $r->send_http_header('text/html');
   $r->print($outtext."\n</body></html>\n");

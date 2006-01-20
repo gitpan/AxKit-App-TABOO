@@ -1,5 +1,5 @@
-AxKit/App/TABOO version 0.39_2
-==============================
+AxKit/App/TABOO version 0.4
+===========================
 
 INTRODUCTION
 
@@ -108,6 +108,7 @@ This module requires these other modules and libraries:
 - Time::Piece
 - Class::Data::Inheritable
 - AxKit::XSP::QueryParam
+- Text::Unaccent and IDNA::Punycode is used to ensure proper names.
 - Session for the object oriented approach to Apache Sessions
 - Formatter::HTML::Textile for formatting.
 - Crypt::GeneratePassword for generating passwords to send to users.

@@ -149,7 +149,7 @@ div.editor-ok h3 a:hover, div.editor-not-ok h3 a:hover, div#the-story h2 a:hover
   text-decoration: underline;
 }
 
-div.byline, div.catinfo, div.timeinfo, div#byline, div#catinfo, div#timeinfo, div.comm-timeinfo, div.comm-timeinfo, div.comm-byline {  
+div.headerdata, div.comm-timeinfo, div.comm-timeinfo, div.comm-byline {  
   color: #333;
   background: #f0f0ff;
   font-size: small;
@@ -166,7 +166,7 @@ dl.articlelist dt span.byline {
   font-size: small;
 }
 
-div.timeinfo, div.comm-timeinfo {
+div.headerdata, div.comm-timeinfo {
   border-bottom: 1px solid #333;
 }
 
@@ -258,4 +258,43 @@ div.foundcats p.description {
   font-size: smaller;
   padding-left: 4em;
   margin-top: 0.3em;
+}
+
+
+@media print {
+  body { 
+    color: #000;
+    background: #fff;
+  }
+  div.rightsidebar, div.menu, div#breadcrumb, div.reply-link, div.commentlist, div#footer { 
+    display:none 
+  }
+  div.main {
+    margin: 2em 5em;
+    max-width: 64em;
+  }
+  div.editor-ok, div.editor-not-ok, div#the-story, div#user-info {  
+    border: none;
+  }
+  
+  div.editor-ok, div.editor-not-ok {  
+    page-break-inside : avoid;
+  }
+}
+
+@media handheld {
+  body { 
+    color: #000;
+    background: #fff;
+  }
+  div.rightsidebar, div.menu, div.catlist, span.user-poster, span.last-changed { 
+    display:none;
+  }
+  div.catinfo, div.timeinfo, div.byline, div#catinfo, div#timeinfo, div#byline {  
+    display:inline;
+  }
+
+  div.main {
+    margin: 0.5em;
+  }
 }

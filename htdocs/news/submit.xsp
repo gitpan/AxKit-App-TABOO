@@ -11,10 +11,8 @@
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category"
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:val="http://www.kjetil.kjernsmo.net/software/TABOO/NS/FormValues"
-  xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns:param="http://www.axkit.org/2002/XSP/QueryParam">
   <cust:submit>
-    <xi:include href="../guest-login.xsp"/>
     <cust:title><i18n:insert>submit-story</i18n:insert></cust:title>
     <param:if-exists name="submitted">
       <story:store/>
