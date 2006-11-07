@@ -48,8 +48,6 @@
   <text id="content"> The content </text>
   <text id="content-descr"> Enter the rest of the content. </text>
 
-  <text id="textile-descr"> You may use <a href="#textile">Textile</a> in this field. </text>  <!-- TODO link -->
-
   <text id="descriptive-image"> A descriptive image </text>
   <text id="descriptive-image-descr"> The address of a descriptive image. </text>
 

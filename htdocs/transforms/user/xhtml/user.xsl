@@ -60,11 +60,13 @@
 	      <xsl:apply-templates select="./*/user:user"/>
 	    </div>
 
-	    <form method="post" action="/user/submit/">
-	      <div class="fields">
-		<xsl:apply-templates select="./ct:control"/>
-	      </div>
-	    </form>
+	    <xsl:if test="not(./*/user:user/user:username = 'guest')">
+	      <form method="post" action="/user/submit/">
+		<div class="fields">
+		  <xsl:apply-templates select="./ct:control"/>
+		</div>
+	      </form>
+	    </xsl:if>
 	  </div>
 	</div>
 	<xsl:call-template name="CreateFooter"/>

@@ -29,11 +29,10 @@
 	<ct:descr><i18n:insert>comment-descr</i18n:insert></ct:descr>
 	<ct:value><param:get name="title"/></ct:value>
       </ct:control>
-      <ct:control name="content" element="textarea" rows="12" cols="60">
+      <ct:control name="content" element="textarea" rows="18" cols="60">
 	<ct:title><i18n:insert>content</i18n:insert></ct:title>
 	<ct:descr>
 	  <i18n:insert>content-descr</i18n:insert>	
-	  <i18n:insert>textile-descr</i18n:insert> <!-- TODO link -->
 	</ct:descr>
 	<ct:value><param:get name="content"/></ct:value>
       </ct:control>

@@ -11,16 +11,13 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.33';
+our $VERSION = '0.5';
 
 
 use DBI;
 use Exception::Class::DBI;
 
 use XML::LibXML;
-
-# This needs to change if other formatters are added
-use Formatter::HTML::Textile;
 
 
 =head1 NAME
@@ -178,10 +175,9 @@ class, it should be sufficiently generic to rarely require
 subclassing. References to subclasses will be followed, and
 C<write_xml> will call the C<write_xml> of that object. Arrays will be
 represented with multiple instances of the same element. Fields that
-have undefined values will not be included. It will also format and
-parse fields indicated by C<elementneedsparse()>, see below. For those
-fields, the unparsed counterparts will have an attribute
-C<raw="Textile">.
+have undefined values will not be included. It will also parse fields
+indicated by C<elementneedsparse()>, see below. Currently, we get HTML
+from TinyMCE, which we let XML::LibXML parse.
 
 =cut
 
@@ -208,26 +204,18 @@ sub write_xml {
 	}
 	elsif (ref($content) eq '') {
 	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
-	  my $text = XML::LibXML::Text->new($content);
-	  if ((defined($self->elementneedsparse)) && ($self->elementneedsparse =~ m/\b$key\b/)) {
-	    # Here, we need to format the text coming in, and then
-	    # parse it do add it
-	    my $formatter = Formatter::HTML::Textile->format($content);
-	    $formatter->charset('utf-8');
-	    $formatter->char_encoding(0);
-	    my $html = $formatter->fragment;
-	    if ($html) {
-	      my $parser = XML::LibXML->new();
-	      my $parsed = $parser->parse_balanced_chunk($html);
-	      my $fragment = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
-	      $fragment->appendChild($parsed);
-	      $topel->appendChild($fragment);
-	      # Add an attribute to the other element containing the
-	      # unparsed stuff
-	      $element->setAttribute('raw', 'Textile');
-	    } 
+	  if (($content) && (defined($self->elementneedsparse)) && ($self->elementneedsparse =~ m/\b$key\b/)) {
+	    my $parser = XML::LibXML->new();
+	    $parser->recover(1);
+	    my $parsed = $parser->parse_html_string($content); # Lets hope the content is well-formed enough...
+	    my @fragments = $parsed->findnodes('/html/body/*');
+	    foreach my $fragment (@fragments) {
+	      $element->appendChild($fragment);
+	    }
+	  } else {
+	    my $text = XML::LibXML::Text->new($content);
+	    $element->appendChild($text);
 	  }
-	  $element->appendChild($text);
 	  $topel->appendChild($element);
 	} elsif (ref($content) eq "ARRAY") {
 	  # The content is an array, we must go through it and add an element for each.
@@ -454,11 +442,10 @@ sub dbconnectargs {
 
 =item C<elementneedsparse($string)>
 
-One may use e.g. L<Formatter::HTML::Textile> to make HTML from simple
-markup syntax, but such formatting must be parsed to be included in
-the output. This method takes a string consisting of a comma-separated
-list of fields that needs parsing as argument, or will return such a
-list if it is not given.
+User-supplied formatting may not be valid XHTML, and so needs to be
+validated and parsed. This method takes a string consisting of a
+comma-separated list of fields that needs parsing as argument, or will
+return such a list if it is not given.
 
 =item C<xmlelement($string)>
 

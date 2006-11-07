@@ -49,8 +49,6 @@
   <text id="content"> Innholdet </text>
   <text id="content-descr"> Skriv inn resten av innholdet her. </text>
 
-  <text id="textile-descr"> I dette feltet kan du bruke <a href="#textile">Textile</a>. </text>  <!-- TODO link -->
-
   <text id="descriptive-image"> Et beskrivende bilde </text>
   <text id="descriptive-image-descr"> Adressen til et beskrivende bilde. </text>
 

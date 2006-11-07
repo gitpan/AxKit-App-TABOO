@@ -65,10 +65,10 @@
       </div>
     </div>
     <div class="minicontent">
-      <xsl:apply-templates select="story:minicontent[not(@raw)]/*" mode="strip-ns"/>
+      <xsl:apply-templates select="story:minicontent/*" mode="strip-ns"/>
     </div>
     <div class="content">
-      <xsl:apply-templates select="story:content[not(@raw)]/*" mode="strip-ns"/>
+      <xsl:apply-templates select="story:content/*" mode="strip-ns"/>
     </div>
       
   </xsl:template>
@@ -122,7 +122,7 @@
 	</div>
       </div>
       <div class="minicontent">
-	<xsl:apply-templates select="story:minicontent[not(@raw)]/*" mode="strip-ns"/>
+	<xsl:apply-templates select="story:minicontent/*" mode="strip-ns"/>
       </div>
       <div class="readmorelink">
 	<a>

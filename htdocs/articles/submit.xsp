@@ -64,11 +64,10 @@
       <ct:descr><i18n:insert>article-filename-descr</i18n:insert></ct:descr>
       <ct:value><val:insert name="filename"/></ct:value>
     </ct:control>
-    <ct:control name="text" element="textarea" rows="15" cols="60">
+    <ct:control name="text" element="textarea" rows="22" cols="60">
       <ct:title><i18n:insert>article-textstring</i18n:insert></ct:title>
       <ct:descr>
 	<i18n:insert>article-textstring-descr</i18n:insert>
-	<i18n:insert>textile-descr</i18n:insert> <!-- TODO link -->
       </ct:descr>
       <ct:value><val:insert name="text"/></ct:value>
     </ct:control>

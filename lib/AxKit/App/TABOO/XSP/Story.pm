@@ -18,7 +18,7 @@ use IDNA::Punycode;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.4';
+our $VERSION = '0.5';
 
 =head1 NAME
 
@@ -83,7 +83,7 @@ sub _create_storyname {
 #    warn "INTITLE: ". $intitle;
     $intitle = unac_string('utf8', $intitle); # Try to translate most
     $intitle = encode_punycode(lc($intitle)); # Punycode the rest if needed
-    $intitle =~ s/\s+/_/gs; # All spaces become one _
+    $intitle =~ s/\s+/-/gs; # All spaces become one -
     $intitle =~ s/[^a-z0-9\-_]//g; # Remove all now not a alphanumeric or -
 #    warn $intitle;
 #    warn $endno;
@@ -275,6 +275,23 @@ sub get_story : struct attribOrChild(storyname,sectionid) {
     my $root = $doc->createElementNS('http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output', 'story:story-loaded');
     $doc->setDocumentElement($root);
     $story->write_xml($doc, $root); # Return an XML representation
+EOC
+}
+
+=head2 C<E<lt>number-of-unapproved sectionid="subqueue"/E<gt>>
+
+Will return the number of articles in a given section that has not
+been approved by an editor. Especially useful for giving the editors a
+heads-up as to new articles in the submission queue, like in the
+example.
+
+=cut
+
+sub number_of_unapproved : expr attribOrChild(sectionid) {
+    return << 'EOC'
+    my $stories = AxKit::App::TABOO::Data::Plurals::Stories->new();
+    $stories->exists(sectionid => $attr_sectionid,
+		   editorok => 0);
 EOC
 }
 

@@ -1,6 +1,14 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
-
+0.5     2006-11-05
+        - Replace Textile input with TinyMCE support.
+	- Correct a bug that allowed anyone to edit the guest user's page...
+	- Add a	XSP tag to find the number of posts that are unapproved,
+	  and add that for the subqueue to the menu
+	- Use - as delimiter instead of _ in storynames (rumours have it
+	  google likes that better).
+	
+	
 0.4     2006-01-20
 	- Remove BasicSession and create my own session stuff.
 	  * AxKit::App::TABOO::Handler::Login to handle logins

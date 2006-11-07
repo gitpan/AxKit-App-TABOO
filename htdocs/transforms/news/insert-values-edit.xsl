@@ -40,7 +40,7 @@
 
   <xsl:template match="val:insert[@name='minicontent']">
     <xsl:if test="$minicontent = ''">
-      <xsl:value-of select="/cust:submit/story:story-loaded/story:story/story:minicontent[@raw]"/>  
+      <xsl:copy-of select="/cust:submit/story:story-loaded/story:story/story:minicontent"/>  
     </xsl:if>
     <xsl:if test="not($minicontent = '')">
       <xsl:value-of select="$minicontent"/>  
@@ -51,7 +51,7 @@
 
   <xsl:template match="val:insert[@name='content']">
     <xsl:if test="$content = ''">
-      <xsl:value-of select="/cust:submit/story:story-loaded/story:story/story:content[@raw]"/>  
+      <xsl:apply-templates select="/cust:submit/story:story-loaded/story:story/story:content"/>  
     </xsl:if>
     <xsl:if test="not($content = '')">
       <xsl:value-of select="$content"/>  

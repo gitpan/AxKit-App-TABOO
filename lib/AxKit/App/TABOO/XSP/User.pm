@@ -144,6 +144,11 @@ sub store {
     # Retrieve old data
     $user->load(what => '*', limit => {'username' => $args{'username'}});
 
+    if ($args{'username'} eq 'guest') {
+      throw Apache::AxKit::Exception::Retval(
+					     return_code => FORBIDDEN,
+					     -text => "Leave the guest user alone!");
+    }
     if ($args{'username'} eq $editinguser) {
 	# It is the user editing his own data
 	if ($args{'authlevel'} > $authlevel) {

@@ -1,4 +1,4 @@
-AxKit/App/TABOO version 0.4
+AxKit/App/TABOO version 0.5
 ===========================
 
 INTRODUCTION
@@ -63,18 +63,11 @@ users.
 TABOO can run on different virtual hosts and operate on different
 databases. 
 
-It can also take user-entered text that has been marked up with some
-simple syntax like Textile http://www.textism.com/tools/textile/ and
-convert that to HTML.
+It uses TinyMCE http://tinymce.moxiecode.com/ to allow WYSIWYG entered
+text in textfields. This results in an incompatible change to older
+versions, and the data needs to be converted. A script is included,
+look inside to see how to use it.
 
-The 0.2 release is does a lot of new things, and some things are not
-quite as well tested yet, and not quite as well
-documented. Importantly, database schema have seen quite a few
-changes, some of which are incompatible with earlier releases. Apart
-from the database changes, this has a lot of new Article code, which
-makes it possible to get static articles out, and present them
-nicely. A classification provider is important when exploring articles
-and stories, as TABOO offers a lot of ways to categorize stuff.
 
 I'm following the mantra "release early", and have made everything
 I've done available from the start. Several fine folks have poked at
@@ -110,7 +103,6 @@ This module requires these other modules and libraries:
 - AxKit::XSP::QueryParam
 - Text::Unaccent and IDNA::Punycode is used to ensure proper names.
 - Session for the object oriented approach to Apache Sessions
-- Formatter::HTML::Textile for formatting.
 - Crypt::GeneratePassword for generating passwords to send to users.
 - AxKit::XSP::Sendmail to send e-mail to new users.
 - MIME::Types.
@@ -125,6 +117,9 @@ This module requires these other modules and libraries:
   Apache::AxKit::Provider::File::Formatter and the OpenOffice
   Provider, but they are not set as prerequisites.
 
+You will need TinyMCE, http://tinymce.moxiecode.com/ which should be
+unpacked and Aliased so that the jscripts directory is just after the
+root.
 
 You will also need some XML libraries, for example libxml2 and
 libxslt. You will probably have gotten these along with AxKit. TABOO
@@ -143,8 +138,7 @@ can be checked out anonymously using e.g.:
 
   svn checkout http://svn.kjernsmo.net/TABOO/trunk TABOO  
 
-It is also available using the svn schema as well as svn+ssh for
-committers.
+It is also available using svn+ssh for committers.
 
 
 SUPPORT

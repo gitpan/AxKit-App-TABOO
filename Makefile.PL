@@ -18,7 +18,6 @@ WriteMakefile(
 			     Crypt::GeneratePassword => 0,
 			     Apache::AxKit::Exception => 0,
 			     Session => 0,
-			     Formatter::HTML::Textile => 0.5,
 			     Apache::AxKit::Plugin::AddXSLParams::Request => 0,
 			     Encode => 2.09,
 			     XML::LibXSLT => 0,

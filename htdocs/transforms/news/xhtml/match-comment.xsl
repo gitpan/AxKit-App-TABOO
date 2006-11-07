@@ -48,7 +48,7 @@
 	</div>
       </div>
       <div class="comm-content">
-	<xsl:apply-templates select="comm:content[not(@raw)]/*" mode="strip-ns"/>
+	<xsl:apply-templates select="comm:content/*" mode="strip-ns"/>
       </div>
       <xsl:if test="not(ancestor::comm:comment-loaded or ancestor::comm:comment-submission)">
 	<div class="reply-link">

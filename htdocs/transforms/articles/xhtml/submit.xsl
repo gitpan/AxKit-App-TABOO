@@ -22,7 +22,6 @@
   <xsl:import href="match-content.xsl"/>
   <xsl:import href="match-author.xsl"/>
   <xsl:import href="/transforms/news/xhtml/match-breadcrumbs.xsl"/>
-  <xsl:import href="/transforms/match-instructions.xsl"/>
   <xsl:import href="/transforms/xhtml/match-control.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -45,6 +44,7 @@
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
 	</title>
 	<xsl:call-template name="CommonHTMLHead"/>
+	<xsl:call-template name="TinyMCE"/>	
 	<link rel="top" href="/"/>
       </head>
       <body>
@@ -114,7 +114,6 @@
 	      </div>
 	    </form>
 	    
-	    <xsl:call-template name="TextileInstructions"/>
 
 	  </div>
 	</div>

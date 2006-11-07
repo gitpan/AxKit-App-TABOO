@@ -1,6 +1,6 @@
 package AxKit::App::TABOO;
 
-our $VERSION = '0.4';
+our $VERSION = '0.5';
 
 use 5.7.3;
 use strict;
@@ -194,7 +194,8 @@ simply get a C</respond> appended on its URI to allow for entering a
 response to it, and this is also easily done through links. It needs a
 bit more polish, though.
 
-It can also format user-entered text with L<Formatter::HTML::Textile>.
+It uses TinyMCE L<http://tinymce.moxiecode.com/> to allow WYSIWYG
+entered text in textfields.
 
 It also has some code for i18n, consisting of stylesheets that can
 take all strings of text from a separate XML file and insert them in
@@ -243,6 +244,10 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   RewriteRule ^/articles/([^/]+)/([^/]+)$ /articles/provider.xsp?primcat=$1&filename=$2
 
   RewriteRule ^/$ /index.xsp
+
+  # Set to whereever you unpacked TinyMCE
+  Alias /jscripts/tiny_mce/ /usr/share/tinymce/www/
+
 
   # This may be needed on some setups
   DirectoryIndex index.xsp index.xml

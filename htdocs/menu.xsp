@@ -8,6 +8,7 @@
   xmlns:i18n="http://www.kjetil.kjernsmo.net/software/TABOO/NS/I18N"
   xmlns:ct="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Control"
   xmlns:cat="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Category"
+  xmlns:story="http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story"
   xmlns:user="http://www.kjetil.kjernsmo.net/software/TABOO/NS/User">
     
   <menu:menu>
@@ -21,7 +22,10 @@
       <user:is-authorized authlevel="5">
 	<user:true>
 	  <menu:li>
-	    <menu:text><i18n:insert>subqueue-story-menu</i18n:insert></menu:text>
+	    <menu:text>
+	      <i18n:insert>subqueue-story-menu</i18n:insert>
+	      (<story:number-of-unapproved sectionid="subqueue"/>)
+	    </menu:text>
 	    <menu:url>/news/subqueue</menu:url>
 	  </menu:li>
 	</user:true>

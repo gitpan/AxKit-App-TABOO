@@ -20,7 +20,6 @@
   <xsl:import href="/transforms/xhtml/footer.xsl"/>
   <xsl:import href="/transforms/insert-i18n.xsl"/>
   <xsl:import href="/transforms/ends-with.xsl"/>
-  <xsl:import href="/transforms/match-instructions.xsl"/>
   <xsl:import href="match-breadcrumbs.xsl"/>
 
   <xsl:output version="1.0" encoding="utf-8" indent="yes"
@@ -44,6 +43,7 @@
 	  <xsl:value-of select="document('/site/main.rdf')//dc:title/rdf:Alt/rdf:_2"/>
 	</title>
 	<xsl:call-template name="CommonHTMLHead"/>	
+	<xsl:call-template name="TinyMCE"/>	
       </head>
       <body>      
 	<xsl:call-template name="CreateHeader"/>
@@ -100,9 +100,7 @@
 		  <div class="fields">
 		    <xsl:apply-templates select="./ct:control"/>
 		  </div>
-		</form>
-		
-		<xsl:call-template name="TextileInstructions"/>
+		</form>		
 	      </xsl:otherwise>
 	    </xsl:choose>
 	    
