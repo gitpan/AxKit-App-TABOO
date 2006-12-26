@@ -25,3 +25,4 @@ htdocs/articles/content
 htdocs/transforms/xhtml2html.xsl
 sql/webshop-create.sql
 sql/webshop-test.sql
+scripts/mailabackup.pl

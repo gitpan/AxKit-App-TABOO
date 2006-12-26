@@ -16,10 +16,10 @@ Hash: SHA1
 
 SHA1 f29d6ad286edf56ca857a4c8084a288cebab47f9 Changes
 SHA1 02b3bab5ae34580fcae7b41b3945591d5f885722 MANIFEST
-SHA1 a877b02774cb67cd8e838e6ae99479343c968402 MANIFEST.SKIP
-SHA1 f6c470da90842520224ee39d56180d1bf7bdc01a META.yml
-SHA1 671a8d5a7c045c65c96da34da4d4cde32cc8d0f9 Makefile.PL
-SHA1 d43dfcc64b332bee43aa6536f658a3856a590c8c README
+SHA1 abeb8cfb3635a72dd25d5a21c20fc94b09f4e827 MANIFEST.SKIP
+SHA1 dcaac23940ef42812d437a0ff74e043ab82508d9 META.yml
+SHA1 da78d8a2a9fa254989c2ef91343d9dfa9d0408f5 Makefile.PL
+SHA1 33189f82cd1b8b9f09df7a60e862923f335d1d33 README
 SHA1 871f731f31fe12bcc5b7a83e0cf4353bdfda175b htdocs/articles/edit.xsp
 SHA1 786152d3dfc41181099e8aa4d90b2bfec8d09367 htdocs/articles/provider.xsp
 SHA1 fd96d1f33d51f8377dbbedeaffb9cf6c8796851e htdocs/articles/submit.xsp
@@ -69,7 +69,7 @@ SHA1 335f60255fe16d4413701859f2019c4540786897 htdocs/transforms/xhtml/match-menu
 SHA1 9c2a0f444b4a6fa859b40e9d97f3b89b214925ea htdocs/transforms/xhtml/rightsidebar.xsl
 SHA1 2b812c125b5e6f6aedc051b2d9f1a086cdc06f12 htdocs/user/submit/new.xsp
 SHA1 70bbad5f80644a571d3cf1c6809c7837f1e78929 htdocs/user/submit/user.xsp
-SHA1 cdcdc3ce38a3587fd70ee2a9c7dda1fc8cd2f7b4 lib/AxKit/App/TABOO.pm
+SHA1 b2a318c3b33a20d7d24ae7acdee64f80626f15e2 lib/AxKit/App/TABOO.pm
 SHA1 6dbe391253da11af984f94e27ceee1b4e8a4e687 lib/AxKit/App/TABOO/AddXSLParams/Session.pm
 SHA1 94e8cc4f955fc2fd2a8f68114a3765e9c72b9a1b lib/AxKit/App/TABOO/Data.pm
 SHA1 eeff37c6eab8a1e5fe9898659ce20a20ed765ae8 lib/AxKit/App/TABOO/Data/Article.pm
@@ -95,7 +95,7 @@ SHA1 06bb4561b0141fd04680d71d44647f83d43bdfa4 lib/AxKit/App/TABOO/Provider/News.
 SHA1 3413a2b61f08837a88e40294fca9fd2f7c08afd8 lib/AxKit/App/TABOO/Provider/NewsList.pm
 SHA1 e78b8dd31937cd61c79d7ccd76158689f92ec0c8 lib/AxKit/App/TABOO/XSP/Article.pm
 SHA1 580f0e976ca654b6482140a247ddf97c67159063 lib/AxKit/App/TABOO/XSP/Category.pm
-SHA1 71ffd278fb28247ffbf9b7b9f53c860f234e1601 lib/AxKit/App/TABOO/XSP/Comment.pm
+SHA1 693cecba9d0f9297059eb0b9e0fa79123382f6b0 lib/AxKit/App/TABOO/XSP/Comment.pm
 SHA1 8ef6a198422ca63d13a1665f98aa964a9a1cd860 lib/AxKit/App/TABOO/XSP/Language.pm
 SHA1 a119d0cfb51c79ba46ce392442d61d4b648b184c lib/AxKit/App/TABOO/XSP/Story.pm
 SHA1 2201ae80b590695e2968db6988facd8d72b7bff0 lib/AxKit/App/TABOO/XSP/User.pm
@@ -111,7 +111,7 @@ SHA1 835b4545bdf1054b755c56cb24f92819156d51d0 test.pl
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.2.2 (GNU/Linux)
 
-iD8DBQFFUQb1lE/Gp2pqC7wRAvjcAJ4qLYkzZk5JV4vfckpxdxsgdn5ZsgCeLBt5
-we7II5Dfec37yv6G+37w3cI=
-=Vqjv
+iD8DBQFFkaUqlE/Gp2pqC7wRAhpYAJ0S5IbqZ0K07jPj4uiVZRNmx995UACdGt3u
+KbrHRtYIphPAGnl1y9mPj/M=
+=fdRD
 -----END PGP SIGNATURE-----

@@ -1,6 +1,6 @@
 package AxKit::App::TABOO;
 
-our $VERSION = '0.5';
+our $VERSION = '0.51';
 
 use 5.7.3;
 use strict;
@@ -207,6 +207,14 @@ typically background articles with rich metadata. Content can be
 displayed, and that's pretty robust. Entering articles also works, but
 they cannot be edited yet.
 
+=head1 REVERSE PROXY
+
+It is generally a very good idea to use a reverse proxy in front of a
+heavyish mod_perl application, and there are a few hard-coded things
+in TABOO that makes it pretty hard to run without it. It is therefore
+strongly recommended that you do that.
+
+
 =head1 CONFIGURATION EXAMPLE
 
 The following is most of the author's AxKit configuration, and should
@@ -262,6 +270,9 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   # Here starts the the main AxKit-specific things
   PerlModule AxKit
   SetHandler AxKit
+
+  # %ENV adds overhead and isn't used, so disable.
+  PerlOptions -SetupEnv
 
   AxHandleDirs On
 
@@ -372,6 +383,11 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   PerlSetEnv PGUSER taboodemo
   PerlSetEnv PGPASSWORD hk987JKBgui
 
+  # Set this if you want to use Akismet: http://akismet.com/
+  PerlSetVar TABOOAkismetKey fooobaaaa
+  PerlSetVar TABOOAkismetURL http://your.mainpage.url
+
+
   # Aliases, rather than files have a full filesystem path. 
   # That's rather evil...
   Alias /news/submit /var/www/news/submit.xsp 
@@ -398,8 +414,8 @@ feel good, but it was the way I it working...
 
 =head1 TODO
 
-A lot. Because this is a POD, I'm stopping with my lofty visions here
-(there's more of that in the README). This is the first beta of TABOO,
+Because this is a POD, I'm stopping with my lofty visions here
+(there's more of that in the README). This is a beta of TABOO,
 and it seems to do what it is intended to, namely be a site where
 multiple users can post news stories, and comment them. That's
 something that has been done before, of course, but not within the

@@ -12,12 +12,11 @@ use AxKit::App::TABOO;
 use Session;
 use Time::Piece ':override';
 use XML::LibXML;
-
-
+use Net::Akismet;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.4';
+our $VERSION = '0.51';
 
 =head1 NAME
 
@@ -81,6 +80,11 @@ logged in and authenticated with an authorization level. If an
 authlevel is not found in the user's session object, it will throw an
 exceptions with an C<AUTH_REQUIRED> code.
 
+If TABOOAkismetKey is set (and spammers will make you want this really
+fast), it will check the Akismet anti-spam system if the user has an
+authlevel less than 2, and return a C<FORBIDDEN> if it is deemed to be
+spam.
+
 Finally, the Data object is instructed to save itself.
 
 If successful, it will return a C<store> element in the output
@@ -128,6 +132,29 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Outpu
       $args{'commentpath'} .= '_' . ++$exists;
     }
     delete $args{'parentcpath'};
+
+    if ($r->dir_config('TABOOAkismetKey')) {
+      AxKit::Debug(9, "Using Akismet");
+      my $akismet = Net::Akismet->new(
+                        KEY => $r->dir_config('TABOOAkismetKey'),
+                        URL => $r->dir_config('TABOOAkismetURL'),
+                ) or throw Apache::AxKit::Exception::Error(-text => "Akismet key verification failed.");
+      my %akismetstuff = (USER_IP => $r->header_in('X-Forwarded-For'),
+			  COMMENT_CONTENT => $args{'content'},
+			  REFERRER => $r->header_in('Referer'),
+			  COMMENT_TYPE => 'comment',
+			 );
+      if ($authlevel >= 2) { # Presumed ham
+	$akismet->ham(%akismetstuff);
+      } else {
+	AxKit::Debug(10, "Akismet check on: ".join("    ",values(%akismetstuff)));
+	if ($akismet->check(%akismetstuff) eq 'true') {
+	  throw Apache::AxKit::Exception::Retval(
+						 return_code => FORBIDDEN,
+						 -text => "Akismet check says that your comment is spam. Please contact webmaster if you received this message in error.");
+	}
+      }
+    }
 
     my $comment = AxKit::App::TABOO::Data::Comment->new();
     $comment->populate(\%args);

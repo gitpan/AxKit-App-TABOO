@@ -112,7 +112,9 @@ This module requires these other modules and libraries:
 - Data::Dumper lists out debugging information, but can be removed. 
 - AxKit will bring along XML::LibXML, and while you could use any
   LibXSLT module supported by AxKit, I recommend XML::LibXSLT, and to
-  ease installation, I made it a prerequisite.
+  ease installation, I made it a prerequisite.  
+- Net::Akismet may be used, but is not strictly required. 
+  See http://akismet.com/ 
 - You'd most certainly want a few Formatters, the
   Apache::AxKit::Provider::File::Formatter and the OpenOffice
   Provider, but they are not set as prerequisites.

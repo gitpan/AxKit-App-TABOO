@@ -25,6 +25,7 @@ WriteMakefile(
 			     MIME::Types => 0,
 			     Text::Unaccent => 1.07,
 			     IDNA::Punycode => 0,
+			     Net::Akismet => 0.02,
 			   }, # E.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
      (ABSTRACT_FROM => 'lib/AxKit/App/TABOO.pm', # retrieve abstract from module
