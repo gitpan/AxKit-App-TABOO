@@ -35,6 +35,7 @@
 	theme_advanced_toolbar_align : "left",
 	theme_advanced_blockformats : "p,h3,h4,h5,h6,div,blockquote",
 	convert_fonts_to_spans : true,
+	relative_urls : false,
 	language : "<xsl:value-of select="$neg.lang"/>",
 	verify_html : true,
 valid_elements : ""

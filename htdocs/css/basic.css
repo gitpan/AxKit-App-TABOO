@@ -190,6 +190,11 @@ div.minicontent, div.content {
   padding: 1ex;
 }
 
+div.minicontent {
+  overflow: auto;
+}
+
+
 div.editlink {  
   text-align : right;
 }
@@ -222,7 +227,7 @@ div.commentlist {
 }
 
 div.fields {  
-  margin-top: 0.5em 0;
+  margin-top: 0.5em;
 }
 
 div.fields div.control, table  { 
@@ -298,3 +303,20 @@ div.foundcats p.description {
     margin: 0.5em;
   }
 }
+
+@media projection {
+  div.main {
+    font-size : 200%;
+  }	
+  h2#sectionhead, h2.pagetitle {
+    font-size: 300%;
+  }
+  div.editor-ok h3, div.editor-not-ok h3, div#the-story h2, div.comm-head h3, div#user-info h2 { 
+    font-size: 120%;
+  }
+  div.menu {  
+    font-size: xx-small;
+  }
+
+
+}		

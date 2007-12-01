@@ -152,7 +152,7 @@
   <text id="new-username-descr"> Velg et ett-ords brukernavn. Det kan være opptil 8 tegn, bruk kun små bokstaver fra det engelske alfabetet. Dette vil også brukes i adressen til kommentarer du poster. </text>
   <text id="new-fullname-descr"> Oppgi ditt fulle navn </text>
   <text id="new-email-descr"> Oppgi en gyldig e-post adresse. Passordet ditt vil sendes til denne adressen. </text>
-  <text id="new-uri-descr"> Oppgi adressen til en webside som beskriver deg </text>
+  <text id="new-uri-descr"> Oppgi adressen til hjemmesiden din </text>
   <text id="new-bio-descr"> Skriv inn en kort tekst som beskriver deg </text>
 
   <text id="to-change-passwd-descr"> For å forandre passord, gi det

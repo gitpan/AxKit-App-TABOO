@@ -14,11 +14,11 @@ use Time::Piece ':override';
 use XML::LibXML;
 use Text::Unaccent;
 use IDNA::Punycode;
-
+use Net::Akismet;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.5';
+our $VERSION = '0.53';
 
 =head1 NAME
 
@@ -131,7 +131,14 @@ authorization level and throw an exception with a C<FORBIDDEN> code if
 not satisfied. If timestamps do not exist, they will be created based
 on the system clock.
 
-Finally, the Data object is instructed to save itself. 
+If TABOOAkismetKey is set (and spammers will make you want this really
+fast), it will check the Akismet anti-spam system if article has not
+been approved by an editor and the user has an authlevel less than 2,
+and return a C<FORBIDDEN> if it is deemed to be spam. Once the article
+has been approved by an editor, it is fed to Akismet to teach it what
+is ham.
+
+Finally, the Data object is instructed to save itself.
 
 If successful, it will return a C<store> element in the output
 namespace with the number 1.
@@ -150,7 +157,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
     $args{'username'} = AxKit::App::TABOO::loggedin($session);
 
     my $authlevel = AxKit::App::TABOO::authlevel($session); 
-    AxKit::Debug(6, "Logged in as $args{'username'} at level $authlevel");
+    AxKit::Debug(4, "Logged in as $args{'username'} at level $authlevel");
     unless (defined($authlevel)) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => AUTH_REQUIRED,
@@ -172,6 +179,30 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Story/Output}
 					       -text => "Editor Priviliges are needed to OK an article. Your level: " . $authlevel);
     }
     
+    if ($r->dir_config('TABOOAkismetKey')) {
+      AxKit::Debug(4, "Using Akismet");
+      my $akismet = Net::Akismet->new(
+                        KEY => $r->dir_config('TABOOAkismetKey'),
+                        URL => 'http://'.$r->header_in('X-Forwarded-Host'),
+                ) or throw Apache::AxKit::Exception::Error(-text => "Akismet key verification failed.");
+      my %akismetstuff = (USER_IP => $r->header_in('X-Forwarded-For'),
+			  COMMENT_CONTENT => $args{'minicontent'} ."\n". $args{'content'},
+			  REFERRER => $r->header_in('Referer'),
+			  COMMENT_TYPE => 'comment',
+			 );
+      if ($args{'editorok'}) { # Surely ham
+	$akismet->ham(%akismetstuff);
+      } elsif ($authlevel < 2) { # Above 2 is probably ham
+	AxKit::Debug(10, "Akismet check on: ".join("    ",values(%akismetstuff)));
+	if ($akismet->check(%akismetstuff) eq 'true') {
+	  throw Apache::AxKit::Exception::Retval(
+						 return_code => FORBIDDEN,
+						 -text => "Akismet check says that your comment is spam. Please contact webmaster if you received this message in error.");
+	}
+      }
+    }
+
+
     if (! $args{'submitterid'}) {
 	# If the submitterid is not set, we set it to the current username
 	$args{'submitterid'} = $args{'username'}

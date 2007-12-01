@@ -16,7 +16,7 @@ use Net::Akismet;
 
 use vars qw/$NS/;
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 =head1 NAME
 
@@ -103,7 +103,7 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Outpu
     $args{'username'} = AxKit::App::TABOO::loggedin($session);
 
     my $authlevel = AxKit::App::TABOO::authlevel($session);
-    AxKit::Debug(6, "Logged in as $args{'username'} at level $authlevel");
+    AxKit::Debug(4, "Logged in as $args{'username'} at level $authlevel");
     unless (defined($authlevel)) {
 	throw Apache::AxKit::Exception::Retval(
 					       return_code => AUTH_REQUIRED,
@@ -134,10 +134,10 @@ sub store : node({http://www.kjetil.kjernsmo.net/software/TABOO/NS/Comment/Outpu
     delete $args{'parentcpath'};
 
     if ($r->dir_config('TABOOAkismetKey')) {
-      AxKit::Debug(9, "Using Akismet");
+      AxKit::Debug(4, "Using Akismet");
       my $akismet = Net::Akismet->new(
                         KEY => $r->dir_config('TABOOAkismetKey'),
-                        URL => $r->dir_config('TABOOAkismetURL'),
+                        URL => 'http://'.$r->header_in('X-Forwarded-Host'),
                 ) or throw Apache::AxKit::Exception::Error(-text => "Akismet key verification failed.");
       my %akismetstuff = (USER_IP => $r->header_in('X-Forwarded-For'),
 			  COMMENT_CONTENT => $args{'content'},

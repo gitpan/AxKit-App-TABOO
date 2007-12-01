@@ -1,6 +1,6 @@
 package AxKit::App::TABOO;
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 use 5.7.3;
 use strict;
@@ -271,9 +271,6 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
   PerlModule AxKit
   SetHandler AxKit
 
-  # %ENV adds overhead and isn't used, so disable.
-  PerlOptions -SetupEnv
-
   AxHandleDirs On
 
   # Language modules to make XSP and XSLTransformations work
@@ -385,7 +382,6 @@ C<PGUSER> and C<PGPASSWORD> environment variables will achieve this.
 
   # Set this if you want to use Akismet: http://akismet.com/
   PerlSetVar TABOOAkismetKey fooobaaaa
-  PerlSetVar TABOOAkismetURL http://your.mainpage.url
 
 
   # Aliases, rather than files have a full filesystem path. 
@@ -456,7 +452,7 @@ can be checked out anonymously using e.g.:
 
   svn checkout http://svn.kjernsmo.net/TABOO/trunk TABOO  
 
-It is also available using the svn schema and svn+ssh for committers.
+It is also available using svn+ssh for committers.
 
 
 =head1 AUTHOR
@@ -469,7 +465,7 @@ L<AxKit>, L<AxKit::App::TABOO::Data>, L<AxKit::App::TABOO::Provider::News>.
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003-2006 Kjetil Kjernsmo. This program is free
+Copyright (c) 2003-2007 Kjetil Kjernsmo. This program is free
 software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
 

@@ -1,5 +1,20 @@
 Revision history for Perl extension AxKit::App::TABOO.
 
+0.52    2007-12-01
+	- Use HTML::StripScripts and friends for parsing and combatting
+	  possible XSS problems.
+	- Use Net::Akismet for stories too. 
+	- Add the CSS that has been live for a while to ensure that
+	  pictures doesn't wrap wrongly.
+	- The Person URI is so different from the homepage, that I changed
+	  the text to explicitly say homepage.
+	- Relative URLs for tinyMCE.
+	- Change some debugging levels.
+
+0.51    2006-12-26
+	- Use Net::Akismet on comments. 
+	- Minor stuff in documentation.
+	
 0.5     2006-11-05
         - Replace Textile input with TinyMCE support.
 	- Correct a bug that allowed anyone to edit the guest user's page...

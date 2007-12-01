@@ -11,13 +11,14 @@ use Class::Data::Inheritable;
 use base qw(Class::Data::Inheritable);
 
 
-our $VERSION = '0.5';
+our $VERSION = '0.52';
 
 
 use DBI;
 use Exception::Class::DBI;
 
 use XML::LibXML;
+use HTML::StripScripts::LibXML;
 
 
 =head1 NAME
@@ -205,13 +206,36 @@ sub write_xml {
 	elsif (ref($content) eq '') {
 	  my $element = $doc->createElementNS($self->xmlns(), $self->xmlprefix() .':'. $key);
 	  if (($content) && (defined($self->elementneedsparse)) && ($self->elementneedsparse =~ m/\b$key\b/)) {
-	    my $parser = XML::LibXML->new();
-	    $parser->recover(1);
-	    my $parsed = $parser->parse_html_string($content); # Lets hope the content is well-formed enough...
-	    my @fragments = $parsed->findnodes('/html/body/*');
-	    foreach my $fragment (@fragments) {
-	      $element->appendChild($fragment);
-	    }
+	    my $hss=HTML::StripScripts::LibXML->new(
+                        {Context=>'Flow',
+			 BanList => [qw( style font center blink marquee ) ],
+			 AllowHref => 1,
+			 AllowSrc => 1,
+			 AllowMailto => 1,
+			 Rules   => { 
+				     'caption'   => \&_style_callback,
+				     'input'   => \&_style_callback,
+				     'legend'   => \&_style_callback,
+				     'table'   => \&_style_callback,
+				     'hr'   => \&_style_callback,
+				     'div'   => \&_style_callback,
+				     'p'   => \&_style_callback,
+				     'h1'   => \&_style_callback,
+				     'h2'   => \&_style_callback,
+				     'h3'   => \&_style_callback,
+				     'h4'   => \&_style_callback,
+				     'h5'   => \&_style_callback,
+				     'h6'   => \&_style_callback,
+				    }
+			},   # HSS options
+			 strict_comment =>1,  # HTML::Parser options
+			 strict_names => 1
+						   );
+	    $hss->parse($content);
+	    $hss->eof;
+	    my $div = $doc->createElement('div');
+	    $div->appendChild($hss->filtered_document);
+	    $element->appendChild($div);
 	  } else {
 	    my $text = XML::LibXML::Text->new($content);
 	    $element->appendChild($text);
@@ -242,6 +266,34 @@ sub write_xml {
     }
     return $doc;
 }
+
+# Dispatch table for what CSS to use to replace a particular attribute
+my %replace = (
+    hspace  => sub { "margin-left:$_[0]px;margin-right:$_[0]px"    },
+    vspace  => sub { "margin-top:$_[0]px;margin-bottom:$_[0]px"    },
+    border  => sub { "border-width:$_[0]px"                         },
+    align   => sub { "text-align:$_[0]"                             },
+);
+
+sub _style_callback {
+    my ($filter,$element) = @_;
+    
+    my $attrs = $element->{attr};
+    my $style = delete $attrs->{style} || '';
+    
+    # loops through the existing attributes
+    # and, if appropriate, replaces them with a style
+    foreach my $key (keys %$attrs) {
+        next unless exists $replace{$key};
+        $style.= $replace{$key}->($attrs->{$key}).";";
+        delete $attrs->{$key}
+    }
+    $attrs->{style} = $style
+        if $style;
+    return 1;
+}
+
+
 
 =item C<populate(\%args)>
 

@@ -151,7 +151,7 @@
   <text id="new-username-descr"> Choose a single-word username. It can be up to 8 characters, and use only lower-case letters from a-z. Your username will also appear in the address of comments you post. </text>
   <text id="new-fullname-descr"> Give your full name </text>
   <text id="new-email-descr"> A valid e-mail address. Your password will be sent to this address. </text>
-  <text id="new-uri-descr"> The address of a web page that describes you </text>
+  <text id="new-uri-descr"> The address of your homepage </text>
   <text id="new-bio-descr"> A short text that describes you </text>
 
   <text id="to-change-passwd-descr"> To change password, enter new
